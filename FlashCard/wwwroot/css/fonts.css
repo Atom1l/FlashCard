@@ -1,0 +1,66 @@
+﻿@font-face {
+    font-family: "NotoSan";
+    src: url("/fonts/Noto-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: "NotoSan", sans-serif;
+}
+
+
+/*- If prefer using class -*/
+.noto-thin {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 100;
+    font-style: normal;
+}
+
+.noto-extralight {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 200;
+    font-style: normal;
+}
+
+.noto-light {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 300;
+    font-style: normal;
+}
+
+.noto-regular {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.noto-medium {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 500;
+    font-style: normal;
+}
+
+.noto-semibold {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 600;
+    font-style: normal;
+}
+
+.noto-bold {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.noto-extrabold {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 800;
+    font-style: normal;
+}
+
+.noto-black {
+    font-family: "Noto Sans Thai Looped", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+}
