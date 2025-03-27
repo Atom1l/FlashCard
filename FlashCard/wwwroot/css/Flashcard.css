@@ -3,7 +3,23 @@
     padding: 0;
     box-sizing: border-box;
 }
+html, body {
+    -webkit-user-select: none;
+    user-select: none;
+}
 
+/*= Color =*/
+.black{
+    color: black !important;
+}
+.blue {
+    color: #8dd4ff !important;
+}
+.purple{
+    color: #a1a4ff !important;
+}
+
+/*= Universal class =*/
 .container {
     margin: 0;
     padding: 0;
@@ -12,18 +28,46 @@
     max-height: 100%;
     width: 100dvw;
     height: 100dvh;
-    background-color: #fffbf1;
+    /*background-color: #fffbf1;*/
     /*border: solid 5px purple;*/
 }
-
 .home-bg {
+    position:relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    /*background: url(/pic/Home.jpg);*/
-    background-repeat: no-repeat;
+    /*background: url(/pic/BG/Home.png);
+    background-attachment:fixed;
+    background-size: cover;
+    background-repeat: no-repeat;*/
     /*border:solid 5px red;*/
 }
+.background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: -1;
+}
+.menu{
+    position:absolute;
+    bottom:5%;
+    left:3%;
+    color: black;
+    transform:scale(4)
+}
+.text-success {
+    color: #B9E7A6 !important;
+}
+.done-bg-color {
+    background-color: #B9E7A6 !important;
+}
+.exit-bg-color{
+    background-color: #fb9b95 !important;
+}
+
+/*= Home Page =*/
 .game-text {
     text-align: center;
     font-size: clamp(2rem, 10vw, 10rem) !important;
@@ -35,18 +79,151 @@
     padding: 30px 0px 30px 0px;
     border-radius: 100px;
     border: none;
+    text-align:center;
+    text-decoration:none;
     font-size: clamp(1rem, 5vw, 3rem) !important;
 }
-
 .authen-text {
-    width: 50% !important;
+    width: 35% !important;
     margin-top: 15px;
     white-space: nowrap;
     font-size: clamp(0.8rem, 3vw, 2rem) !important;
 }
-
 .authen-text a{
     text-decoration:none;
-    color:black !important;
-    border:solid 2px red;
+}
+
+/*= Login/Register Page =*/
+.login-headtext {
+    margin-bottom:15px;
+    font-size: clamp(1rem, 4vw, 4rem) !important;
+}
+.rectangle {
+    padding: 80px 150px 80px 150px;
+    border-radius: 25px;
+    background-color: #ccebfe;
+}
+.login-input {
+    width: 120%;
+    margin-bottom: 35px;
+    padding: 15px 15px 15px 30px;
+    color: #333;
+    background: #fee6b0;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    font-size: clamp(1rem, 2vw, 2rem) !important;
+}
+.login-submit {
+    width: 120%;
+    padding: 15px 15px 15px 30px;
+    color: white;
+    background: #a1a4ff;
+    border: none;
+    outline: none;
+    border-radius: 50px;
+    font-size: clamp(1rem, 2vw, 2rem) !important;
+}
+
+/*= Main Menu Page =*/
+.module-btn {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    background: #8dd4ff;
+    width: 60% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 2vw, 3rem) !important;
+}
+
+/*= Module 1 =*/
+.module-headtext {
+    margin-bottom:20px;
+    text-align: center;
+    font-size: clamp(2rem, 10vw, 10rem) !important;
+}
+.tutorial-headtext {
+    margin-top:-20px;
+    margin-bottom: -20px;
+    text-align: center;
+    font-size: clamp(2rem, 10vw, 8rem) !important;
+}
+.score-headtext {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: clamp(1rem, 5vw, 4.5rem) !important;
+}
+.score-text {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: clamp(1.5rem, 7vw, 7rem) !important;
+}
+.test-result {
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    background: #8dd4ff;
+    width: 30% !important;
+    padding: 10px 0px 10px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 2.5rem) !important;
+}
+.main-module-go {
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #8dd4ff;
+    width: 70% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+.module-go {
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #8dd4ff;
+    width: 50% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+.module-golong { /* For long text */
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #8dd4ff;
+    width: 37.5% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+.module-goshort { /* For short text */
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #8dd4ff;
+    width: 90% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+.no-play{
+    background: #fb9b95 !important;
+}
+.video-preview{
+    width:855px;
+    height:600px;
+    background-color:grey;
 }

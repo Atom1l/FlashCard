@@ -1,15 +1,15 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Flash Card";
 }
 
 <div class="container home-bg">
-    
+    <img src="/pic/BG/Home.png" class="background" />
     <div class="row d-flex flex-column justify-content-center align-items-center">
         <div class="game-text noto-bold fs-1">เกมพลเมืองดี 4.0</div>
-        <button class="w-50 start-btn noto-bold text-white">เริ่มเกม</button>
-        <div class="authen-text w-50 row d-flex flex-row justify-content-center align-items-center">
-            <a href="#" class="col text-center">เข้าสู่ระบบ</a>
-            <a href="#" class="col text-center">สมัครบัญชี</a>
+        <a asp-action="Mainmenu" class="w-50 start-btn noto-bold text-white">เริ่มเกม</a>
+        <div class="authen-text w-50  d-flex flex-row justify-content-center align-items-center">
+            <a asp-action="Login" class="me-auto black text-center">เข้าสู่ระบบ</a>
+            <a asp-action="Register" class=" black text-center">สมัครบัญชี</a>
         </div>
     </div>
 

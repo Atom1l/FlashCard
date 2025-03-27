@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+}
+@{
+    int score = 2; // สมมติว่าคะแนนมาจาก Controller
+    string colorClass = score >= 5 ? "text-success" : "text-danger";
+    string bgClass = score >= 5 ? "done-bg-color" : "exit-bg-color";
+}
+
+<div class="container home-bg">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <div class="row d-flex flex-column justify-content-center align-items-center">
+        <div class="game-text noto-bold fs-1">แบบทดสอบ</div>
+        <div class="score-headtext noto-bold text-center">
+            คะแนน <span class="score-text noto-bold"><span class="@colorClass">@score</span> / 10</span>
+        </div>
+        <div class="test-result test-result-box noto-medium text-white @bgClass">@(score >= 5 ? "ผ่าน" : "ไม่ผ่าน")</div>
+        <div class="d-flex flex-row justify-content-center align-items-center">
+            <a asp-action="Mainmenu" class="module-go done-bg-color noto-regular text-white me-5">เสร็จสิ้น</a>
+            <a asp-action="M1_Test_Start" class="module-go exit-bg-color noto-regular text-white">ทดสอบใหม่</a>
+        </div>
+    </div>
+</div>
