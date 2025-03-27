@@ -93,6 +93,104 @@ html, body {
     text-decoration:none;
 }
 
+/*= Menu Page =*/
+.rectangle-menu {
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding: 80px 80px 80px 80px;
+    border-radius: 25px;
+    background-color: #fee6b0;
+    border:solid 15px #8dd4ff;
+}
+.menu-header-container{
+    position:relative;
+    width:100%;
+    margin-top:-50px;
+    margin-bottom:50px;
+    display:flex;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items:center;
+}
+.volumn-btn i{
+    font-size: 4rem;
+    cursor:pointer;
+}
+.menu-headtext{
+    font-size: clamp(1.5rem , 3vw , 4rem);
+}
+.menu-btn-container{
+    position:relative;
+    width:100%;
+    margin-bottom:-10px;
+    display:flex;
+    flex-direction:row;
+    white-space: nowrap;
+}
+.home-btn {
+    width: 350px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: clamp(1rem, 5vw, 3rem);
+    background-color: #a1a4ff;
+    border: solid 15px white;
+    border-radius: 25px;
+}
+.home-btn i{
+    margin-bottom: 15px;
+    font-size: 8rem;
+}
+
+.continue-btn {
+    width: 350px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: clamp(1rem, 5vw, 3rem);
+    background-color: #B9E7A6;
+    border: solid 15px white;
+    border-radius: 25px;
+}
+.continue-btn i{
+    margin-bottom: 15px;
+    font-size: 8rem;
+}
+
+.lesson-btn {
+    width: 350px;
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: clamp(1rem, 5vw, 3rem);
+    background-color: #8dd4ff;
+    border: solid 15px white;
+    border-radius: 25px;
+}
+.lesson-btn i{
+    margin-bottom: 15px;
+    font-size: 8rem;
+}
+
+
 /*= Login/Register Page =*/
 .login-headtext {
     margin-bottom:15px;

@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    string? source = TempData["Source"]?.ToString();
+}
+
+<div class="container home-bg d-flex flex-column justify-content-center align-items-center">
+    <img src="/pic/BG/Home.png" class="background" />
+    <div class="rectangle-menu">
+        <div class="menu-header-container">
+            <div class="menu-headtext noto-bold">เมนู</div>
+            <div class="volumn-btn" id="volumn-btn"><i class="fa-solid fa-volume-high"></i></div> <!-- fa-volume-xmark -->
+        </div>
+        <div class="menu-btn-container">
+            <!-- Home Page -->
+            <a asp-action="Home" class="home-btn me-5">
+                <i class="fa-solid fa-house"></i>
+                <div class="noto-bold">หน้าแรก</div>
+            </a>
+
+            <!-- === Resume === -->
+            @if (!string.IsNullOrEmpty(source))
+            {
+                <a asp-action="@source" class="continue-btn me-5">
+                    <i class="fa-solid fa-play"></i>
+                    <div class="noto-bold">เล่นต่อ</div>
+                </a>
+            }
+
+            <!-- Module Main Page -->
+            <a asp-action="Mainmenu" class="lesson-btn">
+                <i class="fa-solid fa-book-open"></i>
+                <div class="noto-bold">บทเรียน</div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const volumeBtn = document.getElementById("volumn-btn");
+        const icon = volumeBtn.querySelector("i");
+
+        volumeBtn.addEventListener("click", function () {
+            icon.classList.toggle("fa-volume-high");
+            icon.classList.toggle("fa-volume-xmark");
+        });
+    });
+</script>

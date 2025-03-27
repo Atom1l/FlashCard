@@ -1,5 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Flash Card";
+    string? source = ViewData["Source"]?.ToString();
+    string? next = ViewData["Next"]?.ToString();
 }
 
 <div class="container home-bg">
@@ -8,47 +10,15 @@
         <div class="game-text noto-bold fs-1">เสร็จสิ้น</div>
 
         <!-- Again -->
-        @if (TempData["Source"]?.ToString() == "M1_Start1")
-        {<!-- Start1(การรับรู้อารมณ์) -->
-            <a asp-action="M1_Start1" class="module-goshort noto-regular text-white">เริ่มใหม่</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Enhance1")
-        {<!-- Enhance1(เสริมสร้างความเข้าใจ1) -->
-            <a asp-action="M1_Enhance1" class="module-goshort noto-regular text-white">เริ่มใหม่</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Start2")
-        {<!-- Start2(เหตุการณ์กับอารมณ์) -->
-            <a asp-action="M1_Start2" class="module-goshort noto-regular text-white">เริ่มใหม่</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Enhance2")
-        {<!-- Enhance2(เสริมสร้างความเข้าใจ2) -->
-            <a asp-action="M1_Enhance2" class="module-goshort noto-regular text-white">เริ่มใหม่</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Conclude")
-        {<!-- Conclude(สรุปเนื้อหา) -->
-            <a asp-action="M1_Conclude" class="module-goshort noto-regular text-white">เริ่มใหม่</a>
+        @if (!string.IsNullOrEmpty(source))
+        {
+            <a asp-action="@source" class="module-goshort noto-regular text-white">เริ่มใหม่</a>
         }
 
         <!-- Next -->
-        @if (TempData["Source"]?.ToString() == "M1_Start1")
-        {<!-- Start1(การรับรู้อารมณ์) > Enhance1(เสริมสร้างความเข้าใจ1) -->
-            <a asp-action="M1_Enhance1" class="module-goshort noto-regular text-white">ถัดไป</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Enhance1")
-        {<!-- Enhance1(เสริมสร้างความเข้าใจ1) > Start2(เหตุการณ์กับอารมณ์) -->
-            <a asp-action="M1_Start2" class="module-goshort noto-regular text-white">ถัดไป</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Start2")
-        {<!-- Start2(เหตุการณ์กับอารมณ์) > Enhance2(เสริมสร้างความเข้าใจ2) -->
-            <a asp-action="M1_Enhance2" class="module-goshort noto-regular text-white">ถัดไป</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Enhance2")
-        {<!-- Enhance2(เสริมสร้างความเข้าใจ1) > Conclude(สรุปเนื้อหา) -->
-            <a asp-action="M1_Conclude" class="module-goshort noto-regular text-white">ถัดไป</a>
-        }
-        else if (TempData["Source"]?.ToString() == "M1_Conclude")
-        {<!-- Conclude(สรุปเนื้อหา) -->
-            <a asp-action="M1_Test_Start" class="module-goshort noto-regular text-white">ถัดไป</a>
+        @if (!string.IsNullOrEmpty(next))
+        {
+            <a asp-action="@next" class="module-goshort noto-regular text-white">ถัดไป</a>
         }
 
         <!-- Exit -->

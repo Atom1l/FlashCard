@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+}
+
+<div class="container home-bg">
+    <img src="/pic/BG/Home.png" class="background" />
+    <div class="row d-flex flex-column justify-content-center align-items-center">
+        <div class="game-text noto-bold fs-1">เกมพลเมืองดี 4.0</div>
+        <div class="noto-medium text-center fs-1">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <p>ยินดีต้อนรับ <span class="noto-bold">@User.Identity.Name !</span></p>
+            }
+            else
+            {
+                <p>Please log in.</p>
+            }
+        </div>
+        <a asp-action="Mainmenu" class="w-50 start-btn noto-bold text-white">เริ่มเกม</a>
+    </div>
+
+</div>

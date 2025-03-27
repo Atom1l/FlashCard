@@ -1,4 +1,5 @@
-using FlashCard.Data;
+﻿using FlashCard.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,14 @@ builder.Services.AddControllersWithViews();
 // SQL
 builder.Services.AddDbContext<FlashCardDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("FlashCardConnectionString")));
+
+// Log-In
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login"; // เส้นทางสำหรับหน้า Login
+        options.LogoutPath = "/Account/Logout"; // เส้นทางสำหรับหน้า Logout
+    });
 
 var app = builder.Build();
 
@@ -22,13 +31,16 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.UseAuthorization();
 
 app.MapStaticAssets();
 
+// For Authentication
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=FlashCard}/{action=M1_Tutorial}/{id?}")
+    pattern: "{controller=FlashCard}/{action=HomeLoggedIn}/{id?}")
     .WithStaticAssets();
 
 
