@@ -60,10 +60,17 @@ namespace FlashCard.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Login");
+                    return RedirectToAction("Home");
                 }
             }
             return View();
+        }
+
+        // Log Out //
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Home");
         }
 
 

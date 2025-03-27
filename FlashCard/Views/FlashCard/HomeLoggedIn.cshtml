@@ -4,6 +4,7 @@
 
 <div class="container home-bg">
     <img src="/pic/BG/Home.png" class="background" />
+    <a asp-action="Logout" class="noto-bold text-danger text-decoration-none fs-3">ออกจากระบบ</a>
     <div class="row d-flex flex-column justify-content-center align-items-center">
         <div class="game-text noto-bold fs-1">เกมพลเมืองดี 4.0</div>
         <div class="noto-medium text-center fs-1">
@@ -13,7 +14,9 @@
             }
             else
             {
-                <p>Please log in.</p>
+                <script type="text/javascript">
+                    window.location.href = '@Url.Action("Home", "FlashCard")';
+                </script>
             }
         </div>
         <a asp-action="Mainmenu" class="w-50 start-btn noto-bold text-white">เริ่มเกม</a>
