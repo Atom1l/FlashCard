@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FlashCard.Controllers
 {
@@ -21,6 +22,48 @@ namespace FlashCard.Controllers
             _db = db;
         }
 
+        // Upload Image to database //
+        public IActionResult Upload()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Upload(IFormFile file, string name)
+        {
+            if (file != null && file.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await file.CopyToAsync(memoryStream);
+
+                var imageModel = new Images
+                {
+                    Name = file.FileName,
+                    Answer = name,
+                    Imgbytes = memoryStream.ToArray()
+                };
+
+                _db.ImagesDB.Add(imageModel);
+                await _db.SaveChangesAsync();
+
+                ViewBag.Message = "Upload Successful!";
+            }
+            else
+            {
+                ViewBag.Message = "Please select an image!";
+            }
+
+            return View();
+        }
+
+        // Show Pic //
+        public async Task<IActionResult> ShowAllImages()
+        {
+            var images = await _db.ImagesDB.ToListAsync();
+            return View(images);
+        }
+
+        // =============================================================================== //
         // Start Page //
         public IActionResult Home()
         {

@@ -10,5 +10,6 @@ namespace FlashCard.Data
 
         // DB Set
         public DbSet<FlashCard.Models.User> UsersDB { get; set; }
+        public DbSet<FlashCard.Models.Images> ImagesDB { get; set; }
     }
 }

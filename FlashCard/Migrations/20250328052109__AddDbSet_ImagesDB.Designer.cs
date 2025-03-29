@@ -3,6 +3,7 @@ using FlashCard.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FlashCard.Migrations
 {
     [DbContext(typeof(FlashCardDBContext))]
-    partial class FlashCardDBContextModelSnapshot : ModelSnapshot
+    [Migration("20250328052109__AddDbSet_ImagesDB")]
+    partial class _AddDbSet_ImagesDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +31,6 @@ namespace FlashCard.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Answer")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Imgbytes")
                         .HasColumnType("varbinary(max)");

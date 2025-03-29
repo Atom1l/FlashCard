@@ -1,0 +1,24 @@
+﻿@model List<Images>
+
+@{
+    ViewData["Title"] = "All Images";
+}
+
+<h2>All Uploaded Images</h2>
+
+<div class="row">
+    @foreach (var image in Model)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <!-- Display the image from Imgbytes -->
+                <img src="data:image/png;base64,@Convert.ToBase64String(image.Imgbytes)" class="card-img-top" alt="@image.Name" />
+
+                <div class="card-body">
+                    <h5 class="card-title">@image.Name</h5>
+                    <p class="card-text">ID: @image.Id</p>
+                </div>
+            </div>
+        </div>
+    }
+</div>
