@@ -40,7 +40,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=FlashCard}/{action=M1_Enhance1}/{id?}")
+    pattern: "{controller=FlashCard}/{action=M1_Ask}/{id?}")
     .WithStaticAssets();
 
 
