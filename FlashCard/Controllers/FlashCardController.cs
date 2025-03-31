@@ -27,9 +27,8 @@ namespace FlashCard.Controllers
         {
             return View();
         }
-
         [HttpPost]
-        public async Task<IActionResult> Upload(IFormFile file, string name)
+        public async Task<IActionResult> Upload(IFormFile file, string answer, string module, string subModule)
         {
             if (file != null && file.Length > 0)
             {
@@ -39,8 +38,11 @@ namespace FlashCard.Controllers
                 var imageModel = new Images
                 {
                     Name = file.FileName,
-                    Answer = name,
-                    Imgbytes = memoryStream.ToArray()
+                    Module = module,
+                    SubModule = subModule,
+                    Answer = answer,
+                    Imgbytes = memoryStream.ToArray(),
+                    HasShown = false
                 };
 
                 _db.ImagesDB.Add(imageModel);
@@ -62,6 +64,7 @@ namespace FlashCard.Controllers
             var images = await _db.ImagesDB.ToListAsync();
             return View(images);
         }
+
 
         // =============================================================================== //
         // Start Page //
@@ -179,7 +182,87 @@ namespace FlashCard.Controllers
         }
 
         // Module 1 FlashCard(Emotion) //
-        
+        public async Task<IActionResult> M1_FlashCard()
+        {
+            var images = await _db.ImagesDB
+            .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+            .ToListAsync();
+
+            if (images.Count == 0)
+            {
+                // Reset HasShown to false for all images in this Module and SubModule
+                var allImages = await _db.ImagesDB
+                    .Where(i => i.Module == "1" && i.SubModule == "1").ToListAsync();
+
+                foreach (var img in allImages)
+                {
+                    img.HasShown = false;
+                }
+
+                _db.ImagesDB.UpdateRange(allImages);
+                await _db.SaveChangesAsync();
+
+                return RedirectToAction("M1_Done", new { source = "M1_FlashCard", next = "M1_Enhance1" });
+            }
+
+            // Shuffle the images randomly
+            var random = new Random();
+            var selectedImage = images.OrderBy(x => random.Next()).FirstOrDefault();
+
+            if (selectedImage != null)
+            {
+                // Mark the selected image as shown
+                selectedImage.HasShown = true;
+                _db.ImagesDB.Update(selectedImage);
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);
+        }
+        // For Next FlashCard //
+        public async Task<IActionResult> GetNextFlashCard()
+        {
+            var images = await _db.ImagesDB
+                .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (images.Count == 0)
+            {
+                // Reset HasShown to false for all images in this Module and SubModule
+                var allImages = await _db.ImagesDB
+                    .Where(i => i.Module == "1" && i.SubModule == "1").ToListAsync();
+
+                foreach (var img in allImages)
+                {
+                    img.HasShown = false;
+                }
+
+                _db.ImagesDB.UpdateRange(allImages);
+                await _db.SaveChangesAsync();
+
+                return Json(new { success = false }); // No more images
+            }
+
+            var random = new Random();
+            var selectedImage = images.OrderBy(x => random.Next()).FirstOrDefault();
+
+            if (selectedImage != null)
+            {
+                // Mark the selected image as shown
+                selectedImage.HasShown = true;
+                _db.ImagesDB.Update(selectedImage);
+                await _db.SaveChangesAsync();
+            }
+
+            return Json(new
+            {
+                success = true,
+                imgBytes = Convert.ToBase64String(selectedImage.Imgbytes),
+                answer = selectedImage.Answer,
+            });
+        }
+
+
 
         // Module 1 Done //
         public IActionResult M1_Done(string source, string next)

@@ -5,15 +5,27 @@
 <div class="container home-bg d-flex flex-column justify-content-center align-items-center">
     <img src="/pic/BG/Home.png" class="background" />
     
+    <a asp-action="ShowAllImages" class="btn blue p-3 noto-bold text-white text-decoration-none">See all uploaded</a>
 
     <form method="post" enctype="multipart/form-data" class="d-flex flex-column justify-content-center align-items-center bg-info p-5 shadow">
         <h2 class="noto-bold mb-3">Upload Image</h2>
-        <div class="w-100 mb-3">
-            <label class="form-label">Image Name</label>
-            <input type="text" name="name" class="form-control" required placeholder="Enter image name" />
+
+        <div class="w-100 mb-3"> <!-- Module -->
+            <label class="form-label">Module</label>
+            <input type="text" name="module" class="form-control" required placeholder="Module" />
         </div>
 
-        <div class="w-100 mb-5">
+        <div class="w-100 mb-3"> <!-- SubModule -->
+            <label class="form-label">Sub-Module</label>
+            <input type="text" name="subModule" class="form-control" required placeholder="SubModule" />
+        </div>
+
+        <div class="w-100 mb-3"> <!-- Answer Key -->
+            <label class="form-label">Answer</label>
+            <input type="text" name="answer" class="form-control" required placeholder="Answer" />
+        </div>
+
+        <div class="w-100 mb-5"> <!-- Select Image -->
             <label class="form-label">Select Image</label>
             <input type="file" name="file" class="form-control" required />
         </div>

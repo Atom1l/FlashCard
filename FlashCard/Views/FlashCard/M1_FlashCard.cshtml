@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    var translations = new Dictionary<string, string>
+    {
+        { "Happy", "มีความสุข" },
+        { "Sad", "เศร้า" },
+        { "Angry", "โกรธ" },
+        { "Scared", "กลัว" },
+    };
+}
+
+<div class="container home-bg flex-column">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <a asp-action="M1_Start1" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+    
+    @if (Model != null && Model.Imgbytes != null)
+    {
+        <div class="flashcard-container">
+            <a class="next-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+
+            <img tabindex="0" src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="" />
+
+            @if (!string.IsNullOrEmpty(Model.Answer))
+            {
+                <div class="answer-container">
+                    <p class="noto-bold answer-text">@(translations.ContainsKey(Model.Answer) ? translations[Model.Answer] : Model.Answer)</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No Image Available</p>
+    }
+</div>
+
+<script>
+        document.addEventListener("DOMContentLoaded", function () {
+        const flashcard = document.querySelector(".flashcard-container img");
+        const nextBtn = document.querySelector(".next-btn");
+
+        if (flashcard && nextBtn) {
+            flashcard.addEventListener("click", function () {
+                nextBtn.style.opacity = "1";
+                nextBtn.style.cursor = "pointer";
+                nextBtn.style.pointerEvents = "auto";
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!flashcard.contains(event.target) && !nextBtn.contains(event.target)) {
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                }
+            });
+        }
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const flashcard = document.querySelector(".flashcard-container img");
+        const nextBtn = document.querySelector(".next-btn");
+
+        if (flashcard && nextBtn) {
+            nextBtn.addEventListener("click", function () {
+                fetchNextFlashCard();
+            });
+        }
+
+        function fetchNextFlashCard() {
+            fetch('@Url.Action("GetNextFlashCard")', {
+                method: 'GET',
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const flashcardContainer = document.querySelector(".flashcard-container");
+                    const imgElement = flashcardContainer.querySelector("img");
+                    const answerElement = flashcardContainer.querySelector(".answer-text");
+
+                    imgElement.src = "data:image/png;base64," + data.imgBytes;
+
+                    if (answerElement) {
+                        answerElement.textContent = data.answer ? data.answer : '';
+                    }
+                } else {
+                    alert("No more images available.");
+                    nextBtn.style.opacity = "0"; // ******************************************************************* //
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching next flashcard:', error);
+            });
+        }
+    });
+
+
+</script>

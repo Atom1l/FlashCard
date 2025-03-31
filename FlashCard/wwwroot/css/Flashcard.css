@@ -31,6 +31,17 @@ html, body {
     /*background-color: #fffbf1;*/
     /*border: solid 5px purple;*/
 }
+.container-scroll {
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100dvw;
+    height: 100dvh;
+    /*background-color: #fffbf1;*/
+    /*border: solid 5px purple;*/
+}
 .home-bg {
     position:relative;
     display: flex;
@@ -91,6 +102,10 @@ html, body {
 }
 .authen-text a{
     text-decoration:none;
+}
+.logout-text {
+    white-space: nowrap;
+    font-size: clamp(0.8rem, 3vw, 2rem) !important;
 }
 
 /*= Menu Page =*/
@@ -324,4 +339,68 @@ html, body {
     width:855px;
     height:600px;
     background-color:grey;
+}
+
+/* = FlashCard =*/
+.close-btn{
+    position:absolute;
+    top:1%;
+    right:2%;
+    color:black;
+    text-decoration:none;
+    font-size: 4rem;
+}
+.flashcard-overall-container {
+    border: solid 5px red;
+    width: 100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+.flashcard-container{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    width:100%;
+    height:100%;
+    
+}
+.flashcard-container img{
+    width: 50%;
+    height: 60%;
+    margin-top:150px;
+    border-radius: 50px;
+    border:solid 10px #8dd4ff;
+    cursor:pointer;
+    object-fit:cover;
+    transition: 0.5s ease;
+}
+.flashcard-container img:focus{
+    margin-top:45px;
+}
+.flashcard-container img:focus + .answer-container{
+    opacity:1;
+}
+.next-btn {
+    position: absolute;
+    top: 45%;
+    right: 2%;
+    color: black;
+    text-decoration: none;
+    font-size: 4rem;
+    opacity:0;
+    transition: 0.5s ease;
+    pointer-events:none;
+}
+.answer-container{
+    margin-top:25px;
+    opacity: 0;
+    transition:0.5s ease;
+}
+.answer-text {
+    white-space: nowrap;
+    font-size: clamp(0.8rem, 3vw, 4rem) !important;
 }
