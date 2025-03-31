@@ -39,62 +39,84 @@
 </div>
 
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
-        const flashcard = document.querySelector(".flashcard-container img");
-        const nextBtn = document.querySelector(".next-btn");
-
-        if (flashcard && nextBtn) {
-            flashcard.addEventListener("click", function () {
-                nextBtn.style.opacity = "1";
-                nextBtn.style.cursor = "pointer";
-                nextBtn.style.pointerEvents = "auto";
-            });
-
-            document.addEventListener("click", function (event) {
-                if (!flashcard.contains(event.target) && !nextBtn.contains(event.target)) {
-                    nextBtn.style.opacity = "0";
-                    nextBtn.style.pointerEvents = "none";
-                }
-            });
-        }
-    });
-
     document.addEventListener("DOMContentLoaded", function () {
         const flashcard = document.querySelector(".flashcard-container img");
         const nextBtn = document.querySelector(".next-btn");
+        const answerContainer = document.querySelector(".answer-container");
+        let hasShown = false; // ตัวแปรที่ใช้เก็บสถานะการแสดงของภาพ
+
 
         if (flashcard && nextBtn) {
-            nextBtn.addEventListener("click", function () {
-                fetchNextFlashCard();
-            });
-        }
+            flashcard.addEventListener("click", function () {
+                if (!hasShown) {
+                    // ทำให้ปุ่ม Next ปรากฏ
+                    nextBtn.style.opacity = "1";
+                    nextBtn.style.cursor = "pointer";
+                    nextBtn.style.pointerEvents = "auto";
 
-        function fetchNextFlashCard() {
-            fetch('@Url.Action("GetNextFlashCard")', {
-                method: 'GET',
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const flashcardContainer = document.querySelector(".flashcard-container");
-                    const imgElement = flashcardContainer.querySelector("img");
-                    const answerElement = flashcardContainer.querySelector(".answer-text");
+                    // เปลี่ยนสถานะ HasShown เป็น true หลังจากที่คลิกที่ภาพ
+                    hasShown = true;
 
-                    imgElement.src = "data:image/png;base64," + data.imgBytes;
-
-                    if (answerElement) {
-                        answerElement.textContent = data.answer ? data.answer : '';
-                    }
-                } else {
-                    alert("No more images available.");
-                    nextBtn.style.opacity = "0"; // ******************************************************************* //
+                    // ไม่ให้ทำการ unfocus ที่รูปภาพ
+                    flashcard.focus(); // ถ้าคุณต้องการให้รูปภาพได้รับ focus ตอนคลิก
                 }
-            })
-            .catch(error => {
-                console.error('Error fetching next flashcard:', error);
+            });
+
+            document.addEventListener("click", function (event) {
+                // ซ่อนปุ่ม Next เมื่อคลิกที่อื่นนอกจากรูปภาพหรือปุ่ม
+                if (!flashcard.contains(event.target) && !nextBtn.contains(event.target)) {
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                    hasShown = false; // รีเซ็ตสถานะ HasShown เมื่อ unfocus
+                }
+            });
+
+            nextBtn.addEventListener("click", function () {
+                if (hasShown) {
+                    fetchNextFlashCard();
+                }
             });
         }
-    });
 
+            function fetchNextFlashCard() {
+        fetch('@Url.Action("GetNextFlashCard")', {
+            method: 'GET',
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const flashcardContainer = document.querySelector(".flashcard-container");
+                const imgElement = flashcardContainer.querySelector("img");
+                const answerElement = flashcardContainer.querySelector(".answer-text");
+
+                imgElement.src = "data:image/png;base64," + data.imgBytes;
+
+                if (answerElement) {
+                    const translations = {
+                        "Happy": "มีความสุข",
+                        "Sad": "เศร้า",
+                        "Angry": "โกรธ",
+                        "Scared": "กลัว"
+                    };
+                    answerElement.textContent = translations[data.answer] || data.answer;
+                }
+
+                hasShown = false;
+                nextBtn.style.opacity = "0";
+                nextBtn.style.pointerEvents = "none";
+            } else {
+                // แก้ปัญหาการส่งค่าพารามิเตอร์ไม่ครบ
+                const source = encodeURIComponent("M1_Start1");
+                const next = encodeURIComponent("M1_Enhance1");
+
+                window.location.href = `@Url.Action("M1_Done")?source=${source}&next=${next}`;
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching next flashcard:', error);
+        });
+    }
+
+    });
 
 </script>

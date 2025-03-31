@@ -375,8 +375,7 @@ html, body {
     border-radius: 50px;
     border:solid 10px #8dd4ff;
     cursor:pointer;
-    object-fit:cover;
-    transition: 0.5s ease;
+    transition: 0.3s ease;
 }
 .flashcard-container img:focus{
     margin-top:45px;
@@ -392,15 +391,18 @@ html, body {
     text-decoration: none;
     font-size: 4rem;
     opacity:0;
-    transition: 0.5s ease;
+    transition: 0.3s ease;
     pointer-events:none;
 }
 .answer-container{
     margin-top:25px;
     opacity: 0;
-    transition:0.5s ease;
+    transition:0.3s ease;
 }
 .answer-text {
     white-space: nowrap;
     font-size: clamp(0.8rem, 3vw, 4rem) !important;
 }
+
+/* =M1_Enhance1= */
+

@@ -181,37 +181,30 @@ namespace FlashCard.Controllers
             return View();
         }
 
-        // Module 1 FlashCard(Emotion) //
+        // ======================================== Module 1 FlashCard(Emotion) ======================================== //
         public async Task<IActionResult> M1_FlashCard()
         {
             var images = await _db.ImagesDB
-            .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
-            .ToListAsync();
+                .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
 
-            if (images.Count == 0)
+            if (!images.Any()) // ใช้ .Any() เพื่อให้แน่ใจว่าเป็นเงื่อนไขที่ถูกต้อง
             {
-                // Reset HasShown to false for all images in this Module and SubModule
-                var allImages = await _db.ImagesDB
-                    .Where(i => i.Module == "1" && i.SubModule == "1").ToListAsync();
+                // รีเซ็ตค่า HasShown ให้เป็น false เพื่อให้รูปวนกลับมาแสดงใหม่
+                await _db.ImagesDB
+                    .Where(i => i.Module == "1" && i.SubModule == "1")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false)); // ใช้วิธีที่มีประสิทธิภาพกว่า
 
-                foreach (var img in allImages)
-                {
-                    img.HasShown = false;
-                }
-
-                _db.ImagesDB.UpdateRange(allImages);
                 await _db.SaveChangesAsync();
-
                 return RedirectToAction("M1_Done", new { source = "M1_FlashCard", next = "M1_Enhance1" });
             }
 
-            // Shuffle the images randomly
+            // สุ่มเลือกรูป
             var random = new Random();
             var selectedImage = images.OrderBy(x => random.Next()).FirstOrDefault();
 
             if (selectedImage != null)
             {
-                // Mark the selected image as shown
                 selectedImage.HasShown = true;
                 _db.ImagesDB.Update(selectedImage);
                 await _db.SaveChangesAsync();
@@ -219,28 +212,22 @@ namespace FlashCard.Controllers
 
             return View(selectedImage);
         }
-        // For Next FlashCard //
+
+        //  ======================================== For Next FlashCard ======================================== //
         public async Task<IActionResult> GetNextFlashCard()
         {
             var images = await _db.ImagesDB
                 .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
                 .ToListAsync();
 
-            if (images.Count == 0)
+            if (!images.Any())
             {
-                // Reset HasShown to false for all images in this Module and SubModule
-                var allImages = await _db.ImagesDB
-                    .Where(i => i.Module == "1" && i.SubModule == "1").ToListAsync();
+                await _db.ImagesDB
+                    .Where(i => i.Module == "1" && i.SubModule == "1")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
 
-                foreach (var img in allImages)
-                {
-                    img.HasShown = false;
-                }
-
-                _db.ImagesDB.UpdateRange(allImages);
                 await _db.SaveChangesAsync();
-
-                return Json(new { success = false }); // No more images
+                return Json(new { success = false }); // ไม่มีภาพเหลือแล้ว
             }
 
             var random = new Random();
@@ -248,7 +235,6 @@ namespace FlashCard.Controllers
 
             if (selectedImage != null)
             {
-                // Mark the selected image as shown
                 selectedImage.HasShown = true;
                 _db.ImagesDB.Update(selectedImage);
                 await _db.SaveChangesAsync();
@@ -258,9 +244,10 @@ namespace FlashCard.Controllers
             {
                 success = true,
                 imgBytes = Convert.ToBase64String(selectedImage.Imgbytes),
-                answer = selectedImage.Answer,
+                correctAnswer = selectedImage.Answer // ส่งคำตอบที่ถูกต้องไปให้ View
             });
         }
+
 
 
 
@@ -277,6 +264,37 @@ namespace FlashCard.Controllers
         {
             return View();
         }
+
+        // Module 1 Enhance Test //
+        public async Task<IActionResult> M1_Enhance1_Test()
+        {
+            var images = await _db.ImagesDB
+            .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+            .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "1" && i.SubModule == "1")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+                return RedirectToAction("M1_Done", new { source = "M1_Enhance1", next = "M1_Enhance2" });
+            }
+
+            var random = new Random();
+            var selectedImage = images.OrderBy(x => random.Next()).FirstOrDefault();
+
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.ImagesDB.Update(selectedImage);
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);
+        }
+
 
         // Module 1 Start 2 //
         public IActionResult M1_Start2()

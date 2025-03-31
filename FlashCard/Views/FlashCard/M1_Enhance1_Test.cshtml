@@ -1,0 +1,129 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    var translations = new Dictionary<string, string>
+    {
+        { "Happy", "ดีใจ" },
+        { "Sad", "เศร้า" },
+        { "Angry", "โกรธ" },
+        { "Scared", "กลัว" },
+    };
+}
+
+<div class="container home-bg flex-column">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <a asp-action="M1_Enhance1" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+
+    @if (Model != null && Model.Imgbytes != null)
+    {
+        <div class="flashcard-container">
+            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
+            <div class="choices">
+                @foreach (var choice in translations.Values)
+                {
+                    <button class="choice-btn" data-answer="@choice">@choice</button>
+                }
+            </div>
+            <a class="next-btn" style="opacity: 0; pointer-events: none;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    }
+    else
+    {
+        <p>No Image Available</p>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const choiceButtons = document.querySelectorAll(".choice-btn");
+        const nextBtn = document.querySelector(".next-btn");
+        const flashcard = document.querySelector(".flashcard");
+
+        // 🔹 เพิ่ม translations ใน JavaScript
+        const translations = {
+            "Happy": "ดีใจ",
+            "Sad": "เศร้า",
+            "Angry": "โกรธ",
+            "Scared": "กลัว"
+        };
+
+        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
+        console.log("Correct Answer (First Card):", correctAnswer); // ✅ Debug
+
+        choiceButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                let userAnswer = this.getAttribute("data-answer");
+
+                if (userAnswer === correctAnswer) {
+                    this.classList.add("correct");
+                } else {
+                    this.classList.add("wrong");
+                }
+
+                choiceButtons.forEach(btn => btn.disabled = true);
+                nextBtn.style.opacity = "1";
+                nextBtn.style.pointerEvents = "auto";
+            });
+        });
+
+        nextBtn.addEventListener("click", function () {
+            fetch('@Url.Action("GetNextFlashCard")', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    flashcard.src = "data:image/png;base64," + data.imgBytes;
+
+                    // 🔹 แปลงคำตอบที่ได้ให้ตรงกับภาษาไทย
+                    correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+                    console.log("Correct Answer (Next Card):", correctAnswer); // ✅ Debug
+
+                    choiceButtons.forEach(button => {
+                        button.classList.remove("correct", "wrong");
+                        button.disabled = false;
+                    });
+
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                } else {
+                    const source = encodeURIComponent("M1_Enhance1");
+                    const next = encodeURIComponent("M1_Start2");
+                    window.location.href = `@Url.Action("M1_Done")?source=${source}&next=${next}`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    });
+</script>
+
+<style>
+    .choices {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .choice-btn {
+        padding: 10px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .correct {
+        background-color: green;
+        color: white;
+    }
+
+    .wrong {
+        background-color: red;
+        color: white;
+    }
+
+    .next-btn {
+        margin-top: 15px;
+        padding: 10px;
+        cursor: pointer;
+    }
+</style>
