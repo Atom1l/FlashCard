@@ -220,14 +220,19 @@ namespace FlashCard.Controllers
                 .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
                 .ToListAsync();
 
+            // 🛠 Debug: เช็คว่ามีการ์ดเหลืออยู่หรือไม่
+            Console.WriteLine($"[Debug] การ์ดที่ยังไม่แสดง: {images.Count}");
+
             if (!images.Any())
             {
+                // 🛠 Debug: รีเซ็ตค่า HasShown ถ้าการ์ดหมด
+                Console.WriteLine("[Debug] รีเซ็ตค่า HasShown...");
                 await _db.ImagesDB
                     .Where(i => i.Module == "1" && i.SubModule == "1")
                     .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
 
                 await _db.SaveChangesAsync();
-                return Json(new { success = false }); // ไม่มีภาพเหลือแล้ว
+                return Json(new { success = false });
             }
 
             var random = new Random();
@@ -235,20 +240,21 @@ namespace FlashCard.Controllers
 
             if (selectedImage != null)
             {
+                // 🔹 ค่อยเซ็ต HasShown เป็น true **หลังจาก** เลือกภาพเรียบร้อย
                 selectedImage.HasShown = true;
                 _db.ImagesDB.Update(selectedImage);
                 await _db.SaveChangesAsync();
             }
 
+            Console.WriteLine($"[Debug] ส่งการ์ดใบ: {selectedImage?.Id}, คำตอบ: {selectedImage?.Answer}");
+
             return Json(new
             {
                 success = true,
                 imgBytes = Convert.ToBase64String(selectedImage.Imgbytes),
-                correctAnswer = selectedImage.Answer // ส่งคำตอบที่ถูกต้องไปให้ View
+                correctAnswer = selectedImage.Answer
             });
         }
-
-
 
 
         // Module 1 Done //

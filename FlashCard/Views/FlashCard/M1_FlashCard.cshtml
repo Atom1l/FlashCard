@@ -78,45 +78,57 @@
             });
         }
 
-            function fetchNextFlashCard() {
-        fetch('@Url.Action("GetNextFlashCard")', {
-            method: 'GET',
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                const flashcardContainer = document.querySelector(".flashcard-container");
-                const imgElement = flashcardContainer.querySelector("img");
-                const answerElement = flashcardContainer.querySelector(".answer-text");
+        function fetchNextFlashCard() {
+            fetch('@Url.Action("GetNextFlashCard")', { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const flashcardContainer = document.querySelector(".flashcard-container");
+                    const imgElement = flashcardContainer.querySelector("img");
 
-                imgElement.src = "data:image/png;base64," + data.imgBytes;
+                    // 🔹 หา answerElement ใหม่ทุกครั้ง
+                    let answerElement = document.querySelector(".answer-text");
 
-                if (answerElement) {
+                    // ถ้ายังไม่มี ให้สร้างใหม่
+                    if (!answerElement) {
+                        const answerContainer = document.createElement("div");
+                        answerContainer.classList.add("answer-container");
+
+                        answerElement = document.createElement("p");
+                        answerElement.classList.add("noto-bold", "answer-text");
+
+                        answerContainer.appendChild(answerElement);
+                        flashcardContainer.appendChild(answerContainer);
+                    }
+
+                    imgElement.src = "data:image/png;base64," + data.imgBytes;
+
                     const translations = {
                         "Happy": "มีความสุข",
                         "Sad": "เศร้า",
                         "Angry": "โกรธ",
                         "Scared": "กลัว"
                     };
-                    answerElement.textContent = translations[data.answer] || data.answer;
+
+                    // 🔹 อัปเดตข้อความคำตอบใหม่
+                    answerElement.textContent = translations[data.correctAnswer] || data.correctAnswer;
+
+                    hasShown = false;
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+
+                    // 🛠 Debug: ตรวจสอบว่าการ์ดโหลดใหม่จริงไหม
+                    console.log("[Debug] โหลดการ์ดใหม่: ", data.correctAnswer);
+
+                } else {
+                    console.log("[Debug] ไม่มีการ์ดเหลือแล้ว กำลังเปลี่ยนหน้า...");
+                    const source = encodeURIComponent("M1_Start1");
+                    const next = encodeURIComponent("M1_Enhance1");
+                    window.location.href = `@Url.Action("M1_Done")?source=${source}&next=${next}`;
                 }
-
-                hasShown = false;
-                nextBtn.style.opacity = "0";
-                nextBtn.style.pointerEvents = "none";
-            } else {
-                // แก้ปัญหาการส่งค่าพารามิเตอร์ไม่ครบ
-                const source = encodeURIComponent("M1_Start1");
-                const next = encodeURIComponent("M1_Enhance1");
-
-                window.location.href = `@Url.Action("M1_Done")?source=${source}&next=${next}`;
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching next flashcard:', error);
-        });
-    }
-
+            })
+            .catch(error => console.error('Error fetching next flashcard:', error));
+        }
     });
 
 </script>

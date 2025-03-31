@@ -405,4 +405,61 @@ html, body {
 }
 
 /* =M1_Enhance1= */
+.choices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    gap: 50px; 
+    justify-content: center;
+    width: 60%;  
+    margin: 50px auto;
+}
 
+.choice-btn {
+    padding: 25px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    white-space: nowrap;
+    font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
+}
+
+.correct {
+    background-color: #B9E7A6;
+    color: black;
+}
+
+.wrong {
+    background-color: #FA9B95;
+    color: black;
+}
+
+.flashcard-overall-container {
+    border: solid 5px red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.enhance-container {
+    margin-top:50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.enhance-container img {
+    width: 50%;
+    height: 60%;
+    border-radius: 50px;
+    border: solid 10px #8dd4ff;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
