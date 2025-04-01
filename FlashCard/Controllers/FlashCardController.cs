@@ -301,6 +301,12 @@ namespace FlashCard.Controllers
             return View();
         }
 
+        public async Task<IActionResult> M1_Conclude_All()
+        {
+            var conclude_img = await _db.ImagesDB.Where(i => i.Module == "1").ToListAsync();
+            return View(conclude_img);
+        }
+
         // Module 1 Test //
         public IActionResult M1_Test_Start()
         {

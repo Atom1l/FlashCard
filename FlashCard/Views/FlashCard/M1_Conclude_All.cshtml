@@ -1,0 +1,24 @@
+﻿@model List<Images>
+
+@{
+    ViewData["Title"] = "Flash Card";
+}
+
+<div class="container-scroll home-bg ">
+    <div class="conclude-text noto-bold">สรุปเนื้อหา</div>
+    <div class="row all-card-container">
+        @foreach (var image in Model)
+        {
+            <div class="card-container col-md-3">
+                <div class="card">
+                    <!-- Display the image from Imgbytes -->
+                    <img src="data:image/png;base64,@Convert.ToBase64String(image.Imgbytes)" class="card-img-top" alt="@image.Name" />
+                    @* <div class="card-body text-center">
+                    <p class="card-text noto-bold">Answer: @image.Answer</p>
+                </div> *@
+                </div>
+            </div>
+        }
+    </div>
+    <a asp-controller="FlashCard" asp-action="M1_Test_Start" class="conclude-btn module-golong noto-regular text-white">เสร็จสิ้น</a>
+</div>
