@@ -99,8 +99,9 @@ html, body {
     font-size: clamp(0.8rem, 3vw, 2rem) !important;
 }
 @media screen and (max-width: 1024px) {
+    /* ปรับขนาดตัวอักษรให้พอดีกับหน้าจอ */
     .game-text {
-        font-size: clamp(5rem, 8vw, 8rem) !important; /* ลดขนาดลงเล็กน้อย แต่ยังคงดูโดดเด่น */
+        font-size: clamp(3rem, 8vw, 8rem) !important;
     }
 
     .start-btn {
@@ -114,25 +115,25 @@ html, body {
         font-size: clamp(0.8rem, 2.5vw, 1.8rem) !important;
     }
 
-    /* ย่อขนาดตัวละครตามความเหมาะสมและไม่ให้ตำแหน่งขยับ */
-    img[style*="width: 200px"][src*="Nong Purple .PNG"] {
-        width: 160px !important;
-        left: 5% !important; /* คงที่ไว้ที่เดิม */
+    #nong-purple {
+        width: 150px !important; /* ลดขนาดลง */
+        left: 5% !important; /* บังคับให้คงอยู่ซ้าย */
+        position: absolute !important; /* บังคับไม่ให้หลุดจากตำแหน่ง */
     }
 
-    img[style*="width: 280px"][src*="Nong Yellow .PNG"] {
-        width: 220px !important;
-        left: 5% !important; /* คงที่ไว้ที่เดิม */
+    img[style*="Nong Yellow .PNG"] {
+        width: 230px !important;
+        left: 5% !important; /* คงตำแหน่งเดิม */
     }
 
-    img[style*="width: 150px"][src*="NongBlue.png"] {
+    img[style*="NongBlue.PNG"] {
         width: 120px !important;
-        left: 87% !important; /* คงที่ไว้ที่เดิม */
+        left: 87% !important; /* คงตำแหน่งเดิม */
     }
 
-    img[style*="width: 200px"][src*="NongRed.PNG"] {
+    img[style*="NongRed.PNG"] {
         width: 160px !important;
-        left: 80% !important; /* คงที่ไว้ที่เดิม */
+        left: 80% !important; /* คงตำแหน่งเดิม */
     }
 }
 
@@ -628,7 +629,30 @@ html, body {
     cursor: pointer;
     transition: 0.3s ease;
 }
+@media screen and (max-width: 1024px) {
+    .enhance-container img {
+        width: 68%; /* ลดขนาดการ์ดลงเล็กน้อย */
+        height: auto; /* ปรับให้ขนาดภาพคงสัดส่วน */
+    }
 
+    .choices {
+        width: 80%; /* ขยายพื้นที่ปุ่มตัวเลือกให้เต็มจอมากขึ้น */
+        grid-template-columns: repeat(2, minmax(80px, 1fr)); /* ลดขนาดปุ่มแต่ยังคง 2 คอลัมน์ */
+    }
+
+    .choice-btn {
+        padding: 25px 15px; /* ลดขนาดปุ่มลงเล็กน้อย */
+        font-size: clamp(0.7rem, 2.5vw, 2rem) !important; /* ปรับขนาดตัวอักษรให้เล็กลงตามจอ */
+    }
+
+    .flashcard-overall-container {
+        padding: 10px; /* เพิ่ม padding ให้ขอบเขตชัดเจนขึ้น */
+    }
+
+    .enhance-container {
+        margin-top: 30px; /* ลดระยะห่างข้างบนเพื่อให้พอดีกับหน้าจอเล็กลง */
+    }
+} 
 /* =M1_Conclude= */
 .container-scroll {
     margin: 0;
