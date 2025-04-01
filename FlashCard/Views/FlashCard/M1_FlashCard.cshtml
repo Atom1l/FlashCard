@@ -38,97 +38,62 @@
     }
 </div>
 
+<!-- JS SCRIPT -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const flashcard = document.querySelector(".flashcard-container img");
         const nextBtn = document.querySelector(".next-btn");
-        const answerContainer = document.querySelector(".answer-container");
-        let hasShown = false; // ตัวแปรที่ใช้เก็บสถานะการแสดงของภาพ
+        let hasShown = false;
 
+        // กำหนดค่าของ module และ submodule
+        const moduleValue = 1;
+        const submoduleValue = 1;
 
         if (flashcard && nextBtn) {
             flashcard.addEventListener("click", function () {
                 if (!hasShown) {
-                    // ทำให้ปุ่ม Next ปรากฏ
                     nextBtn.style.opacity = "1";
-                    nextBtn.style.cursor = "pointer";
                     nextBtn.style.pointerEvents = "auto";
-
-                    // เปลี่ยนสถานะ HasShown เป็น true หลังจากที่คลิกที่ภาพ
+                    nextBtn.style.cursor = "pointer";
                     hasShown = true;
-
-                    // ไม่ให้ทำการ unfocus ที่รูปภาพ
-                    flashcard.focus(); // ถ้าคุณต้องการให้รูปภาพได้รับ focus ตอนคลิก
                 }
             });
 
             document.addEventListener("click", function (event) {
-                // ซ่อนปุ่ม Next เมื่อคลิกที่อื่นนอกจากรูปภาพหรือปุ่ม
                 if (!flashcard.contains(event.target) && !nextBtn.contains(event.target)) {
                     nextBtn.style.opacity = "0";
                     nextBtn.style.pointerEvents = "none";
-                    hasShown = false; // รีเซ็ตสถานะ HasShown เมื่อ unfocus
+                    hasShown = false;
                 }
             });
 
             nextBtn.addEventListener("click", function () {
-                if (hasShown) {
-                    fetchNextFlashCard();
-                }
+                if (hasShown) fetchNextFlashCard();
             });
         }
 
         function fetchNextFlashCard() {
-            fetch('@Url.Action("GetNextFlashCard")', { method: 'GET' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const flashcardContainer = document.querySelector(".flashcard-container");
-                    const imgElement = flashcardContainer.querySelector("img");
+            // ส่ง module และ submodule ไปกับ request
+            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
 
-                    // 🔹 หา answerElement ใหม่ทุกครั้ง
-                    let answerElement = document.querySelector(".answer-text");
-
-                    // ถ้ายังไม่มี ให้สร้างใหม่
-                    if (!answerElement) {
-                        const answerContainer = document.createElement("div");
-                        answerContainer.classList.add("answer-container");
-
-                        answerElement = document.createElement("p");
-                        answerElement.classList.add("noto-bold", "answer-text");
-
-                        answerContainer.appendChild(answerElement);
-                        flashcardContainer.appendChild(answerContainer);
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (!data.success) {
+                        window.location.href = `@Url.Action("M1_Done", "Flashcard")?source=M1_Start1&next=M1_Enhance1`;
+                        return;
                     }
 
-                    imgElement.src = "data:image/png;base64," + data.imgBytes;
-
-                    const translations = {
-                        "Happy": "มีความสุข",
-                        "Sad": "เศร้า",
-                        "Angry": "โกรธ",
-                        "Scared": "กลัว"
-                    };
-
-                    // 🔹 อัปเดตข้อความคำตอบใหม่
-                    answerElement.textContent = translations[data.correctAnswer] || data.correctAnswer;
+                    document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
+                    document.querySelector(".answer-text").textContent =
+                        { "Happy": "มีความสุข", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
 
                     hasShown = false;
                     nextBtn.style.opacity = "0";
                     nextBtn.style.pointerEvents = "none";
-
-                    // 🛠 Debug: ตรวจสอบว่าการ์ดโหลดใหม่จริงไหม
-                    console.log("[Debug] โหลดการ์ดใหม่: ", data.correctAnswer);
-
-                } else {
-                    console.log("[Debug] ไม่มีการ์ดเหลือแล้ว กำลังเปลี่ยนหน้า...");
-                    const source = encodeURIComponent("M1_Start1");
-                    const next = encodeURIComponent("M1_Enhance1");
-                    window.location.href = `@Url.Action("M1_Done")?source=${source}&next=${next}`;
-                }
-            })
-            .catch(error => console.error('Error fetching next flashcard:', error));
+                })
+                .catch(error => console.error('Error fetching next flashcard:', error));
         }
     });
-
 </script>
+

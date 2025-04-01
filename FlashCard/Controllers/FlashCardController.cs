@@ -188,65 +188,44 @@ namespace FlashCard.Controllers
                 .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
                 .ToListAsync();
 
-            if (!images.Any()) // ใช้ .Any() เพื่อให้แน่ใจว่าเป็นเงื่อนไขที่ถูกต้อง
+            if (!images.Any())
             {
-                // รีเซ็ตค่า HasShown ให้เป็น false เพื่อให้รูปวนกลับมาแสดงใหม่
                 await _db.ImagesDB
                     .Where(i => i.Module == "1" && i.SubModule == "1")
-                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false)); // ใช้วิธีที่มีประสิทธิภาพกว่า
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
 
                 await _db.SaveChangesAsync();
-                return RedirectToAction("M1_Done", new { source = "M1_FlashCard", next = "M1_Enhance1" });
             }
 
-            // สุ่มเลือกรูป
-            var random = new Random();
-            var selectedImage = images.OrderBy(x => random.Next()).FirstOrDefault();
-
-            if (selectedImage != null)
-            {
-                selectedImage.HasShown = true;
-                _db.ImagesDB.Update(selectedImage);
-                await _db.SaveChangesAsync();
-            }
+            var selectedImage = images[new Random().Next(images.Count)];
+            selectedImage.HasShown = true;
+            _db.Entry(selectedImage).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
 
             return View(selectedImage);
         }
 
-        //  ======================================== For Next FlashCard ======================================== //
-        public async Task<IActionResult> GetNextFlashCard()
+        // ======================================== For Next FlashCard ======================================== //
+        public async Task<IActionResult> GetNextFlashCard(string module , string submodule)
         {
             var images = await _db.ImagesDB
-                .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+                .Where(i => i.Module == module && i.SubModule == submodule && (i.HasShown == false || i.HasShown == null))
                 .ToListAsync();
-
-            // 🛠 Debug: เช็คว่ามีการ์ดเหลืออยู่หรือไม่
-            Console.WriteLine($"[Debug] การ์ดที่ยังไม่แสดง: {images.Count}");
 
             if (!images.Any())
             {
-                // 🛠 Debug: รีเซ็ตค่า HasShown ถ้าการ์ดหมด
-                Console.WriteLine("[Debug] รีเซ็ตค่า HasShown...");
                 await _db.ImagesDB
-                    .Where(i => i.Module == "1" && i.SubModule == "1")
+                    .Where(i => i.Module == module && i.SubModule == submodule)
                     .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
 
                 await _db.SaveChangesAsync();
                 return Json(new { success = false });
             }
 
-            var random = new Random();
-            var selectedImage = images.OrderBy(x => random.Next()).FirstOrDefault();
-
-            if (selectedImage != null)
-            {
-                // 🔹 ค่อยเซ็ต HasShown เป็น true **หลังจาก** เลือกภาพเรียบร้อย
-                selectedImage.HasShown = true;
-                _db.ImagesDB.Update(selectedImage);
-                await _db.SaveChangesAsync();
-            }
-
-            Console.WriteLine($"[Debug] ส่งการ์ดใบ: {selectedImage?.Id}, คำตอบ: {selectedImage?.Answer}");
+            var selectedImage = images[new Random().Next(images.Count)];
+            selectedImage.HasShown = true;
+            _db.Entry(selectedImage).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
 
             return Json(new
             {
@@ -257,11 +236,12 @@ namespace FlashCard.Controllers
         }
 
 
+
         // Module 1 Done //
         public IActionResult M1_Done(string source, string next)
         {
             ViewData["Source"] = source;
-            ViewData["Next"] = next; // รอแฟลชการ์ดก่อนแล้วจะใส่ asp-route-next = "Viewsต่อไป" เข้าไปเพื่อที่จะไปต่อยังหน้าถัดไปโดยไม่ต้องสร้างเยอะแยะ //
+            ViewData["Next"] = next;
             return View();
         }
 
@@ -275,31 +255,32 @@ namespace FlashCard.Controllers
         public async Task<IActionResult> M1_Enhance1_Test()
         {
             var images = await _db.ImagesDB
-            .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+            .Where(i => i.Module == "1" && i.SubModule == "2" && (i.HasShown == false || i.HasShown == null))
             .ToListAsync();
 
             if (!images.Any())
             {
                 await _db.ImagesDB
-                    .Where(i => i.Module == "1" && i.SubModule == "1")
+                    .Where(i => i.Module == "1" && i.SubModule == "2")
                     .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
 
                 await _db.SaveChangesAsync();
-                return RedirectToAction("M1_Done", new { source = "M1_Enhance1", next = "M1_Enhance2" });
             }
 
             var random = new Random();
-            var selectedImage = images.OrderBy(x => random.Next()).FirstOrDefault();
+            var selectedImage = images[random.Next(images.Count)];
 
             if (selectedImage != null)
             {
                 selectedImage.HasShown = true;
-                _db.ImagesDB.Update(selectedImage);
+                _db.Entry(selectedImage).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
             }
 
             return View(selectedImage);
         }
+
+
 
 
         // Module 1 Start 2 //
