@@ -1,0 +1,41 @@
+﻿@{
+    @model Images
+    ViewData["Title"] = "Flash Card";
+    string? module = ViewData["Module"]?.ToString();
+    var translations = new Dictionary<string, string>
+    {
+        { "Happy", "มีความสุข" },
+        { "Sad", "เศร้า" },
+        { "Angry", "โกรธ" },
+        { "Scared", "กลัว" },
+    };
+}
+
+<div class="container home-bg flex-column">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <a asp-action="@module" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+
+    @if (Model != null && Model.Imgbytes != null)
+    {
+        <div class="flashcard-show-container">
+            <a class="next-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+
+            <img tabindex="0" src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="" />
+
+            @if (!string.IsNullOrEmpty(Model.Answer))
+            {
+                <div class="answer-show-container">
+                    <p class="noto-bold answer-text">@(translations.ContainsKey(Model.Answer) ? translations[Model.Answer] : Model.Answer)</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No Image Available</p>
+    }
+</div>

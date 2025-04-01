@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FlashCard.Controllers
 {
@@ -305,6 +306,18 @@ namespace FlashCard.Controllers
         {
             var conclude_img = await _db.ImagesDB.Where(i => i.Module == "1").ToListAsync();
             return View(conclude_img);
+        }
+
+        // FlashCard Details //
+        public IActionResult FlashCard_Details(string name, string module)
+        {
+            ViewData["Module"] = module;
+            var selectedImg = _db.ImagesDB.FirstOrDefault(i => i.Name == name);
+            if (selectedImg == null)
+            {
+                return RedirectToAction("M1_Conclude_All");
+            }
+            return View(selectedImg);
         }
 
         // Module 1 Test //
