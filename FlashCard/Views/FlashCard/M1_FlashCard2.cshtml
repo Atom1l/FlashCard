@@ -1,0 +1,102 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    var translations = new Dictionary<string, string>
+    {
+        { "Happy", "มีความสุข" },
+        { "Sad", "เศร้า" },
+        { "Angry", "โกรธ" },
+        { "Scared", "กลัว" },
+    };
+}
+
+<div class="container home-bg flex-column">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <a asp-action="M1_Start2" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+
+    @if (Model != null && Model.Imgbytes != null)
+    {
+        <div class="flashcard-container">
+            <a class="next-btn">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+
+            <img tabindex="0" src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="" />
+
+            @if (!string.IsNullOrEmpty(Model.Answer))
+            {
+                <div class="answer-container">
+                    <p class="noto-bold answer-text">@(translations.ContainsKey(Model.Answer) ? translations[Model.Answer] : Model.Answer)</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p>No Image Available</p>
+    }
+</div>
+
+<!-- JS SCRIPT -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const flashcard = document.querySelector(".flashcard-container img");
+        const nextBtn = document.querySelector(".next-btn");
+        let hasShown = false;
+
+        // กำหนดค่าของ module และ submodule
+        const moduleValue = 1;
+        const submoduleValue = 2;
+
+        if (flashcard && nextBtn) {
+            flashcard.addEventListener("click", function () {
+                if (!hasShown) {
+                    nextBtn.style.opacity = "1";
+                    nextBtn.style.pointerEvents = "auto";
+                    nextBtn.style.cursor = "pointer";
+                    hasShown = true;
+                }
+            });
+
+            document.addEventListener("click", function (event) {
+                if (!flashcard.contains(event.target) && !nextBtn.contains(event.target)) {
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                    hasShown = false;
+                }
+            });
+
+            nextBtn.addEventListener("click", function () {
+                if (hasShown) fetchNextFlashCard();
+            });
+        }
+
+        function fetchNextFlashCard() {
+            // ส่ง module และ submodule ไปกับ request
+            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                        if (!data.success) {
+                            setTimeout(() => {
+                                window.location.href = `@Url.Action("M1_Done", "Flashcard")?source=M1_Start2&next=M1_Enhance2`;
+                            }, 1000); // รอสัก 1 วินาทีให้ฐานข้อมูลอัปเดต
+                            return;
+                        }
+
+
+                    document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
+                    document.querySelector(".answer-text").textContent =
+                        { "Happy": "มีความสุข", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
+
+                    hasShown = false;
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                })
+                .catch(error => console.error('Error fetching next flashcard:', error));
+        }
+    });
+</script>
+

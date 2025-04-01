@@ -147,31 +147,36 @@ html, body {
     border-radius: 25px;
     background-color: #fee6b0;
     border:solid 15px #8dd4ff;
+    transition: 0.5s ease;
 }
-.menu-header-container{
-    position:relative;
-    width:100%;
-    margin-top:-50px;
-    margin-bottom:50px;
-    display:flex;
+.menu-header-container {
+    position: relative;
+    width: 100%;
+    margin-top: -50px;
+    margin-bottom: 50px;
+    display: flex;
     flex-direction: row;
-    justify-content:space-between;
-    align-items:center;
+    justify-content: space-between;
+    align-items: center;
+    transition: 0.5s ease;
 }
 .volumn-btn i{
     font-size: 4rem;
     cursor:pointer;
+    transition: 0.5s ease;
 }
-.menu-headtext{
-    font-size: clamp(1.5rem , 3vw , 4rem);
+.menu-headtext {
+    font-size: 4rem;
+    transition: 0.5s ease;
 }
-.menu-btn-container{
-    position:relative;
-    width:100%;
-    margin-bottom:-10px;
-    display:flex;
-    flex-direction:row;
+.menu-btn-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: -10px;
+    display: flex;
+    flex-direction: row;
     white-space: nowrap;
+    transition: 0.5s ease;
 }
 .home-btn {
     width: 350px;
@@ -192,7 +197,6 @@ html, body {
     margin-bottom: 15px;
     font-size: 8rem;
 }
-
 .continue-btn {
     width: 350px;
     height: 320px;
@@ -212,7 +216,6 @@ html, body {
     margin-bottom: 15px;
     font-size: 8rem;
 }
-
 .lesson-btn {
     width: 350px;
     height: 320px;
@@ -232,463 +235,588 @@ html, body {
     margin-bottom: 15px;
     font-size: 8rem;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1440px) {
     .rectangle-menu {
-        transform: scale(0.75); /* ลดขนาดลงอีก */
-        padding: 50px; /* ปรับ padding ให้พอดีกับขนาดใหม่ */
+        transform: scale(0.9);
+        padding: 50px;
+    }
+    .menu-header-container {
+        width: 90%;
+        margin-top: -20px;
+        margin-bottom: 20px;
+    }
+    .menu-btn-container{
+        transform:scale(0.9);
+    }
+}
+
+@media (max-width: 1250px) {
+    .rectangle-menu {
+        transform: scale(0.85);
+        padding: 50px 0px 50px 0px;
+    }
+    .menu-header-container {
+        width: 83%;
+        margin-top: -20px;
+        margin-bottom: 0px;
+    }
+    .menu-headtext{
+        font-size: 3.5rem;
+    }
+    .volumn-btn i {
+        font-size: 3.5rem;
+    }
+    .menu-btn-container {
+        transform: scale(0.85);
+    }
+}
+@media (max-width: 1250px) {
+    .rectangle-menu {
+        transform: scale(0.85);
+        padding: 50px 0px 50px 0px;
     }
 
     .menu-header-container {
-        margin-top: -25px;
-        margin-bottom: 35px;
+        width: 83%;
+        margin-top: -20px;
+        margin-bottom: 0px;
     }
 
     .menu-headtext {
-        font-size: 2.5rem; /* ลดขนาดตัวอักษรลงอีกนิด */
+        font-size: 3.5rem;
     }
 
     .volumn-btn i {
-        font-size: 3rem; /* ลดขนาดปุ่มปรับเสียง */
+        font-size: 3.5rem;
     }
 
     .menu-btn-container {
-        gap: 12px; /* ปรับระยะห่างระหว่างปุ่ม */
+        transform: scale(0.85);
+    }
+}
+@media (max-width: 1024px) {
+    .rectangle-menu {
+        transform: scale(0.75);
+        padding: 50px 0px 50px 0px;
+    }
+    .menu-header-container {
+        width: 83%;
+        margin-top: -20px;
+        margin-bottom: 0px;
     }
 
-    .home-btn,
-    .continue-btn,
-    .lesson-btn {
-        width: 300px; /* ลดขนาดปุ่มลงอีก */
-        height: 260px;
-        font-size: 2rem;
+    .menu-headtext {
+        font-size: 3.5rem;
     }
 
-    .home-btn i,
-    .continue-btn i,
-    .lesson-btn i {
-        font-size: 6.5rem; /* ลดขนาดไอคอนลงอีก */
+    .volumn-btn i {
+        font-size: 3.5rem;
     }
 
-    /* ลดขนาดตัวละครลงอีก แต่ยังให้คงตำแหน่งเดิม */
+    .menu-btn-container {
+        transform: scale(0.85);
+    }
     img[src="Nong"] {
         width: 75%;
     }
 }
+@media (max-width: 900px) {
+    .rectangle-menu {
+        transform: scale(0.65);
+        padding: 50px 0px 50px 0px;
+    }
 
+    .menu-header-container {
+        width: 83%;
+        margin-top: -20px;
+        margin-bottom: 0px;
+    }
 
-/*= Login/Register Page =*/
-.login-headtext {
-    margin-bottom:15px;
-    font-size: clamp(1rem, 4vw, 4rem) !important;
+    .menu-headtext {
+        font-size: 3.5rem;
+    }
+
+    .volumn-btn i {
+        font-size: 3.5rem;
+    }
+
+    .menu-btn-container {
+        transform: scale(0.85);
+    }
 }
-.rectangle {
-    padding: 80px 150px 80px 150px;
-    border-radius: 25px;
-    background-color: #ccebfe;
-}
-.login-input {
-    width: 120%;
-    margin-bottom: 35px;
-    padding: 15px 15px 15px 30px;
-    color: #333;
-    background: #fee6b0;
-    border: none;
-    outline: none;
-    border-radius: 50px;
-    font-size: clamp(1rem, 2vw, 2rem) !important;
-}
-.login-submit {
-    width: 120%;
-    padding: 15px 15px 15px 30px;
-    color: white;
-    background: #a1a4ff;
-    border: none;
-    outline: none;
-    border-radius: 50px;
-    font-size: clamp(1rem, 2vw, 2rem) !important;
-}
-
-/*= Main Menu Page =*/
-@media screen and (max-width: 1024px) {
-    .module-btn {
-        width: 80% !important;
-        padding: 20px 0px;
-        font-size: clamp(1rem, 2vw, 2.8rem) !important;
-        border-radius: 80px;
+@media (max-width: 800px) {
+    .rectangle-menu {
+        transform: scale(0.6);
+        padding: 50px 0px 50px 0px;
     }
 
-    /* ปรับขนาดตัวอักษรให้ลดลงเล็กน้อย แต่ยังคงความโดดเด่น */
-    .game-text {
-        font-size: clamp(7.3rem, 9.0vw, 9.0rem) !important;
+    .menu-header-container {
+        width: 83%;
+        margin-top: -20px;
+        margin-bottom: 0px;
     }
 
-    /* ปรับขนาดตัวละครและเลื่อนออกจากพื้นที่หลักเล็กน้อย */
-    img[style*="width: 140px"] {
-        width: 110px !important;
-        left: 0.1% !important; /* ขยับไปทางซ้ายเล็กน้อย */
+    .menu-headtext {
+        font-size: 3.5rem;
     }
 
-    img[style*="width: 150px"] {
-        width: 120px !important;
-        left: 88% !important; /* ขยับออกไปทางขวา */
+    .volumn-btn i {
+        font-size: 3.5rem;
     }
 
-    img[style*="width: 200px"] {
-        width: 160px !important;
-        left: 82% !important; /* ขยับออกไปทางขวาอีกนิด */
-    }
-
-    img[style*="width: 280px"] {
-        width: 200px !important;
-        left: 0.4% !important; /* ขยับออกไปทางซ้าย */
+    .menu-btn-container {
+        transform: scale(0.85);
     }
 }
 
-/*= Module 1 =*/
-.module-headtext {
-    margin-bottom:20px;
-    text-align: center;
-    font-size: clamp(2rem, 10vw, 10rem) !important;
-}
-.tutorial-headtext {
-    margin-top:-20px;
-    margin-bottom: -20px;
-    text-align: center;
-    font-size: clamp(2rem, 10vw, 8rem) !important;
-}
-.score-headtext {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: clamp(1rem, 5vw, 4.5rem) !important;
-}
-.score-text {
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: clamp(1.5rem, 7vw, 7rem) !important;
-}
-.test-result {
-    text-align: center;
-    text-decoration: none;
-    margin-top: 20px;
-    margin-bottom: 40px;
-    background: #8dd4ff;
-    width: 30% !important;
-    padding: 10px 0px 10px 0px;
-    border-radius: 100px;
-    border: none;
-    font-size: clamp(1rem, 3vw, 2.5rem) !important;
-}
-.main-module-go {
-    text-align: center;
-    text-decoration: none;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background: #8dd4ff;
-    width: 70% !important;
-    padding: 30px 0px 30px 0px;
-    border-radius: 100px;
-    border: none;
-    font-size: clamp(1rem, 3vw, 3rem) !important;
-}
-.module-go {
-    text-align: center;
-    text-decoration: none;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background: #8dd4ff;
-    width: 50% !important;
-    padding: 30px 0px 30px 0px;
-    border-radius: 100px;
-    border: none;
-    font-size: clamp(1rem, 3vw, 3rem) !important;
-}
-.module-golong { /* For long text */
-    text-align: center;
-    text-decoration: none;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background: #8dd4ff;
-    width: 37.5% !important;
-    padding: 30px 0px 30px 0px;
-    border-radius: 100px;
-    border: none;
-    font-size: clamp(1rem, 3vw, 3rem) !important;
-}
-.module-goshort { /* For short text */
-    text-align: center;
-    text-decoration: none;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background: #8dd4ff;
-    width: 90% !important;
-    padding: 30px 0px 30px 0px;
-    border-radius: 100px;
-    border: none;
-    font-size: clamp(1rem, 3vw, 3rem) !important;
-}
-.no-play{
-    background: #fb9b95 !important;
-}
-.video-preview{
-    width:855px;
-    height:600px;
-    background-color:grey;
-}
 
-/* = FlashCard =*/
-.close-btn{
-    position:absolute;
-    top:1%;
-    right:2%;
-    color:black;
-    text-decoration:none;
-    font-size: 4rem;
-}
-.flashcard-overall-container {
-    border: solid 5px red;
-    width: 100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-}
-.flashcard-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-.flashcard-container img{
-    width: 50%;
-    height: auto;
-    margin-top:150px;
-    border-radius: 50px;
-    border:solid 10px #8dd4ff;
-    cursor:pointer;
-    transition: 0.3s ease;
-}
-.flashcard-container img:focus{
-    margin-top:45px;
-}
-.flashcard-container img:focus + .answer-container{
-    opacity:1;
-}
-.next-btn {
-    position: absolute;
-    top: 45%;
-    right: 2.25%;
-    color: black;
-    text-decoration: none;
-    font-size: 4rem;
-    opacity:0;
-    transition: 0.3s ease;
-    pointer-events:none;
-}
-.answer-container{
-    margin-top:50px;
-    opacity: 0;
-    transition:0.3s ease;
-}
-.answer-text {
-    white-space: nowrap;
-    font-size: clamp(0.8rem, 5vw, 7rem) !important;
-}
-
-@media screen and (max-width: 1024px) {
-    .flashcard-container img {
-        width: 70%; /* ปรับขนาดภาพให้เหมาะสมกับหน้าจอ */
-        height: auto;
-        margin-top: 100px;
+    /*= Login/Register Page =*/
+    .login-headtext {
+        margin-bottom: 15px;
+        font-size: clamp(1rem, 4vw, 4rem) !important;
     }
 
-    .flashcard-container img:focus {
-        margin-top: 30px;
+    .rectangle {
+        padding: 80px 150px 80px 150px;
+        border-radius: 25px;
+        background-color: #ccebfe;
     }
 
-    .answer-text {
-        font-size: clamp(0.8rem, 2.5vw, 3rem) !important; /* ปรับขนาดตัวอักษรให้เหมาะกับหน้าจอ */
+    .login-input {
+        width: 120%;
+        margin-bottom: 35px;
+        padding: 15px 15px 15px 30px;
+        color: #333;
+        background: #fee6b0;
+        border: none;
+        outline: none;
+        border-radius: 50px;
+        font-size: clamp(1rem, 2vw, 2rem) !important;
     }
 
-    .next-btn {
-        font-size: 3rem; /* ลดขนาดปุ่ม next ให้เหมาะกับหน้าจอที่เล็กลง */
-        top: 50%;
-        right: 5%;
+    .login-submit {
+        width: 120%;
+        padding: 15px 15px 15px 30px;
+        color: white;
+        background: #a1a4ff;
+        border: none;
+        outline: none;
+        border-radius: 50px;
+        font-size: clamp(1rem, 2vw, 2rem) !important;
     }
 
-    .close-btn {
-        font-size: 3rem; /* ลดขนาดปุ่มปิด */
-        top: 2%;
-        right: 3%;
+    /*= Main Menu Page =*/
+    @media screen and (max-width: 1024px) {
+        .module-btn {
+            width: 80% !important;
+            padding: 20px 0px;
+            font-size: clamp(1rem, 2vw, 2.8rem) !important;
+            border-radius: 80px;
+        }
+
+        /* ปรับขนาดตัวอักษรให้ลดลงเล็กน้อย แต่ยังคงความโดดเด่น */
+        .game-text {
+            font-size: clamp(7.3rem, 9.0vw, 9.0rem) !important;
+        }
+
+        /* ปรับขนาดตัวละครและเลื่อนออกจากพื้นที่หลักเล็กน้อย */
+        img[style*="width: 140px"] {
+            width: 110px !important;
+            left: 0.1% !important; /* ขยับไปทางซ้ายเล็กน้อย */
+        }
+
+        img[style*="width: 150px"] {
+            width: 120px !important;
+            left: 88% !important; /* ขยับออกไปทางขวา */
+        }
+
+        img[style*="width: 200px"] {
+            width: 160px !important;
+            left: 82% !important; /* ขยับออกไปทางขวาอีกนิด */
+        }
+
+        img[style*="width: 280px"] {
+            width: 200px !important;
+            left: 0.4% !important; /* ขยับออกไปทางซ้าย */
+        }
     }
-}
 
-/* =M1_Ask= */
-@media (max-width: 1024px) {
-
-    .row {
-        width: 90%;
-        text-align: center;
-    }
-
+    /*= Module 1 =*/
     .module-headtext {
-        font-size: 2rem; /* ปรับขนาดหัวข้อให้เหมาะสม */
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: clamp(2rem, 10vw, 10rem) !important;
+    }
+
+    .tutorial-headtext {
+        margin-top: -20px;
+        margin-bottom: -20px;
+        text-align: center;
+        font-size: clamp(2rem, 10vw, 8rem) !important;
+    }
+
+    .score-headtext {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: clamp(1rem, 5vw, 4.5rem) !important;
+    }
+
+    .score-text {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: clamp(1.5rem, 7vw, 7rem) !important;
+    }
+
+    .test-result {
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        margin-bottom: 40px;
+        background: #8dd4ff;
+        width: 30% !important;
+        padding: 10px 0px 10px 0px;
+        border-radius: 100px;
+        border: none;
+        font-size: clamp(1rem, 3vw, 2.5rem) !important;
+    }
+
+    .main-module-go {
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        background: #8dd4ff;
+        width: 70% !important;
+        padding: 30px 0px 30px 0px;
+        border-radius: 100px;
+        border: none;
+        font-size: clamp(1rem, 3vw, 3rem) !important;
     }
 
     .module-go {
-        width: 80%;
-        font-size: 1.2rem;
-        padding: 12px 0;
         text-align: center;
-        margin-bottom: 10px;
+        text-decoration: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        background: #8dd4ff;
+        width: 50% !important;
+        padding: 30px 0px 30px 0px;
+        border-radius: 100px;
+        border: none;
+        font-size: clamp(1rem, 3vw, 3rem) !important;
     }
 
-}
+    .module-golong { /* For long text */
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        background: #8dd4ff;
+        width: 37.5% !important;
+        padding: 30px 0px 30px 0px;
+        border-radius: 100px;
+        border: none;
+        font-size: clamp(1rem, 3vw, 3rem) !important;
+    }
 
-/* =M1_Enhance1= */
-.choices {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(100px, 1fr));
-    gap: 20px; 
-    justify-content: center;
-    width: 60%;  
-    margin: 30px auto;
-}
+    .module-goshort { /* For short text */
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        background: #8dd4ff;
+        width: 90% !important;
+        padding: 30px 0px 30px 0px;
+        border-radius: 100px;
+        border: none;
+        font-size: clamp(1rem, 3vw, 3rem) !important;
+    }
 
-.choice-btn {
-    padding: 35px 25px 35px 25px;
-    border: none;
-    cursor: pointer;
-    text-align: center;
-    background-color: #f0f0f0;
-    border-radius: 15px;
-    white-space: nowrap;
-    font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
-}
+    .no-play {
+        background: #fb9b95 !important;
+    }
 
-.correct {
-    background-color: #B9E7A6;
-    color: black;
-}
+    .video-preview {
+        width: 855px;
+        height: 600px;
+        background-color: grey;
+    }
 
-.wrong {
-    background-color: #FA9B95;
-    color: black;
-}
+    /* = FlashCard =*/
+    .close-btn {
+        position: absolute;
+        top: 1%;
+        right: 2%;
+        color: black;
+        text-decoration: none;
+        font-size: 4rem;
+    }
 
-.flashcard-overall-container {
-    border: solid 5px red;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+    .flashcard-overall-container {
+        border: solid 5px red;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
 
-.enhance-container {
-    margin-top:50px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
+    .flashcard-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
 
-.enhance-container img {
-    width: 50%;
-    height: 60%;
-    border-radius: 50px;
-    border: solid 10px #8dd4ff;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
+    .flashcard-container img {
+        width: 50%;
+        height: auto;
+        margin-top: 150px;
+        border-radius: 50px;
+        border: solid 10px #8dd4ff;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
 
-/* =M1_Conclude= */
-.container-scroll {
-    position:relative;
-    margin: 0;
-    padding: 0;
-    overflow: auto;
-    max-width: 100%;
-    max-height: 100%;
-    width: 100dvw;
-    height: 100dvh;
-    background: url(/pic/BG/Conclude.png) no-repeat center center;
-    background-attachment: fixed;
-    background-size: cover;
-    
-}
-.sub-container {
-    position:absolute;
-    top:5%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-.flashcard-show-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    height: 100%;
-}
-.flashcard-show-container img {
-    width: 50%;
-    height: 60%;
-    margin-top: 100px;
-    border-radius: 50px;
-    border: solid 10px #8dd4ff;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
-.answer-show-container {
-    margin-top: 50px;
-    transition: 0.3s ease;
-}
-.row{
-    width: 100% !important;
-    margin: 0!important;
-    padding: 0!important;
-}
-.conclude-text {
-    margin-bottom:50px;
-    text-align: center;
-    color: #8dd4ff;
-    font-size: clamp(1rem, 5vw, 5rem) !important;
-}
-.conclude-btn {
-    position: fixed;
-    bottom: 2%;
-    text-align: center;
-    text-decoration: none;
-    background: #8dd4ff;
-    width: 20% !important;
-    padding: 15px 0px 15px 0px;
-    border-radius: 100px;
-    border: none;
-    font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
-}
-.all-card-container{
-    margin-bottom: 120px !important;
-}
-.card-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.card {
-    width: 80%;
-    margin-bottom:50px;
-    border:solid 5px #8dd4ff;
-    border-radius: 15px;
-}
-.card-img-top {
-    border-radius: 10px;
-}
+    .flashcard-container img:focus {
+        margin-top: 45px;
+    }
+
+    .flashcard-container img:focus + .answer-container {
+        opacity: 1;
+    }
+
+    .next-btn {
+        position: absolute;
+        top: 45%;
+        right: 2.25%;
+        color: black;
+        text-decoration: none;
+        font-size: 4rem;
+        opacity: 0;
+        transition: 0.3s ease;
+        pointer-events: none;
+    }
+
+    .answer-container {
+        margin-top: 20px;
+        opacity: 0;
+        transition: 0.3s ease;
+    }
+
+    .answer-text {
+        white-space: nowrap;
+        font-size: 5rem !important;
+    }
+
+    @media screen and (max-width: 1370px) {
+        .flashcard-container img {
+            width: 60%; /* ปรับขนาดภาพให้เหมาะสมกับหน้าจอ */
+            height: auto;
+            margin-top: 100px;
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        .flashcard-container img {
+            width: 65%; /* ปรับขนาดภาพให้เหมาะสมกับหน้าจอ */
+            height: auto;
+            margin-top: 100px;
+        }
+    }
+
+    /* =M1_Ask= */
+    @media (max-width: 1024px) {
+
+        .row {
+            width: 90%;
+            text-align: center;
+        }
+
+        .module-headtext {
+            font-size: 2rem; /* ปรับขนาดหัวข้อให้เหมาะสม */
+        }
+
+        .module-go {
+            width: 80%;
+            font-size: 1.2rem;
+            padding: 12px 0;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    }
+
+    /* =M1_Enhance1= */
+    .choices {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(100px, 1fr));
+        gap: 20px;
+        justify-content: center;
+        width: 60%;
+        margin: 30px auto;
+    }
+
+    .choice-btn {
+        padding: 35px 25px 35px 25px;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        background-color: #f0f0f0;
+        border-radius: 15px;
+        white-space: nowrap;
+        font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
+    }
+
+    .correct {
+        background-color: #B9E7A6;
+        color: black;
+    }
+
+    .wrong {
+        background-color: #FA9B95;
+        color: black;
+    }
+
+    .flashcard-overall-container {
+        border: solid 5px red;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .enhance-container {
+        margin-top: 50px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .enhance-container img {
+        width: 50%;
+        height: 60%;
+        border-radius: 50px;
+        border: solid 10px #8dd4ff;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    /* =M1_Conclude= */
+    .container-scroll {
+        position: relative;
+        margin: 0;
+        padding: 0;
+        overflow: auto;
+        max-width: 100%;
+        max-height: 100%;
+        width: 100dvw;
+        height: 100dvh;
+        background: url(/pic/BG/Conclude.png) no-repeat center center;
+        background-attachment: fixed;
+        background-size: cover;
+    }
+
+    .sub-container {
+        position: absolute;
+        top: 5%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flashcard-show-container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .flashcard-show-container img {
+        width: 50%;
+        height: auto;
+        margin-top: 100px;
+        border-radius: 50px;
+        border: solid 10px #8dd4ff;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    @media screen and (max-width: 1370px) {
+        .flashcard-show-container img {
+            width: 60%; /* ปรับขนาดภาพให้เหมาะสมกับหน้าจอ */
+            height: auto;
+            margin-top: 100px;
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        .flashcard-show-container img {
+            width: 65%; /* ปรับขนาดภาพให้เหมาะสมกับหน้าจอ */
+            height: auto;
+            margin-top: 100px;
+        }
+    }
+
+    .answer-show-container {
+        margin-top: 30px;
+        transition: 0.3s ease;
+    }
+
+    .row {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    .conclude-text {
+        margin-bottom: 50px;
+        text-align: center;
+        color: #8dd4ff;
+        font-size: clamp(1rem, 5vw, 5rem) !important;
+    }
+
+    .conclude-btn {
+        position: fixed;
+        bottom: 2%;
+        text-align: center;
+        text-decoration: none;
+        background: #8dd4ff;
+        width: 20% !important;
+        padding: 15px 0px 15px 0px;
+        border-radius: 100px;
+        border: none;
+        font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
+    }
+
+    .all-card-container {
+        margin-bottom: 120px !important;
+    }
+
+    .card-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .card {
+        width: 80%;
+        margin-bottom: 50px;
+        border: solid 5px #8dd4ff;
+        border-radius: 15px;
+    }
+
+    .card-img-top {
+        border-radius: 10px;
+    }
 

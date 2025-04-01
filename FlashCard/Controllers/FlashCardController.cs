@@ -91,6 +91,7 @@ namespace FlashCard.Controllers
                 var user = _db.UsersDB.SingleOrDefault(u => u.UserName == username && u.Password == password);
                 if (user != null)
                 {
+                    HttpContext.Session.SetInt32("UserID", user.UserID);
                     var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.UserName),
@@ -256,13 +257,13 @@ namespace FlashCard.Controllers
         public async Task<IActionResult> M1_Enhance1_Test()
         {
             var images = await _db.ImagesDB
-            .Where(i => i.Module == "1" && i.SubModule == "2" && (i.HasShown == false || i.HasShown == null))
+            .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
             .ToListAsync();
 
             if (!images.Any())
             {
                 await _db.ImagesDB
-                    .Where(i => i.Module == "1" && i.SubModule == "2")
+                    .Where(i => i.Module == "1" && i.SubModule == "1")
                     .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
 
                 await _db.SaveChangesAsync();
@@ -288,6 +289,28 @@ namespace FlashCard.Controllers
         public IActionResult M1_Start2()
         {
             return View();
+        }
+        public async Task<IActionResult> M1_FlashCard2()
+        {
+            var images = await _db.ImagesDB
+                .Where(i => i.Module == "1" && i.SubModule == "2" && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "1" && i.SubModule == "2")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+            }
+
+            var selectedImage = images[new Random().Next(images.Count)];
+            selectedImage.HasShown = true;
+            _db.Entry(selectedImage).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+
+            return View(selectedImage);
         }
 
         // Module 1 Enhance Understanding2 //
