@@ -98,6 +98,43 @@ html, body {
     white-space: nowrap;
     font-size: clamp(0.8rem, 3vw, 2rem) !important;
 }
+@media screen and (max-width: 1024px) {
+    .game-text {
+        font-size: clamp(5rem, 8vw, 8rem) !important; /* ลดขนาดลงเล็กน้อย แต่ยังคงดูโดดเด่น */
+    }
+
+    .start-btn {
+        width: 50% !important;
+        padding: 25px 0px;
+        font-size: clamp(1rem, 4vw, 2.5rem) !important;
+    }
+
+    .authen-text {
+        width: 45% !important;
+        font-size: clamp(0.8rem, 2.5vw, 1.8rem) !important;
+    }
+
+    /* ย่อขนาดตัวละครตามความเหมาะสมและไม่ให้ตำแหน่งขยับ */
+    img[style*="width: 200px"][src*="Nong Purple .PNG"] {
+        width: 160px !important;
+        left: 5% !important; /* คงที่ไว้ที่เดิม */
+    }
+
+    img[style*="width: 280px"][src*="Nong Yellow .PNG"] {
+        width: 220px !important;
+        left: 5% !important; /* คงที่ไว้ที่เดิม */
+    }
+
+    img[style*="width: 150px"][src*="NongBlue.png"] {
+        width: 120px !important;
+        left: 87% !important; /* คงที่ไว้ที่เดิม */
+    }
+
+    img[style*="width: 200px"][src*="NongRed.PNG"] {
+        width: 160px !important;
+        left: 80% !important; /* คงที่ไว้ที่เดิม */
+    }
+}
 
 /*= Menu Page =*/
 .rectangle-menu {
@@ -195,6 +232,48 @@ html, body {
     margin-bottom: 15px;
     font-size: 8rem;
 }
+@media (max-width: 1024px) {
+    .rectangle-menu {
+        transform: scale(0.75); /* ลดขนาดลงอีก */
+        padding: 50px; /* ปรับ padding ให้พอดีกับขนาดใหม่ */
+    }
+
+    .menu-header-container {
+        margin-top: -25px;
+        margin-bottom: 35px;
+    }
+
+    .menu-headtext {
+        font-size: 2.5rem; /* ลดขนาดตัวอักษรลงอีกนิด */
+    }
+
+    .volumn-btn i {
+        font-size: 3rem; /* ลดขนาดปุ่มปรับเสียง */
+    }
+
+    .menu-btn-container {
+        gap: 12px; /* ปรับระยะห่างระหว่างปุ่ม */
+    }
+
+    .home-btn,
+    .continue-btn,
+    .lesson-btn {
+        width: 300px; /* ลดขนาดปุ่มลงอีก */
+        height: 260px;
+        font-size: 2rem;
+    }
+
+        .home-btn i,
+        .continue-btn i,
+        .lesson-btn i {
+            font-size: 6.5rem; /* ลดขนาดไอคอนลงอีก */
+        }
+
+    /* ลดขนาดตัวละครลงอีก แต่ยังให้คงตำแหน่งเดิม */
+    img[src*="Nong"] {
+        width: 75%;
+    }
+}
 
 
 /*= Login/Register Page =*/
@@ -230,15 +309,39 @@ html, body {
 }
 
 /*= Main Menu Page =*/
-.module-btn {
-    margin-top: 10px;
-    margin-bottom: 20px;
-    background: #8dd4ff;
-    width: 60% !important;
-    padding: 30px 0px 30px 0px;
-    border-radius: 100px;
-    border: none;
-    font-size: clamp(1rem, 2vw, 3rem) !important;
+@media screen and (max-width: 1024px) {
+    .module-btn {
+        width: 80% !important;
+        padding: 20px 0px;
+        font-size: clamp(1rem, 2vw, 2.8rem) !important;
+        border-radius: 80px;
+    }
+
+    /* ปรับขนาดตัวอักษรให้ลดลงเล็กน้อย แต่ยังคงความโดดเด่น */
+    .game-text {
+        font-size: clamp(7.3rem, 9.0vw, 9.0rem) !important;
+    }
+
+    /* ปรับขนาดตัวละครและเลื่อนออกจากพื้นที่หลักเล็กน้อย */
+    img[style*="width: 140px"] {
+        width: 110px !important;
+        left: 0.1% !important; /* ขยับไปทางซ้ายเล็กน้อย */
+    }
+
+    img[style*="width: 150px"] {
+        width: 120px !important;
+        left: 88% !important; /* ขยับออกไปทางขวา */
+    }
+
+    img[style*="width: 200px"] {
+        width: 160px !important;
+        left: 82% !important; /* ขยับออกไปทางขวาอีกนิด */
+    }
+
+    img[style*="width: 280px"] {
+        width: 200px !important;
+        left: 0.4% !important; /* ขยับออกไปทางซ้าย */
+    }
 }
 
 /*= Module 1 =*/
