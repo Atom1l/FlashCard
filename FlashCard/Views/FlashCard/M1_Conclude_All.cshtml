@@ -5,19 +5,21 @@
 }
 
 <div class="container-scroll home-bg ">
-    <div class="conclude-text noto-bold">สรุปเนื้อหา</div>
-    <div class="row all-card-container">
-        @foreach (var image in Model)
-        {
-            <div class="card-container col-md-3">
-                <div class="card">
-                    <!-- Display the image from Imgbytes -->
-                    <a asp-action="FlashCard_Details" asp-route-name="@image.Name" asp-route-module="M1_Conclude_All">
-                        <img src="data:image/png;base64,@Convert.ToBase64String(image.Imgbytes)" class="card-img-top" alt="@image.Name" />
-                    </a>
+    <div class="sub-container">
+        <div class="conclude-text noto-bold">สรุปเนื้อหา</div>
+        <div class="row all-card-container">
+            @foreach (var image in Model)
+            {
+                <div class="card-container col-4 col-lg-3">
+                    <div class="card">
+                        <!-- Display the image from Imgbytes -->
+                        <a asp-action="FlashCard_Details" asp-route-name="@image.Name" asp-route-module="M1_Conclude_All">
+                            <img src="data:image/png;base64,@Convert.ToBase64String(image.Imgbytes)" class="card-img-top" alt="@image.Name" />
+                        </a>
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-    <a asp-controller="FlashCard" asp-action="M1_Done" asp-route-source="M1_Conclude" asp-route-next="M1_Test_Start" class="conclude-btn module-golong noto-regular text-white">เสร็จสิ้น</a>
+    <a asp-controller="FlashCard" asp-action="M1_Done" asp-route-source="M1_Conclude" asp-route-next="M1_Test_Start" class="conclude-btn noto-regular text-white">เสร็จสิ้น</a>
 </div>
