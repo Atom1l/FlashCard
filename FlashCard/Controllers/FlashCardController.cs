@@ -499,7 +499,7 @@ namespace FlashCard.Controllers
             return View();
         }
 
-        // Module 1 Test //
+        // Module 1 Test // // ศำหรับต้นไผ่ก็อปวางตั้งแค่ M1_Test เลย แล้วก็เปลี่ยนเลยเป็น 3 ทั้งชื่อมันและเลข Module ข้างใน //
         public async Task<IActionResult> M1_Test()
         {
             // ดึง User ID จาก session หรือ claims
@@ -555,7 +555,6 @@ namespace FlashCard.Controllers
             }
             else
             {
-                // ถ้าไม่ได้จาก Claims, อ่านจาก Session
                 userId = HttpContext.Session.GetInt32("UserID") ?? 0;
                 Console.WriteLine($"DEBUG: userId from Session = {userId}");
             }
@@ -565,28 +564,45 @@ namespace FlashCard.Controllers
                 return BadRequest($"Invalid User ID: {userId}");
             }
 
-            // นับจำนวน FlashCard ที่ผู้ใช้เคยเห็นใน module นี้
+            // Count from UserId and Img that has already set in database //
             int shownCount = await _db.UserCardDB
                 .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module))
                 .CountAsync();
 
             Console.WriteLine($"DEBUG: User {userId} has seen {shownCount} flashcards in module {module}.");
 
-            // ถ้าผู้ใช้เคยเห็นภาพครบ 12 ครั้งแล้ว → ลบข้อมูลที่เคยบันทึกไว้
-            if (module == "M1" && shownCount >= 12)
+            // ====================== TO DELETE HASSHOWN AFTER DONE ====================== //
+            if (module == "1" && shownCount >= 12)
             {
-                int deletedRows = await _db.UserCardDB
-                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module))
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "1"))
                     .ExecuteDeleteAsync();
 
-                Console.WriteLine($"DEBUG: Deleted {deletedRows} records from UserCardDB.");
                 await _db.SaveChangesAsync();
 
-                return Json(new { success = false }); // จบการทำงาน ไม่ต้องไปสุ่มภาพแล้ว
+                return Json(new { success = false });
+            }
+            else if (module == "2" && shownCount >= 8)
+            {
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "1"))
+                    .ExecuteDeleteAsync();
+
+                await _db.SaveChangesAsync();
+
+                return Json(new { success = false });
+            }
+            else if (module == "3" && shownCount >= 7)
+            {
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "3"))
+                    .ExecuteDeleteAsync();
+
+                await _db.SaveChangesAsync();
+
+                return Json(new { success = false });
             }
 
-
-            // ค้นหารูปภาพที่ยังไม่เคยแสดง
             var unseenImages = await _db.ImagesDB
                 .Where(i => i.Module == module)
                 .Where(i => !_db.UserCardDB.Any(uf => uf.UserId == userId && uf.ImageId == i.Id))
@@ -594,12 +610,11 @@ namespace FlashCard.Controllers
 
             if (!unseenImages.Any())
             {
-                return Json(new { success = false }); // ไม่มีภาพเหลือให้แสดง
+                return Json(new { success = false }); 
             }
 
             var selectedImage = unseenImages[new Random().Next(unseenImages.Count)];
 
-            // บันทึกว่าผู้ใช้เคยเห็นภาพนี้แล้ว
             _db.UserCardDB.Add(new UserFlashCard
             {
                 UserId = userId,
@@ -664,6 +679,8 @@ namespace FlashCard.Controllers
 
             return View();
         }
+
+        /* ================================== Module 2 ================================== */
 
     }
 

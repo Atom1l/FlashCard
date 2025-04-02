@@ -2,7 +2,7 @@
     ViewData["Title"] = "Flash Card";
     var translations = new Dictionary<string, string>
     {
-        { "Happy", "มีความสุข" },
+        { "Happy", "ดีใจ" },
         { "Sad", "เศร้า" },
         { "Angry", "โกรธ" },
         { "Scared", "กลัว" },
@@ -86,7 +86,7 @@
 
                     document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
                     document.querySelector(".answer-text").textContent =
-                        { "Happy": "มีความสุข", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
+                        { "Happy": "ดีใจ", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
 
                     hasShown = false;
                     nextBtn.style.opacity = "0";

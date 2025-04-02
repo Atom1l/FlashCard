@@ -45,7 +45,15 @@
         <div class="test-result test-result-box noto-medium text-white @bgClass">@(score >= topass ? "ผ่าน" : "ไม่ผ่าน")</div>
         <div class="d-flex flex-row justify-content-center align-items-center">
             <a asp-action="Mainmenu" class="module-go done-bg-color noto-regular text-white me-5">เสร็จสิ้น</a>
-            <a asp-action="M1_Test_Start" class="module-go exit-bg-color noto-regular text-white">ทดสอบใหม่</a>
+            @if (Module == "M1")
+            {
+                <a asp-action="M1_Test_Start" class="module-go exit-bg-color noto-regular text-white">ทดสอบใหม่</a>
+            }
+            @if (Module == "M2")
+            {
+                <a asp-action="M2_Test_Start" class="module-go exit-bg-color noto-regular text-white">ทดสอบใหม่</a>
+            }
+            
         </div>
     </div>
 </div>
