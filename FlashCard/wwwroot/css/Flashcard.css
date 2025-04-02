@@ -426,6 +426,11 @@ html, body {
             left: 0.1% !important; /* ขยับไปทางซ้ายเล็กน้อย */
         }
 
+        #nong-purple {
+            width: 160px !important;
+            left: 10% !important;
+        }
+
         img[style*="width: 150px"] {
             width: 120px !important;
             left: 88% !important; /* ขยับออกไปทางขวา */
@@ -500,7 +505,7 @@ html, body {
         margin-top: 20px;
         margin-bottom: 20px;
         background: #8dd4ff;
-        width: 50% !important;
+        width: 30% !important;
         padding: 30px 0px 30px 0px;
         border-radius: 100px;
         border: none;
@@ -703,7 +708,7 @@ html, body {
 
 .enhance-container img {
     width: 50%;
-    height: 60%;
+    height: auto;
     border-radius: 50px;
     border: solid 10px #8dd4ff;
     cursor: pointer;

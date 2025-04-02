@@ -7,6 +7,8 @@
         { "Angry", "โกรธ" },
         { "Scared", "กลัว" },
     };
+
+    int userId = int.Parse(User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value ?? "0"); // Users Authentication //
 }
 
 <div class="container home-bg flex-column">
@@ -45,9 +47,9 @@
         const nextBtn = document.querySelector(".next-btn");
         let hasShown = false;
 
-        // กำหนดค่าของ module และ submodule
         const moduleValue = 1;
         const submoduleValue = 2;
+        const userId = @userId;
 
         if (flashcard && nextBtn) {
             flashcard.addEventListener("click", function () {
@@ -74,7 +76,7 @@
 
         function fetchNextFlashCard() {
             // ส่ง module และ submodule ไปกับ request
-            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
+            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}&userId=${userId}`;
 
             fetch(url)
                 .then(response => response.json())

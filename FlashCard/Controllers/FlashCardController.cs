@@ -12,7 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace FlashCard.Controllers
 {
-    
+
     public class FlashCardController : Controller
     {
         // Database Refer //
@@ -91,17 +91,20 @@ namespace FlashCard.Controllers
                 var user = _db.UsersDB.SingleOrDefault(u => u.UserName == username && u.Password == password);
                 if (user != null)
                 {
+                    // ✅ เก็บ UserID ไว้ใน Session
                     HttpContext.Session.SetInt32("UserID", user.UserID);
+
+                    // ✅ เพิ่ม UserID ลงใน Claims
                     var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, user.UserName),
-                // เพิ่ม claims อื่น ๆ ตามที่ต้องการ
-            };
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, user.UserID.ToString()), // 🔥 จุดสำคัญ
+                        new Claim(ClaimTypes.Name, user.UserName),
+                    };
 
                     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     var principal = new ClaimsPrincipal(identity);
 
-                    // ตั้งค่า cookie
+                    // ✅ ตั้งค่า Cookie Authentication
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
                     return RedirectToAction("HomeLoggedIn");
@@ -113,6 +116,7 @@ namespace FlashCard.Controllers
             }
             return View();
         }
+
 
         // Log Out //
         public async Task<IActionResult> Logout()
@@ -186,47 +190,108 @@ namespace FlashCard.Controllers
         // ======================================== Module 1 FlashCard(Emotion) ======================================== //
         public async Task<IActionResult> M1_FlashCard()
         {
-            var images = await _db.ImagesDB
-                .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
-                .ToListAsync();
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = 0;
 
-            if (!images.Any())
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
             {
-                await _db.ImagesDB
-                    .Where(i => i.Module == "1" && i.SubModule == "1")
-                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
-
-                await _db.SaveChangesAsync();
+                Console.WriteLine($"DEBUG: UserID from Claims = {userId}");
+            }
+            else
+            {
+                userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+                Console.WriteLine($"DEBUG: UserID from Session = {userId}");
             }
 
-            var selectedImage = images[new Random().Next(images.Count)];
-            selectedImage.HasShown = true;
-            _db.Entry(selectedImage).State = EntityState.Modified;
+            if (userId <= 0 || !await _db.UsersDB.AnyAsync(u => u.UserID == userId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var unseenImages = await _db.ImagesDB
+                .Where(i => i.Module == "1" && i.SubModule == "1")
+                .Where(i => !_db.UserCardDB.Any(uf => uf.UserId == userId && uf.ImageId == i.Id))
+                .ToListAsync();
+
+            if (!unseenImages.Any())
+            {
+                // Reset HasShown if User seen it all
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "1" && i.SubModule == "1"))
+                    .ExecuteDeleteAsync();
+
+                await _db.SaveChangesAsync();
+
+                // No more Images left
+                return View(null);
+            }
+
+            var selectedImage = unseenImages[new Random().Next(unseenImages.Count)];
+
+            // Add data to UserCardDB to separate each users card showing
+            _db.UserCardDB.Add(new UserFlashCard
+            {
+                UserId = userId,
+                ImageId = selectedImage.Id,
+                HasShown = true
+            });
+
             await _db.SaveChangesAsync();
 
             return View(selectedImage);
         }
 
         // ======================================== For Next FlashCard ======================================== //
-        public async Task<IActionResult> GetNextFlashCard(string module , string submodule)
+        public async Task<IActionResult> GetNextFlashCard(string module, string submodule)
         {
-            var images = await _db.ImagesDB
-                .Where(i => i.Module == module && i.SubModule == submodule && (i.HasShown == false || i.HasShown == null))
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userNameClaim = User.Identity.Name;
+
+            Console.WriteLine($"DEBUG: UserID (Claim) = {userIdClaim}, UserName (Claim) = {userNameClaim}");
+
+            int userId = 0;
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
+            {
+                Console.WriteLine($"DEBUG: userId from Claims = {userId}");
+            }
+            else
+            {
+                // ถ้าไม่ได้จาก Claims, อ่านจาก Session
+                userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+                Console.WriteLine($"DEBUG: userId from Session = {userId}");
+            }
+
+            if (userId <= 0 || !await _db.UsersDB.AnyAsync(u => u.UserID == userId))
+            {
+                return BadRequest($"Invalid User ID: {userId}");
+            }
+
+            var unseenImages = await _db.ImagesDB
+                .Where(i => i.Module == module && i.SubModule == submodule)
+                .Where(i => !_db.UserCardDB.Any(uf => uf.UserId == userId && uf.ImageId == i.Id))
                 .ToListAsync();
 
-            if (!images.Any())
+            if (!unseenImages.Any())
             {
-                await _db.ImagesDB
-                    .Where(i => i.Module == module && i.SubModule == submodule)
-                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+                // ✅ รีเซ็ต HasShown เฉพาะของ userId นั้น ๆ
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module && i.SubModule == submodule))
+                    .ExecuteDeleteAsync();
 
                 await _db.SaveChangesAsync();
+
                 return Json(new { success = false });
             }
 
-            var selectedImage = images[new Random().Next(images.Count)];
-            selectedImage.HasShown = true;
-            _db.Entry(selectedImage).State = EntityState.Modified;
+            var selectedImage = unseenImages[new Random().Next(unseenImages.Count)];
+
+            _db.UserCardDB.Add(new UserFlashCard
+            {
+                UserId = userId,
+                ImageId = selectedImage.Id,
+                HasShown = true
+            });
+
             await _db.SaveChangesAsync();
 
             return Json(new
@@ -236,7 +301,6 @@ namespace FlashCard.Controllers
                 correctAnswer = selectedImage.Answer
             });
         }
-
 
 
         // Module 1 Done //
@@ -256,9 +320,12 @@ namespace FlashCard.Controllers
         // Module 1 Enhance Test //
         public async Task<IActionResult> M1_Enhance1_Test()
         {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
             var images = await _db.ImagesDB
-            .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
-            .ToListAsync();
+                .Where(i => i.Module == "1" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
 
             if (!images.Any())
             {
@@ -277,12 +344,20 @@ namespace FlashCard.Controllers
                 selectedImage.HasShown = true;
                 _db.Entry(selectedImage).State = EntityState.Modified;
                 await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
             }
 
-            return View(selectedImage);
+            return View(selectedImage);  // ส่งภาพที่เลือกไปยัง View
         }
-
-
 
 
         // Module 1 Start 2 //
@@ -290,8 +365,72 @@ namespace FlashCard.Controllers
         {
             return View();
         }
+
         public async Task<IActionResult> M1_FlashCard2()
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = 0;
+
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
+            {
+                Console.WriteLine($"DEBUG: UserID from Claims = {userId}");
+            }
+            else
+            {
+                userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+                Console.WriteLine($"DEBUG: UserID from Session = {userId}");
+            }
+
+            if (userId <= 0 || !await _db.UsersDB.AnyAsync(u => u.UserID == userId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var unseenImages = await _db.ImagesDB
+                .Where(i => i.Module == "1" && i.SubModule == "2")
+                .Where(i => !_db.UserCardDB.Any(uf => uf.UserId == userId && uf.ImageId == i.Id))
+                .ToListAsync();
+
+            if (!unseenImages.Any())
+            {
+                // Reset HasShown if User seen it all
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "1" && i.SubModule == "2"))
+                    .ExecuteDeleteAsync();
+
+                await _db.SaveChangesAsync();
+
+                // No more Images left
+                return View(null);
+            }
+
+            var selectedImage = unseenImages[new Random().Next(unseenImages.Count)];
+
+            // Add data to UserCardDB to separate each users card showing
+            _db.UserCardDB.Add(new UserFlashCard
+            {
+                UserId = userId,
+                ImageId = selectedImage.Id,
+                HasShown = true
+            });
+
+            await _db.SaveChangesAsync();
+
+            return View(selectedImage);
+        }
+
+
+        // Module 1 Enhance Understanding2 //
+        public IActionResult M1_Enhance2()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> M1_Enhance2_Test()
+        {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
             var images = await _db.ImagesDB
                 .Where(i => i.Module == "1" && i.SubModule == "2" && (i.HasShown == false || i.HasShown == null))
                 .ToListAsync();
@@ -305,19 +444,30 @@ namespace FlashCard.Controllers
                 await _db.SaveChangesAsync();
             }
 
-            var selectedImage = images[new Random().Next(images.Count)];
-            selectedImage.HasShown = true;
-            _db.Entry(selectedImage).State = EntityState.Modified;
-            await _db.SaveChangesAsync();
+            var random = new Random();
+            var selectedImage = images[random.Next(images.Count)];
 
-            return View(selectedImage);
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.Entry(selectedImage).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);  // ส่งภาพที่เลือกไปยัง View
         }
 
-        // Module 1 Enhance Understanding2 //
-        public IActionResult M1_Enhance2()
-        {
-            return View();
-        }
+
 
         // Module 1 Conclude //
         public IActionResult M1_Conclude()
@@ -350,13 +500,154 @@ namespace FlashCard.Controllers
         }
 
         // Module 1 Test //
+        public async Task<IActionResult> M1_Test()
+        {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            var images = await _db.ImagesDB
+                .Where(i => (i.Module == "1") && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "1")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+            }
+
+            var random = new Random();
+            var selectedImage = images[random.Next(images.Count)];
+
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.Entry(selectedImage).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);
+        }
+
+        public async Task<IActionResult> GetNextFlashCard_Test(string module)
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userNameClaim = User.Identity.Name;
+
+            Console.WriteLine($"DEBUG: UserID (Claim) = {userIdClaim}, UserName (Claim) = {userNameClaim}");
+
+            int userId = 0;
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
+            {
+                Console.WriteLine($"DEBUG: userId from Claims = {userId}");
+            }
+            else
+            {
+                // ถ้าไม่ได้จาก Claims, อ่านจาก Session
+                userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+                Console.WriteLine($"DEBUG: userId from Session = {userId}");
+            }
+
+            if (userId <= 0 || !await _db.UsersDB.AnyAsync(u => u.UserID == userId))
+            {
+                return BadRequest($"Invalid User ID: {userId}");
+            }
+
+            var unseenImages = await _db.ImagesDB
+                .Where(i => i.Module == module)
+                .Where(i => !_db.UserCardDB.Any(uf => uf.UserId == userId && uf.ImageId == i.Id))
+                .ToListAsync();
+
+            if (!unseenImages.Any())
+            {
+                // ✅ รีเซ็ต HasShown เฉพาะของ userId นั้น ๆ
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module))
+                    .ExecuteDeleteAsync();
+
+                await _db.SaveChangesAsync();
+
+                return Json(new { success = false });
+            }
+
+            var selectedImage = unseenImages[new Random().Next(unseenImages.Count)];
+
+            _db.UserCardDB.Add(new UserFlashCard
+            {
+                UserId = userId,
+                ImageId = selectedImage.Id,
+                HasShown = true
+            });
+
+            await _db.SaveChangesAsync();
+
+            return Json(new
+            {
+                success = true,
+                imgBytes = Convert.ToBase64String(selectedImage.Imgbytes),
+                correctAnswer = selectedImage.Answer
+            });
+        }
 
 
         // Module 1 Test done //
-        public IActionResult M1_Test_Done()
+        public async Task<IActionResult> M1_Test_Done(string score, string module)
         {
+            ViewData["Score"] = score;
+            ViewData["Module"] = module;
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = 0;
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
+            {
+                // ลบข้อมูล UserCardDB ที่เกี่ยวข้องกับผู้ใช้
+                var userCards = _db.UserCardDB.Where(uf => uf.UserId == userId && uf.Image.Module == module);
+                _db.UserCardDB.RemoveRange(userCards);
+                await _db.SaveChangesAsync();
+
+                // เช็คว่าโมดูลคืออะไรและบันทึกคะแนนไปยังคอลัมน์ที่เหมาะสม
+                var user = await _db.UsersDB.FirstOrDefaultAsync(u => u.UserID == userId);
+                if (user != null)
+                {
+                    switch (module)
+                    {
+                        case "M1":
+                            user.M1Score = int.TryParse(score, out int m1Score) ? m1Score : 0;
+                            break;
+                        case "M2":
+                            user.M2Score = int.TryParse(score, out int m2Score) ? m2Score : 0;
+                            break;
+                        case "M3":
+                            user.M3Score = int.TryParse(score, out int m3Score) ? m3Score : 0;
+                            break;
+                        default:
+                            // ถ้าโมดูลไม่ตรงกับที่กำหนด
+                            break;
+                    }
+
+                    await _db.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                return BadRequest("Invalid user or module.");
+            }
+
             return View();
         }
+
     }
 
 

@@ -1,0 +1,114 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    var translations = new Dictionary<string, string>
+    {
+        { "Happy", "ดีใจ" },
+        { "Sad", "เศร้า" },
+        { "Angry", "โกรธ" },
+        { "Scared", "กลัว" },
+    };
+}
+
+<div class="container home-bg flex-column">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <a asp-action="M1_Enhance1" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+
+    @if (Model != null && Model.Imgbytes != null)
+    {
+        <div class="enhance-container">
+            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
+            <div class="choices">
+                @foreach (var choice in translations.Values)
+                {
+                    <button class="choice-btn noto-bold" data-answer="@choice">@choice</button>
+                }
+            </div>
+            <a class="next-btn" style="opacity: 0; pointer-events: none;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    }
+    else
+    {
+        <p>No Image Available</p>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const choiceButtons = document.querySelectorAll(".choice-btn");
+        const nextBtn = document.querySelector(".next-btn");
+        const flashcard = document.querySelector(".flashcard");
+
+        const translations = {
+            "Happy": "ดีใจ",
+            "Sad": "เศร้า",
+            "Angry": "โกรธ",
+            "Scared": "กลัว"
+        };
+
+        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
+        let score = 0;
+        let count = 0;
+
+        choiceButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                let userAnswer = this.getAttribute("data-answer");
+                count++;
+
+                if (userAnswer === correctAnswer) {
+                    this.classList.add("correct");
+                    score++;
+                } else {
+                    this.classList.add("wrong");
+
+                    choiceButtons.forEach(btn => {
+                        if (btn.getAttribute("data-answer") === correctAnswer) {
+                            btn.classList.add("correct");
+                        }
+                    });
+                }
+
+                choiceButtons.forEach(btn => btn.disabled = true);
+                nextBtn.style.opacity = "1";
+                nextBtn.style.cursor = "pointer";
+                nextBtn.style.pointerEvents = "auto";
+            });
+        });
+
+        nextBtn.addEventListener("click", function () {
+            const moduleValue = 1;
+
+            // เช็คว่า count ถึง 12 หรือยัง
+            if (count >= 12) {
+                const module = encodeURIComponent("M1");
+                window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+            } else {
+                const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
+                fetch(url, { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        flashcard.src = "data:image/png;base64," + data.imgBytes;
+                        correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+
+                        choiceButtons.forEach(button => {
+                            button.classList.remove("correct", "wrong");
+                            button.disabled = false;
+                        });
+
+                        nextBtn.style.opacity = "0";
+                        nextBtn.style.pointerEvents = "none";
+                    } else {
+                        // สำหรับเมื่อทดสอบเสร็จแล้ว
+                        const module = encodeURIComponent("M1");
+                        window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    });
+</script>

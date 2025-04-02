@@ -15,21 +15,21 @@ builder.Services.AddDbContext<FlashCardDBContext>(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Account/Login"; // เส้นทางไปหน้า Login
-        options.LogoutPath = "/Account/Logout"; // เส้นทางไปหน้า Logout
-        options.Cookie.HttpOnly = true; // ป้องกันการถูกเข้าถึงจาก JS
-        options.Cookie.SecurePolicy = CookieSecurePolicy.Always; // ใช้เฉพาะ HTTPS
-        options.Cookie.SameSite = SameSiteMode.Lax; // ป้องกันปัญหาการเข้าถึงข้ามโดเมน
+        options.LoginPath = "/Account/Login";
+        options.LogoutPath = "/Account/Logout";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.Lax;
     });
 
 // Session
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); // อายุของ Session
-    options.Cookie.HttpOnly = true; // ป้องกันการเข้าถึงจาก JavaScript
-    options.Cookie.IsEssential = true; // ให้ Session ใช้งานได้เสมอ
-    options.Cookie.Name = "FlashCardSession"; // ตั้งชื่อ Session Cookie (ช่วยลดปัญหาการแชร์ Session ระหว่างแท็บ)
-    options.Cookie.SameSite = SameSiteMode.Lax; // ป้องกันปัญหาการใช้งานข้ามโดเมน
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.Cookie.Name = "FlashCardSession";
+    options.Cookie.SameSite = SameSiteMode.Lax;
 });
 
 var app = builder.Build();
@@ -44,19 +44,19 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-app.MapStaticAssets();
+// ให้บริการ Static Assets
+app.UseStaticFiles();
 
-// ใช้งาน Session ก่อน Authentication
+// Session before Authentication
 app.UseSession();
 
-// ใช้งาน Authentication & Authorization
+// Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
-// กำหนดเส้นทางเริ่มต้น
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=FlashCard}/{action=M1_FlashCard2}/{id?}")
+    pattern: "{controller=FlashCard}/{action=HomeLoggedIn}/{id?}")
     .WithStaticAssets();
 
 app.Run();

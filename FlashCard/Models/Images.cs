@@ -9,8 +9,5 @@
         public string? Module { get; set; }
         public string? SubModule { get; set; }
         public bool? HasShown { get; set; }
-
-        // UserID //
-        public int? UserId { get; set; }
     }
 }
