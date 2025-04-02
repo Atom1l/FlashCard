@@ -36,7 +36,6 @@
     }
 </div>
 
-
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const choiceButtons = document.querySelectorAll(".choice-btn");
@@ -50,19 +49,51 @@
             "Scared": "กลัว"
         };
 
-        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
-        let score = 0;
+        // ฟังก์ชันสำหรับการโหลดไฟล์เสียงตามคำตอบ
+        function getAnswerAudioFile(answer) {
+            const answerAudioFiles = {
+                "Happy": "/sounds/M1-Happy.mp3",
+                "Sad": "/sounds/M1-Sad.mp3",
+                "Angry": "/sounds/M1-Angry.mp3",
+                "Scared": "/sounds/M1-Scared.mp3"
+            };
+            return answerAudioFiles[answer] || null;
+        }
 
+        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
+        let answerAudioFile = getAnswerAudioFile(correctAnswer); // โหลดเสียงคำตอบที่ถูกต้อง
+
+        // ฟังก์ชันเล่นเสียง
+        const correctSound = new Audio("/sounds/correctsound.mp3");
+        const wrongSound = new Audio("/sounds/wrongsound.mp3");
+
+        let score = 0;
+        let count = 0;
+
+        // ฟังก์ชันคลิกปุ่มคำตอบ
         choiceButtons.forEach(button => {
             button.addEventListener("click", function () {
                 let userAnswer = this.getAttribute("data-answer");
+                count++;
 
+                // เล่นเสียงคำตอบที่ถูกต้องหรือผิด
                 if (userAnswer === correctAnswer) {
                     this.classList.add("correct");
                     score++;
+                    correctSound.play(); // เล่นเสียงคำตอบถูกต้อง
+
+                    // เล่นเสียงคำตอบที่ตรงกับโจทย์
+                    const answerAudio = new Audio(getAnswerAudioFile(userAnswer));
+                    answerAudio.play(); // เล่นเสียงคำตอบของโจทย์ที่ถูกต้อง
                 } else {
                     this.classList.add("wrong");
+                    wrongSound.play(); // เล่นเสียงคำตอบผิด
 
+                    // เล่นเสียงคำตอบที่ตรงกับโจทย์
+                    const answerAudio = new Audio(getAnswerAudioFile(correctAnswer));
+                    answerAudio.play(); // เล่นเสียงคำตอบของโจทย์ที่ถูกต้อง
+
+                    // แสดงคำตอบที่ถูกต้อง
                     choiceButtons.forEach(btn => {
                         if (btn.getAttribute("data-answer") === correctAnswer) {
                             btn.classList.add("correct");
@@ -70,40 +101,52 @@
                     });
                 }
 
+                // ปิดปุ่มตัวเลือก
                 choiceButtons.forEach(btn => btn.disabled = true);
+
+                // แสดงปุ่ม Next
                 nextBtn.style.opacity = "1";
                 nextBtn.style.cursor = "pointer";
                 nextBtn.style.pointerEvents = "auto";
             });
         });
 
+        // ฟังก์ชันเมื่อคลิกปุ่ม Next
         nextBtn.addEventListener("click", function () {
-
             const moduleValue = 1;
 
-            const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
+            // เช็คว่า count ถึง 12 หรือยัง
+            if (count >= 12) {
+                const module = encodeURIComponent("M1");
+                window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+            } else {
+                const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
+                fetch(url, { method: 'GET' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        flashcard.src = "data:image/png;base64," + data.imgBytes;
+                        correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
 
-            fetch(url, { method: 'GET' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    flashcard.src = "data:image/png;base64," + data.imgBytes;
+                        // รีเซ็ตเสียงคำตอบของโจทย์ใหม่
+                        answerAudioFile = getAnswerAudioFile(data.correctAnswer.trim());
 
-                    correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+                        // รีเซ็ตปุ่มคำตอบ
+                        choiceButtons.forEach(button => {
+                            button.classList.remove("correct", "wrong");
+                            button.disabled = false;
+                        });
 
-                    choiceButtons.forEach(button => {
-                        button.classList.remove("correct", "wrong");
-                        button.disabled = false;
-                    });
-
-                    nextBtn.style.opacity = "0";
-                    nextBtn.style.pointerEvents = "none";
-                } else {
-                    const module = encodeURIComponent("M1");
-                    window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                        nextBtn.style.opacity = "0";
+                        nextBtn.style.pointerEvents = "none";
+                    } else {
+                        // เมื่อทดสอบเสร็จแล้ว
+                        const module = encodeURIComponent("M1");
+                        window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
         });
     });
 </script>
