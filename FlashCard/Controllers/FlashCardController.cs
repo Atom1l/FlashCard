@@ -565,6 +565,28 @@ namespace FlashCard.Controllers
                 return BadRequest($"Invalid User ID: {userId}");
             }
 
+            // นับจำนวน FlashCard ที่ผู้ใช้เคยเห็นใน module นี้
+            int shownCount = await _db.UserCardDB
+                .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module))
+                .CountAsync();
+
+            Console.WriteLine($"DEBUG: User {userId} has seen {shownCount} flashcards in module {module}.");
+
+            // ถ้าผู้ใช้เคยเห็นภาพครบ 12 ครั้งแล้ว → ลบข้อมูลที่เคยบันทึกไว้
+            if (module == "M1" && shownCount >= 12)
+            {
+                int deletedRows = await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module))
+                    .ExecuteDeleteAsync();
+
+                Console.WriteLine($"DEBUG: Deleted {deletedRows} records from UserCardDB.");
+                await _db.SaveChangesAsync();
+
+                return Json(new { success = false }); // จบการทำงาน ไม่ต้องไปสุ่มภาพแล้ว
+            }
+
+
+            // ค้นหารูปภาพที่ยังไม่เคยแสดง
             var unseenImages = await _db.ImagesDB
                 .Where(i => i.Module == module)
                 .Where(i => !_db.UserCardDB.Any(uf => uf.UserId == userId && uf.ImageId == i.Id))
@@ -572,18 +594,12 @@ namespace FlashCard.Controllers
 
             if (!unseenImages.Any())
             {
-                // ✅ รีเซ็ต HasShown เฉพาะของ userId นั้น ๆ
-                await _db.UserCardDB
-                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module))
-                    .ExecuteDeleteAsync();
-
-                await _db.SaveChangesAsync();
-
-                return Json(new { success = false });
+                return Json(new { success = false }); // ไม่มีภาพเหลือให้แสดง
             }
 
             var selectedImage = unseenImages[new Random().Next(unseenImages.Count)];
 
+            // บันทึกว่าผู้ใช้เคยเห็นภาพนี้แล้ว
             _db.UserCardDB.Add(new UserFlashCard
             {
                 UserId = userId,
@@ -600,6 +616,7 @@ namespace FlashCard.Controllers
                 correctAnswer = selectedImage.Answer
             });
         }
+
 
 
         // Module 1 Test done //
