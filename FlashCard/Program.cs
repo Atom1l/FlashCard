@@ -56,7 +56,7 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=FlashCard}/{action=HomeLoggedIn}/{id?}")
+    pattern: "{controller=FlashCard}/{action=Home}/{id?}")
     .WithStaticAssets();
 
 app.Run();

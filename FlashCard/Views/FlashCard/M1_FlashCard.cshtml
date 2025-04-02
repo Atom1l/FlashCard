@@ -2,7 +2,7 @@
     ViewData["Title"] = "Flash Card";
     var translations = new Dictionary<string, string>
     {
-        { "Happy", "มีความสุข" },
+        { "Happy", "" },
         { "Sad", "เศร้า" },
         { "Angry", "โกรธ" },
         { "Scared", "กลัว" },
@@ -14,7 +14,7 @@
     <a asp-action="M1_Start1" class="close-btn">
         <i class="fa-solid fa-xmark"></i>
     </a>
-    
+
     @if (Model != null && Model.Imgbytes != null)
     {
         <div class="flashcard-container">
@@ -38,6 +38,12 @@
     }
 </div>
 
+<!-- เพิ่ม Audio Elements สำหรับเสียง -->
+<audio id="angrySound" src="/sounds/M1-Angry.mp3"></audio>
+<audio id="scaredSound" src="/sounds/M1-Scared.mp3"></audio>
+<audio id="sadSound" src="/sounds/M1-Sad.mp3"></audio>
+<audio id="happySound" src="/sounds/M1-Happy.mp3"></audio>
+
 <!-- JS SCRIPT -->
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -45,9 +51,13 @@
         const nextBtn = document.querySelector(".next-btn");
         let hasShown = false;
 
-        // กำหนดค่าของ module และ submodule
-        const moduleValue = 1;
-        const submoduleValue = 1;
+        // สร้างอ็อบเจกต์แมพเสียงกับคำตอบ
+        const soundMap = {
+            "ดีใจ": document.getElementById("happySound"),
+            "เศร้า": document.getElementById("sadSound"),
+            "โกรธ": document.getElementById("angrySound"),
+            "กลัว": document.getElementById("scaredSound")
+        };
 
         if (flashcard && nextBtn) {
             flashcard.addEventListener("click", function () {
@@ -56,6 +66,13 @@
                     nextBtn.style.pointerEvents = "auto";
                     nextBtn.style.cursor = "pointer";
                     hasShown = true;
+
+                    // เล่นเสียงที่ตรงกับคำตอบ
+                    const answerText = document.querySelector(".answer-text").textContent.trim();
+                    if (soundMap[answerText]) {
+                        soundMap[answerText].currentTime = 0; // รีเซ็ตเสียงให้เล่นตั้งแต่ต้น
+                        soundMap[answerText].play();
+                    }
                 }
             });
 
@@ -74,7 +91,7 @@
 
         function fetchNextFlashCard() {
             // ส่ง module และ submodule ไปกับ request
-            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
+            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=1&submodule=1`;
 
             fetch(url)
                 .then(response => response.json())
@@ -84,9 +101,10 @@
                         return;
                     }
 
+                    // อัปเดตรูปภาพและคำตอบใหม่
                     document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
                     document.querySelector(".answer-text").textContent =
-                        { "Happy": "มีความสุข", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
+                        { "Happy": "ดีใจ", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
 
                     hasShown = false;
                     nextBtn.style.opacity = "0";
@@ -96,4 +114,3 @@
         }
     });
 </script>
-

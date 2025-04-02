@@ -2,7 +2,7 @@
     ViewData["Title"] = "Flash Card";
     var translations = new Dictionary<string, string>
     {
-        { "Happy", "มีความสุข" },
+        { "Happy", "ดีใจ" },
         { "Sad", "เศร้า" },
         { "Angry", "โกรธ" },
         { "Scared", "กลัว" },
@@ -39,6 +39,11 @@
         <p>No Image Available</p>
     }
 </div>
+<!-- เพิ่ม Audio Elements สำหรับเสียง -->
+<audio id="angrySound" src="/sounds/M1-Angry.mp3"></audio>
+<audio id="scaredSound" src="/sounds/M1-Scared.mp3"></audio>
+<audio id="sadSound" src="/sounds/M1-Sad.mp3"></audio>
+<audio id="happySound" src="/sounds/M1-Happy.mp3"></audio>
 
 <!-- JS SCRIPT -->
 <script>
@@ -46,6 +51,14 @@
         const flashcard = document.querySelector(".flashcard-container img");
         const nextBtn = document.querySelector(".next-btn");
         let hasShown = false;
+
+        // สร้างอ็อบเจกต์แมพเสียงกับคำตอบ
+        const soundMap = {
+            "ดีใจ": document.getElementById("happySound"),
+            "เศร้า": document.getElementById("sadSound"),
+            "โกรธ": document.getElementById("angrySound"),
+            "กลัว": document.getElementById("scaredSound")
+        };
 
         const moduleValue = 1;
         const submoduleValue = 2;
@@ -58,6 +71,13 @@
                     nextBtn.style.pointerEvents = "auto";
                     nextBtn.style.cursor = "pointer";
                     hasShown = true;
+
+                    // เล่นเสียงที่ตรงกับคำตอบ
+                    const answerText = document.querySelector(".answer-text").textContent.trim();
+                    if (soundMap[answerText]) {
+                        soundMap[answerText].currentTime = 0; // รีเซ็ตเสียงให้เล่นตั้งแต่ต้น
+                        soundMap[answerText].play();
+                    }
                 }
             });
 
@@ -91,7 +111,7 @@
 
                     document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
                     document.querySelector(".answer-text").textContent =
-                        { "Happy": "มีความสุข", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
+                        { "Happy": "ดีใจ", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
 
                     hasShown = false;
                     nextBtn.style.opacity = "0";
