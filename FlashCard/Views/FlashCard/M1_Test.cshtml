@@ -111,42 +111,36 @@
             });
         });
 
-        // ฟังก์ชันเมื่อคลิกปุ่ม Next
         nextBtn.addEventListener("click", function () {
             const moduleValue = 1;
 
-            // เช็คว่า count ถึง 12 หรือยัง
-            if (count >= 12) {
-                const module = encodeURIComponent("M1");
-                window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
-            } else {
-                const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
-                fetch(url, { method: 'GET' })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        flashcard.src = "data:image/png;base64," + data.imgBytes;
-                        correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+            const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
 
-                        // รีเซ็ตเสียงคำตอบของโจทย์ใหม่
-                        answerAudioFile = getAnswerAudioFile(data.correctAnswer.trim());
+            fetch(url, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    flashcard.src = "data:image/png;base64," + data.imgBytes;
 
-                        // รีเซ็ตปุ่มคำตอบ
-                        choiceButtons.forEach(button => {
-                            button.classList.remove("correct", "wrong");
-                            button.disabled = false;
-                        });
+                    // อัปเดตค่าใหม่ของคำตอบที่ถูกต้อง
+                    correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
 
-                        nextBtn.style.opacity = "0";
-                        nextBtn.style.pointerEvents = "none";
-                    } else {
-                        // เมื่อทดสอบเสร็จแล้ว
-                        const module = encodeURIComponent("M1");
-                        window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-            }
+                    // โหลดเสียงใหม่ของโจทย์ที่เปลี่ยน
+                    answerAudioFile = getAnswerAudioFile(data.correctAnswer.trim());
+
+                    choiceButtons.forEach(button => {
+                        button.classList.remove("correct", "wrong");
+                        button.disabled = false;
+                    });
+
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                } else {
+                    const module = encodeURIComponent("M1");
+                    window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
     });
 </script>
