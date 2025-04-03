@@ -1,0 +1,37 @@
+﻿.module3-go {
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #a1a4ff;
+    width: 30% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+
+.module3-golong { /* For long text */
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #a1a4ff;
+    width: 37.5% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+
+.module3-headtext {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: clamp(2rem, 7vw, 10rem) !important;
+}
+
+@media (max-width: 1024px) {
+    .module-headtext {
+        font-size: 2rem; /* ปรับขนาดหัวข้อให้เหมาะสม */
+    }
+}

@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+}
+
+<div class="container home-bg">
+    <img src="/pic/BG/Module3.png" class="background" />
+    <div class="row d-flex flex-column justify-content-center align-items-center">
+        <div class="module-headtext noto-bold fs-1" style="color: #FA9B95;">เคยเล่นมาก่อนหรือไม่</div>
+        <a asp-action="M3_Start" class="module3-go noto-regular text-white">เคยเล่นแล้ว</a>
+        <a asp-action="M3_Tutorial" class="module3-go noto-regular no-play text-white">ยังไม่เคยเล่น</a>
+    </div>
+    <a class="menu" asp-action="Menu" asp-route-source="M3_Ask"><i class="fa-solid fa-list"></i></a>
+</div>

@@ -983,6 +983,95 @@ namespace FlashCard.Controllers
             return View(selectedImage);
         }
 
+        /* ================================== Module 3 ================================== */
+
+        // === MODULE 3 === //
+        // Module 3 Main Page //
+        public IActionResult M3_Main()
+        {
+            return View();
+        }
+
+        // Module 3 ASK //
+        public IActionResult M3_Ask()
+        {
+            return View();
+        }
+
+        // Module 3 Tutorial //
+        public IActionResult M3_Tutorial()
+        {
+            return View();
+        }
+
+        // Module 3 Start  //
+        public IActionResult M3_Start()
+        {
+            return View();
+        }
+
+        // Module 3 Done //
+        public IActionResult M3_Done(string source, string next)
+        {
+            ViewData["Source"] = source;
+            ViewData["Next"] = next;
+            return View();
+        }
+
+        // ======================================== Module 3 FlashCard ======================================== //
+        public async Task<IActionResult> M3_FlashCard()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = 0;
+
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
+            {
+                Console.WriteLine($"DEBUG: UserID from Claims = {userId}");
+            }
+            else
+            {
+                userId = HttpContext.Session.GetInt32("UserID") ?? 0;
+                Console.WriteLine($"DEBUG: UserID from Session = {userId}");
+            }
+
+            if (userId <= 0 || !await _db.UsersDB.AnyAsync(u => u.UserID == userId))
+            {
+                return RedirectToAction("Login");
+            }
+
+            var unseenImages = await _db.ImagesDB
+                .Where(i => i.Module == "3" && i.SubModule == "1")
+                .Where(i => !_db.UserCardDB.Any(uf => uf.UserId == userId && uf.ImageId == i.Id))
+                .ToListAsync();
+
+            if (!unseenImages.Any())
+            {
+                // Reset HasShown if User seen it all
+                await _db.UserCardDB
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "1" && i.SubModule == "1"))
+                    .ExecuteDeleteAsync();
+
+                await _db.SaveChangesAsync();
+
+                // No more Images left
+                return View(null);
+            }
+
+            var selectedImage = unseenImages[new Random().Next(unseenImages.Count)];
+
+            // Add data to UserCardDB to separate each users card showing
+            _db.UserCardDB.Add(new UserFlashCard
+            {
+                UserId = userId,
+                ImageId = selectedImage.Id,
+                HasShown = true
+            });
+
+            await _db.SaveChangesAsync();
+
+            return View(selectedImage);
+        }
+
     }
 
 

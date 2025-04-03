@@ -2,16 +2,17 @@
     ViewData["Title"] = "Flash Card";
     var translations = new Dictionary<string, string>
     {
-        { "Happy", "ดีใจ" },
-        { "Sad", "เศร้า" },
-        { "Angry", "โกรธ" },
-        { "Scared", "กลัว" },
+        { "Ask", "ขออนุญาตถาม" },
+        { "Goodbye", "ลาก่อร" },
+        { "Hello", "สวัสดี" },
+        { "Sorry", "ขอโทษ" },
+        { "Thanks", "ขอบคุณ" },
     };
 }
 
 <div class="container home-bg flex-column">
     <img src="/pic/BG/Blank.png" class="background" />
-    <a asp-action="M1_Start1" class="close-btn">
+    <a asp-action="M3_Start" class="close-btn">
         <i class="fa-solid fa-xmark"></i>
     </a>
 
@@ -39,10 +40,11 @@
 </div>
 
 <!-- เพิ่ม Audio Elements สำหรับเสียง -->
-<audio id="angrySound" src="/sounds/M1-Angry.mp3"></audio>
-<audio id="scaredSound" src="/sounds/M1-Scared.mp3"></audio>
-<audio id="sadSound" src="/sounds/M1-Sad.mp3"></audio>
-<audio id="happySound" src="/sounds/M1-Happy.mp3"></audio>
+<audio id="askSound" src="/sounds/M1-Ask.mp3"></audio>
+<audio id="goodbyeSound" src="/sounds/M1-Goodbye.mp3"></audio>
+<audio id="helloSound" src="/sounds/M1-Hello.mp3"></audio>
+<audio id="sorrySound" src="/sounds/M1-Sorry.mp3"></audio>
+<audio id="thanksSound" src="/sounds/M1-Thanks.mp3"></audio>
 
 <!-- JS SCRIPT -->
 <script>
@@ -53,10 +55,11 @@
 
         // สร้างอ็อบเจกต์แมพเสียงกับคำตอบ
         const soundMap = {
-            "ดีใจ": document.getElementById("happySound"),
-            "เศร้า": document.getElementById("sadSound"),
-            "โกรธ": document.getElementById("angrySound"),
-            "กลัว": document.getElementById("scaredSound")
+            "ขออนุญาตถาม": document.getElementById("askSound"),
+            "ลาก่อน": document.getElementById("goodbyeSound"),
+            "สวัสดี": document.getElementById("helloSound"),
+            "ขอโทษ": document.getElementById("sorrySound"),
+            "ขอบคุณ": document.getElementById("scaredSound")
         };
 
         if (flashcard && nextBtn) {
@@ -92,20 +95,20 @@
 
         function fetchNextFlashCard() {
             // ส่ง module และ submodule ไปกับ request
-            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=1&submodule=1`;
+            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=3&submodule=1`;
 
             fetch(url)
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        window.location.href = `@Url.Action("M1_Done", "Flashcard")?source=M1_Start1&next=M1_Enhance1`;
+                        window.location.href = `@Url.Action("M3_Done", "Flashcard")?source=M3_Start&next=M3_Enhance`;
                         return;
                     }
 
                     // อัปเดตรูปภาพและคำตอบใหม่
                     document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
                     document.querySelector(".answer-text").textContent =
-                        { "Happy": "ดีใจ", "Sad": "เศร้า", "Angry": "โกรธ", "Scared": "กลัว" }[data.correctAnswer] || data.correctAnswer;
+                        { "Ask": "ขออนุญาตถาม", "Goodbye": "ลาก่อน", "Hello": "สวัสดี", "Sorry": "ขอโทษ", "Thanks": "ขอบคุณ" }[data.correctAnswer] || data.correctAnswer;
 
                     hasShown = false;
                     nextBtn.style.opacity = "0";

@@ -3,18 +3,19 @@
 }
 
 <div class="container home-bg">
-    <img src="/pic/BG/Module_Main.png" class="background" />
+    <img src="/pic/BG/Module3.png" class="background" />
 
-     <!-- ตัวละครที่เพิ่มเข้ามา -->
+    <!-- ตัวละครที่เพิ่มเข้ามา -->
     <img src="/pic/BG/Nong Purple .PNG" style="position: absolute; top: 10%; left: 2%; width: 140px; transform: rotate(-10deg);" />
     <img src="/pic/BG/Nong Yellow .PNG" style="position: absolute; top: 70%; left: 5%; width: 280px; transform: rotate(20deg);" />
     <img src="/pic/BG/NongBlue.PNG" style="position: absolute; top: 2%; left: 87%; width: 150px; transform: rotate(-5deg);" />
     <img src="/pic/BG/NongRed.PNG" style="position: absolute; top: 70%; left: 80%; width: 200px; transform: rotate(-10deg);" />
 
+
     <div class="row d-flex flex-column justify-content-center align-items-center">
-        <div class="game-text blue noto-bold fs-1">เกมพลเมืองดี 4.0</div>
-        <a asp-action="M1_Main" class="main-module-go noto-regular text-white">Module 1 : การรับรู้อารมณ์</a>
-        <a asp-action="M2_Main" class="main-module-go noto-regular text-white">Module 2 : การแสดงออก</a>
-        <a asp-action="M3_Main" class="main-module-go noto-regular text-white">Module 3 : จริยธรรมและศีลธรรม</a>
+        <div class="module-headtext noto-bold fs-1" style="color: #FA9B95;">จริยธรรมและศีลธรรม</div>
+        <a asp-action="M3_Ask" class="module3-go noto-regular text-white">เข้าสู่บทเรียน</a>
+        <a asp-action="M3_Test_Start" class="module3-go noto-regular text-white">แบบทดสอบ</a>
     </div>
+    <a class="menu" asp-action="Menu" asp-route-source="M3_Main"><i class="fa-solid fa-list"></i></a>
 </div>
