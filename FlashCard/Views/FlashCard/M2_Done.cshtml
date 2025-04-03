@@ -1,0 +1,29 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    string? source = ViewData["Source"]?.ToString();
+    string? next = ViewData["Next"]?.ToString();
+}
+
+<div class="container home-bg">
+    <img src="/pic/BG/Module2.png" class="background" />
+    <div class="row d-flex flex-column justify-content-center align-items-center">
+        <div class="game-text noto-bold fs-1">เสร็จสิ้น</div>
+
+        <!-- Again -->
+        @if (!string.IsNullOrEmpty(source))
+        {
+            <a asp-action="@source" class="module2-golong noto-regular text-white">เริ่มใหม่</a>
+        }
+
+        <!-- Next -->
+        @if (!string.IsNullOrEmpty(next))
+        {
+            <a asp-action="@next" class="module2-golong noto-regular text-white">ถัดไป</a>
+        }
+
+        <!-- Exit -->
+        <a asp-action="Mainmenu" class="module2-golong noto-regular text-white">ออก</a>
+    </div>
+
+</div>
+

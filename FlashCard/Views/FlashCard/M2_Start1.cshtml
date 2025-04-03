@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+}
+
+<div class="container home-bg">
+    <img src="/pic/BG/Module2.png" class="background" />
+    <div class="row d-flex flex-column justify-content-center align-items-center">
+        <div class="module-headtext purple noto-bold fs-1">การแสดงความต้องการ</div>
+        <a asp-controller="FlashCard" asp-action="M2_FlashCard" class="module2-go noto-regular text-white">เริ่มเกม</a>
+        <a asp-controller="FlashCard" asp-action="M2_Test_Start" class="module2-go noto-regular text-white">แบบทดสอบ</a>
+    </div>
+    <a class="menu" asp-action="Menu" asp-route-source="M2_Start1"><i class="fa-solid fa-list"></i></a>
+</div>
+
