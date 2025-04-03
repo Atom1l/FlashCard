@@ -14,7 +14,7 @@
                 <div class="card-container col-4 col-lg-3">
                     <div class="card">
                         <!-- Display the image from Imgbytes -->
-                        <a asp-action="FlashCard_Details" asp-route-name="@image.Name" asp-route-module="M1_Conclude_All">
+                        <a asp-action="FlashCard_Details" asp-route-name="@image.Name" asp-route-module="M2_Conclude_All">
                             <img src="data:image/png;base64,@Convert.ToBase64String(image.Imgbytes)" class="card-img-top" alt="@image.Name" />
                         </a>
                     </div>
@@ -22,5 +22,5 @@
             }
         </div>
     </div>
-    <a asp-controller="FlashCard" asp-action="M1_Done" asp-route-source="M1_Conclude" asp-route-next="M1_Test_Start" class="conclude-btn noto-regular text-white">เสร็จสิ้น</a>
+    <a asp-controller="FlashCard" asp-action="M2_Done" asp-route-source="M2_Conclude" asp-route-next="M2_Test_Start" class="conclude-btn noto-regular text-white">เสร็จสิ้น</a>
 </div>

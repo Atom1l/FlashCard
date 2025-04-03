@@ -110,6 +110,7 @@
                     hasShown = false;
                     nextBtn.style.opacity = "0";
                     nextBtn.style.pointerEvents = "none";
+                    nextBtn.style.cursor = "pointer";
                 })
                 .catch(error => console.error('Error fetching next flashcard:', error));
         }
