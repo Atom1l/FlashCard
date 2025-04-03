@@ -116,8 +116,8 @@
         });
 
         nextBtn.addEventListener("click", function () {
-            const moduleValue = 1;
-            const submoduleValue = 2;
+            const moduleValue = 3;
+            const submoduleValue = 1;
 
             const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
 
@@ -141,9 +141,9 @@
                     nextBtn.style.opacity = "0";
                     nextBtn.style.pointerEvents = "none";
                 } else {
-                    const source = encodeURIComponent("M1_Enhance2");
-                    const next = encodeURIComponent("M1_Conclude");
-                    window.location.href = `@Url.Action("M1_Done")?source=${source}&next=${next}`;
+                    const source = encodeURIComponent("M3_Enhance");
+                    const next = encodeURIComponent("M3_Conclude");
+                    window.location.href = `@Url.Action("M3_Done")?source=${source}&next=${next}`;
                 }
             })
             .catch(error => console.error('Error:', error));
