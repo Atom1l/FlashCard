@@ -759,6 +759,47 @@ namespace FlashCard.Controllers
             return View(selectedImage);  // ส่งภาพที่เลือกไปยัง View
         }
 
+        public async Task<IActionResult> M2_Enhance2_Test()
+        {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            var images = await _db.ImagesDB
+                .Where(i => i.Module == "2" && i.SubModule == "2" && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "2" && i.SubModule == "2")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+            }
+
+            var random = new Random();
+            var selectedImage = images[random.Next(images.Count)];
+
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.Entry(selectedImage).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);  // ส่งภาพที่เลือกไปยัง View
+        }
+
         // Module 2 Enhance 2
         public IActionResult M2_Enhance2()
         {
@@ -899,9 +940,6 @@ namespace FlashCard.Controllers
 
             return View(selectedImage);
         }
-
-
-
 
         // Module 2 Test
         public async Task<IActionResult> M2_Test()

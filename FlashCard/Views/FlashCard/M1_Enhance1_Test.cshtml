@@ -26,6 +26,7 @@
     @if (Model != null && Model.Imgbytes != null)
     {
         <div class="enhance-container">
+            <div class="question-text noto-bold">รูปนี้สื่อถึงอารมณ์อะไร?</div>
             <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
             <div class="choices">
                 @foreach (var choice in translations.Values)

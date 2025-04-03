@@ -25,6 +25,12 @@
     @if (Model != null && Model.Imgbytes != null)
     {
         <div class="enhance-container">
+            @if(Model.SubModule == "1"){
+                <div class="question-text noto-bold">คนในภาพกำลังแสดงออกถึงอะไร?</div>
+            }
+            else if(Model.SubModule == "2"){
+                <div class="question-text noto-bold">คนในภาพต้องการแสดงออกอย่างไร?</div>
+            }
             <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
             <div class="m2-choices">
                 @foreach (var choice in translations.Values)

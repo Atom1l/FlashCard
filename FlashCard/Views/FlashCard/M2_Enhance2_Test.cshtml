@@ -2,29 +2,29 @@
     ViewData["Title"] = "Flash Card";
     var translations = new Dictionary<string, string>
     {
-        { "Want", "อยากได้ของ" },
-        { "Hungry", "หิวข้าว" },
-        { "Thirsty", "หิวน้ำ" },
+        { "AskQ", "ขออนุญาตถาม" },
+        { "Yes", "ใช่" },
+        { "No", "ไม่" },
     };
 
     var answerAudioFiles = new Dictionary<string, string>
     {
-        { "Want", "/sounds/M1-Happy.mp3" },
-        { "Hungry", "/sounds/M1-Sad.mp3" },
-        { "Thirsty", "/sounds/M1-Angry.mp3" },
+        { "AskQ", "/sounds/M1-Happy.mp3" },
+        { "Yes", "/sounds/M1-Sad.mp3" },
+        { "NO", "/sounds/M1-Angry.mp3" },
     };
 }
 
 <div class="container home-bg flex-column">
     <img src="/pic/BG/Blank.png" class="background" />
-    <a asp-action="M2_Enhance1" class="close-btn">
+    <a asp-action="M2_Enhance2" class="close-btn">
         <i class="fa-solid fa-xmark"></i>
     </a>
-
+    
     @if (Model != null && Model.Imgbytes != null)
     {
         <div class="enhance-container">
-            <div class="question-text noto-bold">คนในภาพกำลังแสดงออกถึงอะไร?</div>
+            <div class="question-text noto-bold">คนในภาพต้องการแสดงออกอย่างไร?</div>
             <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
             <div class="m2-choices">
                 @foreach (var choice in translations.Values)
@@ -54,17 +54,17 @@
         const flashcard = document.querySelector(".flashcard");
 
         const translations = {
-            "Want": "อยากได้ของ",
-            "Hungry": "หิวข้าว",
-            "Thirsty": "หิวน้ำ"
+            "AskQ": "ขออนุญาตถาม",
+            "Yes": "ใช่",
+            "No": "ไม่"
         };
 
         // ฟังก์ชันโหลดเสียงของคำตอบที่ถูกต้อง (อัปเดตค่าใหม่)
         function getAnswerAudioFile(answer) {
             const answerAudioFiles = {
-                "Want": "/sounds/M1-Happy.mp3",
-                "Hungry": "/sounds/M1-Sad.mp3",
-                "Thirsty": "/sounds/M1-Angry.mp3",
+                "AskQ": "/sounds/M1-Happy.mp3",
+                "Yes": "/sounds/M1-Sad.mp3",
+                "No": "/sounds/M1-Angry.mp3",
             };
             return answerAudioFiles[answer] || null;
         }
@@ -110,7 +110,7 @@
 
         nextBtn.addEventListener("click", function () {
             const moduleValue = 2;
-            const submoduleValue = 1;
+            const submoduleValue = 2;
 
             const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
 
@@ -134,8 +134,8 @@
                     nextBtn.style.opacity = "0";
                     nextBtn.style.pointerEvents = "none";
                 } else {
-                    const source = encodeURIComponent("M2_Enhance1");
-                    const next = encodeURIComponent("M2_Start2");
+                    const source = encodeURIComponent("M2_Enhance2");
+                    const next = encodeURIComponent("M2_Conclude");
                     window.location.href = `@Url.Action("M2_Done")?source=${source}&next=${next}`;
                 }
             })

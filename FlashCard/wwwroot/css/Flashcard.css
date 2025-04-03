@@ -551,12 +551,14 @@ html, body {
     /* = FlashCard =*/
     .close-btn {
         position: absolute;
-        top: 1%;
+        top: 2%;
         right: 2%;
         color: black;
         text-decoration: none;
         font-size: 4rem;
     }
+
+    
 
     .flashcard-overall-container {
         border: solid 5px red;
@@ -696,6 +698,12 @@ html, body {
         align-items: center;
     }
 
+    .question-text {
+        margin-bottom: 20px;
+        text-align: center;
+        font-size: clamp(1rem, 4vw, 8rem) !important;
+    }
+
     .enhance-container {
         margin-top: 50px;
         display: flex;
@@ -706,14 +714,13 @@ html, body {
         height: 100%;
     }
 
-.enhance-container img {
-    width: 50%;
-    height: auto;
-    border-radius: 50px;
-    border: solid 10px #8dd4ff;
-    cursor: pointer;
-    transition: 0.3s ease;
-}
+    .enhance-container img {
+        width: 40%;
+        height: auto;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
 
 /* =M1_Conclude= */
 .container-scroll {
@@ -799,6 +806,8 @@ html, body {
 .card-img-top {
     border-radius: 10px;
 }
+
+
 
 
 
