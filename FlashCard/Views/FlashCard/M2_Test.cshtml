@@ -1,0 +1,152 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    var translations = new Dictionary<string, Dictionary<string, string>>
+    {
+        { "2", new Dictionary<string, string> {
+            { "AskQ", "ขออนุญาตถาม" },
+            { "Yes", "ใช่" },
+            { "No", "ไม่" }
+        }},
+        { "1", new Dictionary<string, string> {
+            { "Want", "อยากได้ของ" },
+            { "Hungry", "หิวข้าว" },
+            { "Thirsty", "หิวน้ำ" }
+            
+        }}
+    };
+}
+
+<div class="container home-bg flex-column">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <a asp-action="M1_Enhance1" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+
+    @if (Model != null && Model.Imgbytes != null)
+    {
+        <div class="enhance-container">
+            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
+            <div class="m2-choices">
+                @foreach (var choice in translations.Values)
+                {
+                    <button class="choice-btn noto-bold" data-answer="@choice">@choice</button>
+                }
+            </div>
+            <a class="next-btn" style="opacity: 0; pointer-events: none;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    }
+    else
+    {
+        <p>No Image Available</p>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const nextBtn = document.querySelector(".next-btn");
+        const flashcard = document.querySelector(".flashcard");
+        const choicesContainer = document.querySelector(".m2-choices");
+
+        const translations = {
+            "2": {
+                "AskQ": "ขออนุญาตถาม",
+                "Yes": "ใช่",
+                "No": "ไม่"
+            },
+            "1": {
+                "Hungry": "หิวข้าว",
+                "Thirsty": "หิวน้ำ",
+                "Want": "อยากได้ของ"
+            }
+        };
+
+        let correctAnswer = "@Model.Answer".trim();
+        let subModule = "@Model.SubModule".trim();
+        let score = 0;
+
+        // ✅ ฟังก์ชันแปลง Key ให้เป็นคำแปล
+        function translateAnswer(subModule, key) {
+            return translations[subModule]?.[key] || key;
+        }
+
+        // ✅ ฟังก์ชันอัปเดต Choices ตาม Submodule
+        function updateChoices(subModule, correctKey) {
+            choicesContainer.innerHTML = "";
+            const correctTranslated = translateAnswer(subModule, correctKey);
+
+            Object.entries(translations[subModule] || {}).forEach(([key, choice]) => {
+                const button = document.createElement("button");
+                button.classList.add("choice-btn", "noto-bold");
+                button.textContent = choice;
+                button.setAttribute("data-answer", choice);
+                choicesContainer.appendChild(button);
+            });
+
+            setTimeout(() => {
+                attachChoiceEvents(correctTranslated);
+            }, 50);
+
+        }
+
+        // ✅ ฟังก์ชันผูก Event ให้ปุ่ม Choices ที่ถูกสร้างใหม่
+        function attachChoiceEvents(correctTranslated) {
+            const choiceButtons = document.querySelectorAll(".choice-btn");
+
+            choiceButtons.forEach(button => {
+                button.addEventListener("click", function () {
+                    let userAnswer = this.getAttribute("data-answer").trim().toLowerCase();
+                    let correctAns = correctTranslated.trim().toLowerCase();
+
+                    if (userAnswer === correctAns) {
+                        this.classList.add("correct");
+                        score++;
+                        new Audio("/sounds/correctsound.mp3").play();
+                    } else {
+                        this.classList.add("wrong");
+                        new Audio("/sounds/wrongsound.mp3").play();
+
+                        choiceButtons.forEach(btn => {
+                            if (btn.getAttribute("data-answer").trim().toLowerCase() === correctAns) {
+                                btn.classList.add("correct");
+                            }
+                        });
+                    }
+
+                    choiceButtons.forEach(btn => btn.disabled = true);
+                    nextBtn.style.opacity = "1";
+                    nextBtn.style.pointerEvents = "auto";
+                });
+            });
+        }
+
+        // ✅ ฟังก์ชันดึง Flashcard ใหม่จากเซิร์ฟเวอร์
+        nextBtn.addEventListener("click", function () {
+            const moduleValue = 2;
+            const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
+
+            fetch(url, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    flashcard.src = "data:image/png;base64," + data.imgBytes;
+                    correctAnswer = data.correctAnswer.trim();
+                    subModule = data.subModule.trim();
+
+                    updateChoices(subModule, correctAnswer);
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                    nextBtn.style.cursor = "pointer";
+                } else {
+                    const module = encodeURIComponent("M2");
+                    window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        updateChoices(subModule, correctAnswer);
+    });
+
+</script>

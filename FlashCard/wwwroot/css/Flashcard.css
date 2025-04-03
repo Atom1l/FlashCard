@@ -800,3 +800,26 @@ html, body {
     border-radius: 10px;
 }
 
+
+
+
+
+
+
+/* Module 2*/
+.m2-choices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    grid-template-rows: auto auto;
+    gap: 20px;
+    justify-content: center;
+    width: 60%;
+    margin: 30px auto;
+}
+
+.m2-choices .choice-btn:first-child {
+    grid-column: span 2;
+    width: 50%;
+    justify-self: center;
+    align-self: center;
+}

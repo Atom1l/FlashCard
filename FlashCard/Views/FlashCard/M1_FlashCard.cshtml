@@ -86,6 +86,7 @@
 
             nextBtn.addEventListener("click", function () {
                 if (hasShown) fetchNextFlashCard();
+                soundMap[answerText].stop(); 
             });
         }
 

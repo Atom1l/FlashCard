@@ -569,8 +569,6 @@ namespace FlashCard.Controllers
                 .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == module))
                 .CountAsync();
 
-            Console.WriteLine($"DEBUG: User {userId} has seen {shownCount} flashcards in module {module}.");
-
             // ====================== TO DELETE HASSHOWN AFTER DONE ====================== //
             if (module == "1" && shownCount >= 12)
             {
@@ -585,7 +583,7 @@ namespace FlashCard.Controllers
             else if (module == "2" && shownCount >= 8)
             {
                 await _db.UserCardDB
-                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "1"))
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "2"))
                     .ExecuteDeleteAsync();
 
                 await _db.SaveChangesAsync();
@@ -628,7 +626,8 @@ namespace FlashCard.Controllers
             {
                 success = true,
                 imgBytes = Convert.ToBase64String(selectedImage.Imgbytes),
-                correctAnswer = selectedImage.Answer
+                correctAnswer = selectedImage.Answer,
+                subModule = selectedImage.SubModule
             });
         }
 
@@ -681,6 +680,46 @@ namespace FlashCard.Controllers
         }
 
         /* ================================== Module 2 ================================== */
+        public async Task<IActionResult> M2_Test()
+        {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            var images = await _db.ImagesDB
+                .Where(i => (i.Module == "2") && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "2")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+            }
+
+            var random = new Random();
+            var selectedImage = images[random.Next(images.Count)];
+
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.Entry(selectedImage).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);
+        }
 
     }
 
