@@ -815,7 +815,7 @@ html, body {
     justify-content: center;
     width: 60%;
     margin: 30px auto;
-    border: 2px solid red;
+    border:none;
 }
 
 .m2-choices .choice-btn:first-child {

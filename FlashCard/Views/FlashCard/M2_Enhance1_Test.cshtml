@@ -1,24 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Flash Card";
-    var translations = new Dictionary<string, Dictionary<string, string>>
+    var translations = new Dictionary<string, string>
     {
-        { "2", new Dictionary<string, string> {
-            { "AskQ", "ขออนุญาตถาม" },
-            { "Yes", "ใช่" },
-            { "No", "ไม่" }
-        }},
-        { "1", new Dictionary<string, string> {
-            { "Want", "อยากได้ของ" },
-            { "Hungry", "หิวข้าว" },
-            { "Thirsty", "หิวน้ำ" }
-            
-        }}
+        { "Want", "อยากได้ของ" },
+        { "Hungry", "หิวข้าว" },
+        { "Thirsty", "หิวน้ำ" }
     };
 }
 
 <div class="container home-bg flex-column">
     <img src="/pic/BG/Blank.png" class="background" />
-    <a asp-action="M1_Enhance1" class="close-btn">
+    <a asp-action="M2_Enhance1" class="close-btn">
         <i class="fa-solid fa-xmark"></i>
     </a>
 
@@ -50,21 +42,13 @@
         const choicesContainer = document.querySelector(".m2-choices");
 
         const translations = {
-            "2": {
-                "AskQ": "ขออนุญาตถาม",
-                "Yes": "ใช่",
-                "No": "ไม่"
-            },
-            "1": {
                 "Hungry": "หิวข้าว",
                 "Thirsty": "หิวน้ำ",
                 "Want": "อยากได้ของ"
-            }
         };
 
         let correctAnswer = "@Model.Answer".trim();
         let subModule = "@Model.SubModule".trim();
-        let score = 0;
 
         // ✅ ฟังก์ชันแปลง Key ให้เป็นคำแปล
         function translateAnswer(subModule, key) {
@@ -114,7 +98,6 @@
 
                     if (userAnswer === correctAns) {
                         this.classList.add("correct");
-                        score++;
                         new Audio("/sounds/correctsound.mp3").play();
                     } else {
                         this.classList.add("wrong");
@@ -138,7 +121,9 @@
         // ✅ ฟังก์ชันดึง Flashcard ใหม่จากเซิร์ฟเวอร์
         nextBtn.addEventListener("click", function () {
             const moduleValue = 2;
-            const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
+            const submoduleValue = 1;
+
+            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
 
             fetch(url, { method: 'GET' })
             .then(response => response.json())
@@ -153,8 +138,9 @@
                     nextBtn.style.pointerEvents = "none";
                     nextBtn.style.cursor = "pointer";
                 } else {
-                    const module = encodeURIComponent("M2");
-                    window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+                    const source = encodeURIComponent("M2_Enhance1");
+                    const next = encodeURIComponent("M2_Start2");
+                    window.location.href = `@Url.Action("M2_Done")?source=${source}&next=${next}`;
                 }
             })
             .catch(error => console.error('Error:', error));

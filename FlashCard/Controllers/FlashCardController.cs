@@ -298,7 +298,8 @@ namespace FlashCard.Controllers
             {
                 success = true,
                 imgBytes = Convert.ToBase64String(selectedImage.Imgbytes),
-                correctAnswer = selectedImage.Answer
+                correctAnswer = selectedImage.Answer,
+                subModule = selectedImage.SubModule
             });
         }
 
@@ -716,6 +717,46 @@ namespace FlashCard.Controllers
         public IActionResult M2_Enhance1()
         {
             return View();
+        }
+        public async Task<IActionResult> M2_Enhance1_Test()
+        {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            var images = await _db.ImagesDB
+                .Where(i => i.Module == "2" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "2" && i.SubModule == "1")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+            }
+
+            var random = new Random();
+            var selectedImage = images[random.Next(images.Count)];
+
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.Entry(selectedImage).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);  // ส่งภาพที่เลือกไปยัง View
         }
 
         // Module 2 Enhance 2
