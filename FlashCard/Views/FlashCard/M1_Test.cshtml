@@ -37,7 +37,7 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function () {
         const choiceButtons = document.querySelectorAll(".choice-btn");
         const nextBtn = document.querySelector(".next-btn");
         const flashcard = document.querySelector(".flashcard");
@@ -49,7 +49,7 @@
             "Scared": "กลัว"
         };
 
-        // ฟังก์ชันสำหรับการโหลดไฟล์เสียงตามคำตอบ
+        // ฟังก์ชันสำหรับการโหลดไฟล์เสียงคำตอบ
         function getAnswerAudioFile(answer) {
             const answerAudioFiles = {
                 "Happy": "/sounds/M1-Happy.mp3",
@@ -60,10 +60,15 @@
             return answerAudioFiles[answer] || null;
         }
 
+        // กำหนดคำตอบที่ถูกต้องและเสียง
         let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
-        let answerAudioFile = getAnswerAudioFile(correctAnswer); // โหลดเสียงคำตอบที่ถูกต้อง
+        let answerAudioFile = getAnswerAudioFile(correctAnswer);
 
-        // ฟังก์ชันเล่นเสียง
+        // สร้างเสียงของคำตอบถูกต้องและเล่นทันที
+        const answerAudio = new Audio(answerAudioFile);
+        answerAudio.play();  // เพิ่มการเล่นเสียงในข้อแรก
+
+        // โหลดเสียงสำหรับคำตอบถูกและผิด
         const correctSound = new Audio("/sounds/correctsound.mp3");
         const wrongSound = new Audio("/sounds/wrongsound.mp3");
 
@@ -76,22 +81,20 @@
                 let userAnswer = this.getAttribute("data-answer");
                 count++;
 
-                // เล่นเสียงคำตอบที่ถูกต้องหรือผิด
+                // สร้างเสียงคำตอบของโจทย์ปัจจุบัน
+                const answerAudio = new Audio(answerAudioFile);
+
+                // เล่นเสียงของคำตอบของโจทย์ (M1-xxx.mp3)
+                answerAudio.play();
+
+                // ตรวจสอบว่าตอบถูกหรือไม่
                 if (userAnswer === correctAnswer) {
                     this.classList.add("correct");
                     score++;
-                    correctSound.play(); // เล่นเสียงคำตอบถูกต้อง
-
-                    // เล่นเสียงคำตอบที่ตรงกับโจทย์
-                    const answerAudio = new Audio(getAnswerAudioFile(userAnswer));
-                    answerAudio.play(); // เล่นเสียงคำตอบของโจทย์ที่ถูกต้อง
+                    correctSound.play(); // เล่นเสียงถูกต้อง
                 } else {
                     this.classList.add("wrong");
-                    wrongSound.play(); // เล่นเสียงคำตอบผิด
-
-                    // เล่นเสียงคำตอบที่ตรงกับโจทย์
-                    const answerAudio = new Audio(getAnswerAudioFile(correctAnswer));
-                    answerAudio.play(); // เล่นเสียงคำตอบของโจทย์ที่ถูกต้อง
+                    wrongSound.play(); // เล่นเสียงผิด
 
                     // แสดงคำตอบที่ถูกต้อง
                     choiceButtons.forEach(btn => {
