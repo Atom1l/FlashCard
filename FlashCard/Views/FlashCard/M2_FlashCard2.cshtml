@@ -97,7 +97,7 @@
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        window.location.href = `@Url.Action("M2_Done", "Flashcard")?source=M2_Start1&next=M2_Enhance1`;
+                        window.location.href = `@Url.Action("M2_Done", "Flashcard")?source=M2_Start2&next=M2_Enhance2`;
                         return;
                     }
 

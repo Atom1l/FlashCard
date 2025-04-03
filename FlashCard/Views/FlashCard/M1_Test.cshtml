@@ -18,6 +18,14 @@
     @if (Model != null && Model.Imgbytes != null)
     {
         <div class="enhance-container">
+            @if (Model.SubModule == "1")
+            {
+                <div class="question-text noto-bold">รูปนี้สื่ออารมณ์อะไร?</div>
+            }
+            else if (Model.SubModule == "2")
+            {
+                <div class="question-text noto-bold">เหตุการณ์นี้สื่อถึงอารมณ์แบบใด?</div>
+            }
             <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
             <div class="choices">
                 @foreach (var choice in translations.Values)
@@ -37,10 +45,11 @@
 </div>
 
 <script>
-        document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function () {
         const choiceButtons = document.querySelectorAll(".choice-btn");
         const nextBtn = document.querySelector(".next-btn");
         const flashcard = document.querySelector(".flashcard");
+        const questionText = document.querySelector(".question-text");
 
         const translations = {
             "Happy": "ดีใจ",
@@ -49,65 +58,38 @@
             "Scared": "กลัว"
         };
 
-        // ฟังก์ชันสำหรับการโหลดไฟล์เสียงคำตอบ
-        function getAnswerAudioFile(answer) {
-            const answerAudioFiles = {
-                "Happy": "/sounds/M1-Happy.mp3",
-                "Sad": "/sounds/M1-Sad.mp3",
-                "Angry": "/sounds/M1-Angry.mp3",
-                "Scared": "/sounds/M1-Scared.mp3"
-            };
-            return answerAudioFiles[answer] || null;
+        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
+        let subModule = "@Model.SubModule".trim();
+        let score = 0;
+
+        function updateQuestionText(subModule) {
+            if (subModule === "1") {
+                questionText.textContent = "รูปนี้สื่ออารมณ์อะไร?";
+            } else if (subModule === "2") {
+                questionText.textContent = "เหตุการณ์นี้สื่อถึงอารมณ์แบบใด?";
+            }
         }
 
-        // กำหนดคำตอบที่ถูกต้องและเสียง
-        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
-        let answerAudioFile = getAnswerAudioFile(correctAnswer);
+        function updateChoices(correctKey) {
+            choiceButtons.forEach((button, index) => {
+                let key = Object.keys(translations)[index];
+                button.textContent = translations[key];
+                button.setAttribute("data-answer", translations[key]);
+                button.classList.remove("blue-bg");
+                button.disabled = false;
+            });
+        }
 
-        // สร้างเสียงของคำตอบถูกต้องและเล่นทันที
-        const answerAudio = new Audio(answerAudioFile);
-        answerAudio.play();  // เพิ่มการเล่นเสียงในข้อแรก
-
-        // โหลดเสียงสำหรับคำตอบถูกและผิด
-        const correctSound = new Audio("/sounds/correctsound.mp3");
-        const wrongSound = new Audio("/sounds/wrongsound.mp3");
-
-        let score = 0;
-        let count = 0;
-
-        // ฟังก์ชันคลิกปุ่มคำตอบ
         choiceButtons.forEach(button => {
             button.addEventListener("click", function () {
                 let userAnswer = this.getAttribute("data-answer");
-                count++;
 
-                // สร้างเสียงคำตอบของโจทย์ปัจจุบัน
-                const answerAudio = new Audio(answerAudioFile);
-
-                // เล่นเสียงของคำตอบของโจทย์ (M1-xxx.mp3)
-                answerAudio.play();
-
-                // ตรวจสอบว่าตอบถูกหรือไม่
+                this.classList.add("blue-bg");
                 if (userAnswer === correctAnswer) {
-                    this.classList.add("correct");
                     score++;
-                    correctSound.play(); // เล่นเสียงถูกต้อง
-                } else {
-                    this.classList.add("wrong");
-                    wrongSound.play(); // เล่นเสียงผิด
-
-                    // แสดงคำตอบที่ถูกต้อง
-                    choiceButtons.forEach(btn => {
-                        if (btn.getAttribute("data-answer") === correctAnswer) {
-                            btn.classList.add("correct");
-                        }
-                    });
                 }
 
-                // ปิดปุ่มตัวเลือก
                 choiceButtons.forEach(btn => btn.disabled = true);
-
-                // แสดงปุ่ม Next
                 nextBtn.style.opacity = "1";
                 nextBtn.style.cursor = "pointer";
                 nextBtn.style.pointerEvents = "auto";
@@ -116,7 +98,6 @@
 
         nextBtn.addEventListener("click", function () {
             const moduleValue = 1;
-
             const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
 
             fetch(url, { method: 'GET' })
@@ -124,17 +105,11 @@
             .then(data => {
                 if (data.success) {
                     flashcard.src = "data:image/png;base64," + data.imgBytes;
-
-                    // อัปเดตค่าใหม่ของคำตอบที่ถูกต้อง
                     correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+                    subModule = data.subModule.trim();
 
-                    // โหลดเสียงใหม่ของโจทย์ที่เปลี่ยน
-                    answerAudioFile = getAnswerAudioFile(data.correctAnswer.trim());
-
-                    choiceButtons.forEach(button => {
-                        button.classList.remove("correct", "wrong");
-                        button.disabled = false;
-                    });
+                    updateQuestionText(subModule);
+                    updateChoices(correctAnswer);
 
                     nextBtn.style.opacity = "0";
                     nextBtn.style.pointerEvents = "none";
@@ -145,5 +120,8 @@
             })
             .catch(error => console.error('Error:', error));
         });
+
+        updateQuestionText(subModule);
     });
+
 </script>

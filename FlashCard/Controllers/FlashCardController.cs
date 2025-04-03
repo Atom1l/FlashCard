@@ -701,6 +701,12 @@ namespace FlashCard.Controllers
             return View();
         }
 
+        // Module 2 Choose //
+        public IActionResult M2_Choose()
+        {
+            return View();
+        }
+
         // Module 2 Start 1 //
         public IActionResult M2_Start1()
         {

@@ -15,8 +15,16 @@ html, body {
 .blue {
     color: #8dd4ff !important;
 }
+.blue-bg {
+    color: white;
+    background: #8dd4ff !important;
+}
 .purple{
     color: #a1a4ff !important;
+}
+.purple-bg {
+    color: white;
+    background: #a1a4ff !important;
 }
 
 /*= Universal class =*/
@@ -497,6 +505,7 @@ html, body {
         border-radius: 100px;
         border: none;
         font-size: clamp(1rem, 3vw, 3rem) !important;
+        z-index: 99;
     }
 
     .module-go {
@@ -584,7 +593,6 @@ html, body {
         height: auto;
         margin-top: 150px;
         border-radius: 50px;
-        border: solid 10px #8dd4ff;
         cursor: pointer;
         transition: 0.3s ease;
     }
@@ -758,7 +766,6 @@ html, body {
     height: 60%;
     margin-top: 100px;
     border-radius: 50px;
-    border: solid 10px #8dd4ff;
     cursor: pointer;
     transition: 0.3s ease;
 }
@@ -800,7 +807,7 @@ html, body {
 .card {
     width: 80%;
     margin-bottom:50px;
-    border:solid 5px #8dd4ff;
+    
     border-radius: 15px;
 }
 .card-img-top {

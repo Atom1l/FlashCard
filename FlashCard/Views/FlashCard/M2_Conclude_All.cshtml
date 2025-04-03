@@ -7,7 +7,7 @@
 <div class="container-scroll home-bg ">
     <img src="/pic/BG/Blank.png" class="background" />
     <div class="sub-container">
-        <div class="conclude-text noto-bold">สรุปเนื้อหา</div>
+        <div class="m2-conclude-text noto-bold">สรุปเนื้อหา</div>
         <div class="row all-card-container">
             @foreach (var image in Model)
             {
@@ -22,5 +22,5 @@
             }
         </div>
     </div>
-    <a asp-controller="FlashCard" asp-action="M2_Done" asp-route-source="M2_Conclude" asp-route-next="M2_Test_Start" class="conclude-btn noto-regular text-white">เสร็จสิ้น</a>
+    <a asp-controller="FlashCard" asp-action="M2_Done" asp-route-source="M2_Conclude" asp-route-next="M2_Test_Start" class="m2-conclude-btn noto-regular text-white">เสร็จสิ้น</a>
 </div>

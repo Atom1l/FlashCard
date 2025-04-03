@@ -72,14 +72,12 @@
         let subModule = "@Model.SubModule".trim();
         let score = 0;
 
-        // ✅ ฟังก์ชันแปลง Key ให้เป็นคำแปล
         function translateAnswer(subModule, key) {
             return translations[subModule]?.[key] || key;
         }
 
-        // ✅ ฟังก์ชันอัปเดต Choices ตาม Submodule
         function updateChoices(subModule, correctKey) {
-            choicesContainer.innerHTML = ""; // ล้างของเก่า
+            choicesContainer.innerHTML = "";
 
             const fragment = document.createDocumentFragment();
             const correctTranslated = translateAnswer(subModule, correctKey);
@@ -90,7 +88,6 @@
                 button.textContent = choice;
                 button.setAttribute("data-answer", choice);
 
-                // ถ้าเป็นปุ่มแรกให้จัดการ grid-column แบบพิเศษ
                 if (index === 0) {
                     button.style.gridColumn = "span 2";
                     button.style.width = "50%";
@@ -108,8 +105,6 @@
             }, 10);
         }
 
-
-        // ✅ ฟังก์ชันผูก Event ให้ปุ่ม Choices ที่ถูกสร้างใหม่
         function attachChoiceEvents(correctTranslated) {
             const choiceButtons = document.querySelectorAll(".choice-btn");
 
@@ -118,19 +113,10 @@
                     let userAnswer = this.getAttribute("data-answer").trim().toLowerCase();
                     let correctAns = correctTranslated.trim().toLowerCase();
 
-                    if (userAnswer === correctAns) {
-                        this.classList.add("correct");
-                        score++;
-                        new Audio("/sounds/correctsound.mp3").play();
-                    } else {
-                        this.classList.add("wrong");
-                        new Audio("/sounds/wrongsound.mp3").play();
+                    this.classList.add("purple-bg"); // ใช้ .blue-bg แทนการเฉลย
 
-                        choiceButtons.forEach(btn => {
-                            if (btn.getAttribute("data-answer").trim().toLowerCase() === correctAns) {
-                                btn.classList.add("correct");
-                            }
-                        });
+                    if (userAnswer === correctAns) {
+                        score++;
                     }
 
                     choiceButtons.forEach(btn => btn.disabled = true);
@@ -141,7 +127,6 @@
             });
         }
 
-        // ✅ ฟังก์ชันดึง Flashcard ใหม่จากเซิร์ฟเวอร์
         nextBtn.addEventListener("click", function () {
             const moduleValue = 2;
             const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
@@ -153,6 +138,13 @@
                     flashcard.src = "data:image/png;base64," + data.imgBytes;
                     correctAnswer = data.correctAnswer.trim();
                     subModule = data.subModule.trim();
+
+                    const questionText = document.querySelector(".question-text");
+                    if (subModule === "1") {
+                        questionText.textContent = "คนในภาพกำลังแสดงออกถึงอะไร?";
+                    } else if (subModule === "2") {
+                        questionText.textContent = "คนในภาพต้องการแสดงออกอย่างไร?";
+                    }
 
                     updateChoices(subModule, correctAnswer);
                     nextBtn.style.opacity = "0";
