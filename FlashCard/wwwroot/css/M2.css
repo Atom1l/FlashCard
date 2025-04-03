@@ -23,6 +23,20 @@
     border: none;
     font-size: clamp(1rem, 3vw, 3rem) !important;
 }
+
+.module2-goshort { /* For short text */
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #8dd4ff;
+    width: 90% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+
 .module2-headtext {
     margin-bottom: 20px;
     text-align: center;
@@ -32,4 +46,22 @@
     .module-headtext {
         font-size: 2rem; /* ปรับขนาดหัวข้อให้เหมาะสม */
     }
+}
+.m2-conclude-text {
+    margin-bottom: 50px;
+    text-align: center;
+    color: #a1a4ff;
+    font-size: clamp(1rem, 5vw, 5rem) !important;
+}
+.m2-conclude-btn {
+    position: fixed;
+    bottom: 2%;
+    text-align: center;
+    text-decoration: none;
+    background: #a1a4ff;
+    width: 20% !important;
+    padding: 15px 0px 15px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
 }
