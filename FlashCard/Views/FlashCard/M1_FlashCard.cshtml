@@ -85,8 +85,16 @@
             });
 
             nextBtn.addEventListener("click", function () {
-                if (hasShown) fetchNextFlashCard();
-                soundMap[answerText].stop(); 
+                if (hasShown) {
+                    // หยุดเสียงทั้งหมดก่อนโหลดแฟลชการ์ดใหม่
+                    for (const sound of Object.values(soundMap)) {
+                        sound.pause();
+                        sound.currentTime = 0;
+                    }
+
+                    fetchNextFlashCard();
+                }
+                // soundMap[answerText].stop(); 
             });
         }
 

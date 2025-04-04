@@ -38,10 +38,9 @@
 </div>
 
 <!-- เพิ่ม Audio Elements สำหรับเสียง -->
-<audio id="angrySound" src="/sounds/M1-Angry.mp3"></audio>
-<audio id="scaredSound" src="/sounds/M1-Scared.mp3"></audio>
-<audio id="sadSound" src="/sounds/M1-Sad.mp3"></audio>
-<audio id="happySound" src="/sounds/M1-Happy.mp3"></audio>
+<audio id="askSound" src="/sounds/M2-2/Ask-M2.mp3"></audio>
+<audio id="yesSound" src="/sounds/M2-2/Yes-M2.mp3"></audio>
+<audio id="noSound" src="/sounds/M2-2/No-M2.mp3"></audio>
 
 <!-- JS SCRIPT -->
 <script>
@@ -52,10 +51,9 @@
 
         // สร้างอ็อบเจกต์แมพเสียงกับคำตอบ
         const soundMap = {
-            "ดีใจ": document.getElementById("happySound"),
-            "เศร้า": document.getElementById("sadSound"),
-            "โกรธ": document.getElementById("angrySound"),
-            "กลัว": document.getElementById("scaredSound")
+            "ขออนุญาตถาม": document.getElementById("askSound"),
+            "ใช่": document.getElementById("yesSound"),
+            "ไม่": document.getElementById("noSound"),
         };
 
         if (flashcard && nextBtn) {
@@ -69,7 +67,7 @@
                     // เล่นเสียงที่ตรงกับคำตอบ
                     const answerText = document.querySelector(".answer-text").textContent.trim();
                     if (soundMap[answerText]) {
-                        soundMap[answerText].currentTime = 0; // รีเซ็ตเสียงให้เล่นตั้งแต่ต้น
+                        soundMap[answerText].currentTime = 0;
                         soundMap[answerText].play();
                     }
                 }
@@ -84,13 +82,20 @@
             });
 
             nextBtn.addEventListener("click", function () {
-                if (hasShown) fetchNextFlashCard();
-                soundMap[answerText].stop();
+                if (hasShown) {
+                    // ✅ หยุดเสียงที่กำลังเล่นอยู่
+                    const answerText = document.querySelector(".answer-text").textContent.trim();
+                    if (soundMap[answerText]) {
+                        soundMap[answerText].pause();
+                        soundMap[answerText].currentTime = 0;
+                    }
+
+                    fetchNextFlashCard();
+                }
             });
         }
 
         function fetchNextFlashCard() {
-            // ส่ง module และ submodule ไปกับ request
             const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=2&submodule=2`;
 
             fetch(url)
@@ -105,9 +110,6 @@
                     document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
                     document.querySelector(".answer-text").textContent =
                         { "AskQ": "ขออนุญาตถาม", "Yes": "ใช่", "No": "ไม่" }[data.correctAnswer] || data.correctAnswer;
-
-                        
-
 
                     hasShown = false;
                     nextBtn.style.opacity = "0";

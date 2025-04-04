@@ -9,9 +9,9 @@
 
     var answerAudioFiles = new Dictionary<string, string>
     {
-        { "Want", "/sounds/M1-Happy.mp3" },
-        { "Hungry", "/sounds/M1-Sad.mp3" },
-        { "Thirsty", "/sounds/M1-Angry.mp3" },
+        { "Want", "/sounds/M2-2/Want-M2-3.mp3" },
+        { "Hungry", "/sounds/M2-2/Rice-M2-3.mp3" },
+        { "Thirsty", "/sounds/M2-2/Water-M2-3.mp3" },
     };
 }
 
@@ -24,7 +24,7 @@
     @if (Model != null && Model.Imgbytes != null)
     {
         <div class="enhance-container">
-            <div class="question-text noto-bold">คนในภาพกำลังแสดงออกถึงอะไร?</div>
+            <div class="question-text noto-bold">คนในภาพกำลังแสดงออกอย่างไร?</div>
             <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
             <div class="m2-choices">
                 @foreach (var choice in translations.Values)
@@ -59,19 +59,21 @@
             "Thirsty": "หิวน้ำ"
         };
 
-        // ฟังก์ชันโหลดเสียงของคำตอบที่ถูกต้อง (อัปเดตค่าใหม่)
+        // ฟังก์ชันโหลดไฟล์เสียงจากคำตอบภาษาอังกฤษ
         function getAnswerAudioFile(answer) {
             const answerAudioFiles = {
-                "Want": "/sounds/M1-Happy.mp3",
-                "Hungry": "/sounds/M1-Sad.mp3",
-                "Thirsty": "/sounds/M1-Angry.mp3",
+                "Want": "/sounds/M2-2/Want-M2-3.mp3",
+                "Hungry": "/sounds/M2-2/Rice-M2-3.mp3",
+                "Thirsty": "/sounds/M2-2/Water-M2-3.mp3",
             };
             return answerAudioFiles[answer] || null;
         }
 
+        // ค่าเริ่มต้นจาก Model
         let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
         let answerAudioFile = getAnswerAudioFile("@Model.Answer");
 
+        let answerAudio; // เก็บเสียงที่กำลังเล่นอยู่
         const correctSound = document.getElementById("correct-sound");
         const wrongSound = document.getElementById("wrong-sound");
 
@@ -79,18 +81,24 @@
             button.addEventListener("click", function () {
                 let userAnswer = this.getAttribute("data-answer");
 
-                // เล่นเสียงของคำตอบที่ถูกต้อง (โหลดใหม่ทุกครั้ง)
-                let answerAudio = new Audio(answerAudioFile);
+                // หยุดเสียงเดิมก่อน
+                if (answerAudio) {
+                    answerAudio.pause();
+                    answerAudio.currentTime = 0;
+                }
+
+                // เล่นเสียงของคำตอบที่ถูกต้อง
+                answerAudio = new Audio(answerAudioFile);
                 answerAudio.play();
 
                 if (userAnswer === correctAnswer) {
                     this.classList.add("correct");
-                    correctSound.play(); // เล่นเสียงเมื่อตอบถูกต้อง
+                    correctSound.play();
                 } else {
                     this.classList.add("wrong");
-                    wrongSound.play(); // เล่นเสียงเมื่อตอบผิด
+                    wrongSound.play();
 
-                    // แสดงตัวเลือกที่ถูกต้องเป็นสีเขียว
+                    // ไฮไลต์คำตอบที่ถูกต้อง
                     choiceButtons.forEach(btn => {
                         if (btn.getAttribute("data-answer") === correctAnswer) {
                             btn.classList.add("correct");
@@ -98,7 +106,7 @@
                     });
                 }
 
-                // ปิดการใช้งานปุ่มตัวเลือกทั้งหมด
+                // ปิดการใช้งานปุ่มตัวเลือก
                 choiceButtons.forEach(btn => btn.disabled = true);
 
                 // แสดงปุ่ม Next
@@ -109,37 +117,49 @@
         });
 
         nextBtn.addEventListener("click", function () {
+            // หยุดเสียงก่อนโหลดแฟลชการ์ดใหม่
+            if (answerAudio) {
+                answerAudio.pause();
+                answerAudio.currentTime = 0;
+            }
+            correctSound.pause();
+            correctSound.currentTime = 0;
+            wrongSound.pause();
+            wrongSound.currentTime = 0;
+
             const moduleValue = 2;
             const submoduleValue = 1;
 
             const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
 
             fetch(url, { method: 'GET' })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    flashcard.src = "data:image/png;base64," + data.imgBytes;
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // อัปเดตแฟลชการ์ดใหม่
+                        flashcard.src = "data:image/png;base64," + data.imgBytes;
 
-                    // อัปเดตค่าใหม่ของคำตอบที่ถูกต้อง
-                    correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+                        // อัปเดตคำตอบและเสียงใหม่
+                        correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+                        answerAudioFile = getAnswerAudioFile(data.correctAnswer.trim());
 
-                    // โหลดเสียงใหม่ของโจทย์ที่เปลี่ยน
-                    answerAudioFile = getAnswerAudioFile(data.correctAnswer.trim());
+                        // รีเซ็ตปุ่มตัวเลือก
+                        choiceButtons.forEach(button => {
+                            button.classList.remove("correct", "wrong");
+                            button.disabled = false;
+                        });
 
-                    choiceButtons.forEach(button => {
-                        button.classList.remove("correct", "wrong");
-                        button.disabled = false;
-                    });
-
-                    nextBtn.style.opacity = "0";
-                    nextBtn.style.pointerEvents = "none";
-                } else {
-                    const source = encodeURIComponent("M2_Enhance1");
-                    const next = encodeURIComponent("M2_Start2");
-                    window.location.href = `@Url.Action("M2_Done")?source=${source}&next=${next}`;
-                }
-            })
-            .catch(error => console.error('Error:', error));
+                        // ซ่อนปุ่ม Next
+                        nextBtn.style.opacity = "0";
+                        nextBtn.style.pointerEvents = "none";
+                        nextBtn.style.cursor = "default";
+                    } else {
+                        const source = encodeURIComponent("M2_Enhance1");
+                        const next = encodeURIComponent("M2_Start2");
+                        window.location.href = `@Url.Action("M2_Done")?source=${source}&next=${next}`;
+                    }
+                })
+                .catch(error => console.error('Error:', error));
         });
     });
 </script>

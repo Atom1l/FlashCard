@@ -50,84 +50,89 @@
 </div>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const choiceButtons = document.querySelectorAll(".choice-btn");
-        const nextBtn = document.querySelector(".next-btn");
-        const flashcard = document.querySelector(".flashcard");
+document.addEventListener("DOMContentLoaded", function () {
+    const choiceButtons = document.querySelectorAll(".choice-btn");
+    const nextBtn = document.querySelector(".next-btn");
+    const flashcard = document.querySelector(".flashcard");
 
-        const translations = {
-            "Happy": "ดีใจ",
-            "Sad": "เศร้า",
-            "Angry": "โกรธ",
-            "Scared": "กลัว"
+    let answerAudio;
+
+    const translations = {
+        "Happy": "ดีใจ",
+        "Sad": "เศร้า",
+        "Angry": "โกรธ",
+        "Scared": "กลัว"
+    };
+
+    function getAnswerAudioFile(answer) {
+        const answerAudioFiles = {
+            "Happy": "/sounds/M1-2/Happy-M1-3.mp3",
+            "Sad": "/sounds/M1-2/Sad-M1-3.mp3",
+            "Angry": "/sounds/M1-2/Angry-M1-3.mp3",
+            "Scared": "/sounds/M1-2/Afraid-M1-3.mp3"
         };
+        return answerAudioFiles[answer] || null;
+    }
 
-        // ฟังก์ชันโหลดเสียงของคำตอบที่ถูกต้อง (อัปเดตค่าใหม่)
-        function getAnswerAudioFile(answer) {
-            const answerAudioFiles = {
-                "Happy": "/sounds/M1-2/Happy-M1-3.mp3",
-                "Sad": "/sounds/M1-2/Sad-M1-3.mp3",
-                "Angry": "/sounds/M1-2/Angry-M1-3.mp3",
-                "Scared": "sounds/M1-2/Afraid-M1-3.mp3"
-            };
-            return answerAudioFiles[answer] || null;
+    let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
+    let answerAudioFile = getAnswerAudioFile("@Model.Answer");
+
+    const correctSound = document.getElementById("correct-sound");
+    const wrongSound = document.getElementById("wrong-sound");
+
+    choiceButtons.forEach(button => {
+        button.addEventListener("click", function () {
+            let userAnswer = this.getAttribute("data-answer");
+
+            // เล่นเสียงของคำตอบที่ถูกต้อง
+            answerAudio = new Audio(answerAudioFile);
+            answerAudio.play();
+
+            if (userAnswer === correctAnswer) {
+                this.classList.add("correct");
+                correctSound.play();
+            } else {
+                this.classList.add("wrong");
+                wrongSound.play();
+
+                choiceButtons.forEach(btn => {
+                    if (btn.getAttribute("data-answer") === correctAnswer) {
+                        btn.classList.add("correct");
+                    }
+                });
+            }
+
+            choiceButtons.forEach(btn => btn.disabled = true);
+            nextBtn.style.opacity = "1";
+            nextBtn.style.cursor = "pointer";
+            nextBtn.style.pointerEvents = "auto";
+        });
+    });
+
+    nextBtn.addEventListener("click", function () {
+
+        if (typeof answerAudio !== "undefined") {
+            answerAudio.pause();
+            answerAudio.currentTime = 0;
+
+            correctSound.pause();
+            correctSound.currentTime = 0;
+
+            wrongSound.pause();
+            wrongSound.currentTime = 0;
         }
 
-        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
-        let answerAudioFile = getAnswerAudioFile("@Model.Answer");
+        const moduleValue = 1;
+        const submoduleValue = 1;
 
-        const correctSound = document.getElementById("correct-sound");
-        const wrongSound = document.getElementById("wrong-sound");
+        const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
 
-        choiceButtons.forEach(button => {
-            button.addEventListener("click", function () {
-                let userAnswer = this.getAttribute("data-answer");
-
-                // เล่นเสียงของคำตอบที่ถูกต้อง (โหลดใหม่ทุกครั้ง)
-                let answerAudio = new Audio(answerAudioFile);
-                answerAudio.play();
-
-                if (userAnswer === correctAnswer) {
-                    this.classList.add("correct");
-                    correctSound.play(); // เล่นเสียงเมื่อตอบถูกต้อง
-                } else {
-                    this.classList.add("wrong");
-                    wrongSound.play(); // เล่นเสียงเมื่อตอบผิด
-
-                    // แสดงตัวเลือกที่ถูกต้องเป็นสีเขียว
-                    choiceButtons.forEach(btn => {
-                        if (btn.getAttribute("data-answer") === correctAnswer) {
-                            btn.classList.add("correct");
-                        }
-                    });
-                }
-
-                // ปิดการใช้งานปุ่มตัวเลือกทั้งหมด
-                choiceButtons.forEach(btn => btn.disabled = true);
-
-                // แสดงปุ่ม Next
-                nextBtn.style.opacity = "1";
-                nextBtn.style.cursor = "pointer";
-                nextBtn.style.pointerEvents = "auto";
-            });
-        });
-
-        nextBtn.addEventListener("click", function () {
-            const moduleValue = 1;
-            const submoduleValue = 1;
-
-            const url = `@Url.Action("GetNextFlashCard", "Flashcard")?module=${moduleValue}&submodule=${submoduleValue}`;
-
-            fetch(url, { method: 'GET' })
+        fetch(url, { method: 'GET' })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
                     flashcard.src = "data:image/png;base64," + data.imgBytes;
-
-                    // อัปเดตค่าใหม่ของคำตอบที่ถูกต้อง
                     correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
-
-                    // โหลดเสียงใหม่ของโจทย์ที่เปลี่ยน
                     answerAudioFile = getAnswerAudioFile(data.correctAnswer.trim());
 
                     choiceButtons.forEach(button => {
@@ -144,6 +149,6 @@
                 }
             })
             .catch(error => console.error('Error:', error));
-        });
     });
+});
 </script>
