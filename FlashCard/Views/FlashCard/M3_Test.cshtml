@@ -1,0 +1,123 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    var translations = new Dictionary<string, string>
+    {
+        { "Ask", "ขออนุญาต" },
+        { "Goodbye", "ลาก่อน" },
+        { "Hello", "สวัสดี" },
+        { "Sorry", "ขอโทษ" },
+        { "Thanks", "ขอบคุณ"},
+    };
+}
+
+<div class="container home-bg flex-column">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <a asp-action="M3_Enhance" class="close-btn">
+        <i class="fa-solid fa-xmark"></i>
+    </a>
+
+    @if (Model != null && Model.Imgbytes != null)
+    {
+        <div class="enhance-container">
+            @if (Model.SubModule == "1")
+            {
+                <div class="question-text noto-bold">คำพูดใดเหมาะสมกับภาพนี้?</div>
+            }
+            <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
+            <div class="choices">
+                @foreach (var choice in translations.Values)
+                {
+                    <button class="choice-btn noto-bold" data-answer="@choice">@choice</button>
+                }
+            </div>
+            <a class="next-btn" style="opacity: 0; pointer-events: none;">
+                <i class="fa-solid fa-chevron-right"></i>
+            </a>
+        </div>
+    }
+    else
+    {
+        <p>No Image Available</p>
+    }
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const choiceButtons = document.querySelectorAll(".choice-btn");
+        const nextBtn = document.querySelector(".next-btn");
+        const flashcard = document.querySelector(".flashcard");
+        const questionText = document.querySelector(".question-text");
+
+        const translations = {
+            "Ask": "ขออนุญาต",
+            "Goodbye": "ลาก่อน",
+            "Hello": "สวัสดี",
+            "Sorry": "ขอโทษ",
+            "Thanks": "ขอบคุณ"
+        };
+
+        let correctAnswer = translations["@Model.Answer"] || "@Model.Answer";
+        let subModule = "@Model.SubModule".trim();
+        let score = 0;
+
+        function updateQuestionText(subModule) {
+            if (subModule === "1") {
+                questionText.textContent = "คำพูดใดเหมาะสมกับภาพนี้?";
+            }
+        }
+
+        function updateChoices(correctKey) {
+            choiceButtons.forEach((button, index) => {
+                let key = Object.keys(translations)[index];
+                button.textContent = translations[key];
+                button.setAttribute("data-answer", translations[key]);
+                button.classList.remove("blue-bg");
+                button.disabled = false;
+            });
+        }
+
+        choiceButtons.forEach(button => {
+            button.addEventListener("click", function () {
+                let userAnswer = this.getAttribute("data-answer");
+
+                this.classList.add("blue-bg");
+                if (userAnswer === correctAnswer) {
+                    score++;
+                }
+
+                choiceButtons.forEach(btn => btn.disabled = true);
+                nextBtn.style.opacity = "1";
+                nextBtn.style.cursor = "pointer";
+                nextBtn.style.pointerEvents = "auto";
+            });
+        });
+
+        nextBtn.addEventListener("click", function () {
+            const moduleValue = 3;
+            const url = `@Url.Action("GetNextFlashCard_Test", "Flashcard")?module=${moduleValue}`;
+
+            fetch(url, { method: 'GET' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    flashcard.src = "data:image/png;base64," + data.imgBytes;
+                    correctAnswer = translations[data.correctAnswer.trim()] || data.correctAnswer.trim();
+                    subModule = data.subModule.trim();
+
+                    updateQuestionText(subModule);
+                    updateChoices(correctAnswer);
+
+                    nextBtn.style.opacity = "0";
+                    nextBtn.style.pointerEvents = "none";
+                } else {
+                    const module = encodeURIComponent("M3");
+                    window.location.href = `@Url.Action("M3_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        updateQuestionText(subModule);
+    });
+
+</script>
