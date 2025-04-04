@@ -10,10 +10,10 @@
 
     var answerAudioFiles = new Dictionary<string, string>
     {
-        { "Happy", "/sounds/M1-Happy.mp3" },
-        { "Sad", "/sounds/M1-Sad.mp3" },
-        { "Angry", "/sounds/M1-Angry.mp3" },
-        { "Scared", "/sounds/M1-Scared.mp3" }
+        { "Happy", "/sounds/M1-2/Happy-M1-3.mp3" },
+        { "Sad", "/sounds/M1-2/Sad-M1-3.mp3" },
+        { "Angry", "/sounds/M1-2/Angry-M1-3.mp3" },
+        { "Scared", "/sounds/M1-2/Afraid-M1-3.mp3" }
     };
 }
 
@@ -65,10 +65,10 @@
         // ฟังก์ชันโหลดเสียงของคำตอบที่ถูกต้อง (อัปเดตค่าใหม่)
         function getAnswerAudioFile(answer) {
             const answerAudioFiles = {
-                "Happy": "/sounds/M1-Happy.mp3",
-                "Sad": "/sounds/M1-Sad.mp3",
-                "Angry": "/sounds/M1-Angry.mp3",
-                "Scared": "/sounds/M1-Scared.mp3"
+                "Happy": "/sounds/M1-2/Happy-M1-3.mp3",
+                "Sad": "/sounds/M1-2/Sad-M1-3.mp3",
+                "Angry": "/sounds/M1-2/Angry-M1-3.mp3",
+                "Scared": "sounds/M1-2/Afraid-M1-3.mp3"
             };
             return answerAudioFiles[answer] || null;
         }
