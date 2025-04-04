@@ -28,6 +28,19 @@ html, body {
 }
 
 /*= Universal class =*/
+.streak{
+    position:absolute;
+    top:2%;
+    right:2%;
+    font-size: 3.5rem;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.streak i{
+    margin-right:10px;
+    color: orange;
+}
 .container {
     margin: 0;
     padding: 0;

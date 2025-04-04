@@ -75,6 +75,27 @@ namespace FlashCard.Controllers
         }
         public IActionResult HomeLoggedIn()
         {
+            var userIdStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (int.TryParse(userIdStr, out int userId))
+            {
+                var user = _db.UsersDB.FirstOrDefault(u => u.UserID == userId);
+
+                if (user != null)
+                {
+                    DateTime today = DateTime.Today;
+
+                    if (user.LastStreakDate == null || user.LastStreakDate.Value.Date < today)
+                    {
+                        user.Streak += 1;
+                        user.LastStreakDate = today;
+
+                        _db.SaveChanges();
+                    }
+                    ViewBag.Streak = user.Streak;
+                }
+            }
+
             return View();
         }
 

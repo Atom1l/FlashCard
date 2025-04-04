@@ -18,7 +18,8 @@ namespace FlashCard.Models
         public string? Surname { get; set; }
 
         // Game Part
-        public int Streak { get; set; }
+        public int Streak { get; set; } = 0;
+        public DateTime? LastStreakDate { get; set; }
         public int M1Score { get; set; }
         public int M2Score { get; set; }
         public int M3Score { get; set; }
