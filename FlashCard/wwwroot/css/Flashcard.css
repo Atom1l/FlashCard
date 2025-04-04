@@ -566,7 +566,7 @@ html, body {
 
     .video-preview {
         width: 855px;
-        height: 600px;
+        height: 500px;
         background-color: grey;
     }
 
@@ -776,7 +776,7 @@ html, body {
 }
 .flashcard-show-container img {
     width: 50%;
-    height: 60%;
+    height: auto;
     margin-top: 100px;
     border-radius: 50px;
     cursor: pointer;
