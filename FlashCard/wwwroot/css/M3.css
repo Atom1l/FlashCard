@@ -30,8 +30,371 @@
     font-size: clamp(2rem, 7vw, 10rem) !important;
 }
 
+.tutorial-headtext {
+    margin-top: -20px;
+    margin-bottom: -20px;
+    text-align: center;
+    font-size: clamp(2rem, 10vw, 8rem) !important;
+}
+
+.score-headtext {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: clamp(1rem, 5vw, 4.5rem) !important;
+}
+
+.score-text {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: clamp(1.5rem, 7vw, 7rem) !important;
+}
+
+.test-result {
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 40px;
+    background: #FA9B95;
+    width: 30% !important;
+    padding: 10px 0px 10px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(1rem, 3vw, 2.5rem) !important;
+}
+
 @media (max-width: 1024px) {
     .module-headtext {
         font-size: 2rem; /* ปรับขนาดหัวข้อให้เหมาะสม */
+    }
+}
+
+/* = M3 FlashCard =*/
+.close-btn {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+    color: black;
+    text-decoration: none;
+    font-size: 4rem;
+}
+
+
+
+.flashcard-overall-container {
+    border: solid 5px red;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flashcard-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+    .flashcard-container img {
+        width: 50%;
+        height: auto;
+        margin-top: 150px;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+        .flashcard-container img:focus {
+            margin-top: 45px;
+        }
+
+            .flashcard-container img:focus + .answer-container {
+                opacity: 1;
+            }
+
+.next-btn {
+    position: absolute;
+    top: 45%;
+    right: 2.25%;
+    color: black;
+    text-decoration: none;
+    font-size: 4rem;
+    opacity: 0;
+    transition: 0.3s ease;
+    pointer-events: none;
+}
+
+.answer-container {
+    margin-top: 20px;
+    opacity: 0;
+    transition: 0.3s ease;
+}
+
+.answer-text {
+    white-space: nowrap;
+    font-size: 5rem !important;
+}
+
+@media screen and (max-width: 1370px) {
+    .flashcard-container img {
+        width: 60%; /* ปรับขนาดภาพให้เหมาะสมกับหน้าจอ */
+        height: auto;
+        margin-top: 100px;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .flashcard-container img {
+        width: 65%; /* ปรับขนาดภาพให้เหมาะสมกับหน้าจอ */
+        height: auto;
+        margin-top: 100px;
+    }
+}
+
+/* =M3_Ask= */
+@media (max-width: 1024px) {
+
+    .row {
+        width: 90%;
+        text-align: center;
+    }
+
+    .module3-headtext {
+        font-size: 2rem; /* ปรับขนาดหัวข้อให้เหมาะสม */
+    }
+
+    .module3-go {
+        width: 80%;
+        font-size: 1.2rem;
+        padding: 12px 0;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+}
+
+/* =M3_Enhance= */
+.m3-choices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* จัดปุ่มให้แถวไหนก็ตามอยู่กลางแนวนอน */
+    gap: 10px 10px; /* ระยะห่างระหว่างปุ่ม */
+    width: 65%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+    .m3-choices .choice-btn {
+        min-width: 240px; /* กำหนดความกว้างขั้นต่ำให้พอทำให้ปุ่มที่ 4 ล้น */
+        height: 110px; /* ขยายความสูงนิดหน่อย */
+        padding: 40px 30px; /* ขยาย padding */
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        background-color: #f0f0f0;
+        border-radius: 15px;
+        font-size: clamp(1rem, 2.5vw, 2.2rem);
+        transition: 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100px; /* เพิ่มความสูงคงที่ให้ทุกปุ่มเท่ากัน */
+        white-space: normal; /* เปลี่ยนจาก nowrap เป็น normal เพื่อให้ขึ้นบรรทัดใหม่ได้ */
+    }
+
+
+        .m3-choices .choice-btn.correct {
+            background-color: #B9E7A6;
+            color: black;
+        }
+
+        .m3-choices .choice-btn.wrong {
+            background-color: #FA9B95;
+            color: black;
+        }
+
+.enhance-container {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+    .enhance-container img.flashcard {
+        width: 42%;
+        height: auto;
+        border-radius: 50px;
+        margin-bottom: 30px;
+        transition: 0.3s ease;
+    }
+
+.question-text {
+    margin-bottom: 25px;
+    text-align: center;
+    font-size: clamp(1.5rem, 4vw, 4.5rem);
+    font-weight: bold;
+}
+
+/* Responsive (ขั้นต่ำคือ iPad Mini 1024x768) */
+@media screen and (max-width: 1024px) {
+    .m3-choices {
+        width: 80%;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px 20px;
+    }
+
+    .enhance-container img.flashcard {
+        width: 60%;
+    }
+}
+
+/* =M3_Conclude= */
+.container-scroll {
+    position: relative;
+    margin: 0;
+    padding: 0;
+    overflow: auto;
+    max-width: 100%;
+    max-height: 100%;
+    width: 100dvw;
+    height: 100dvh;
+    background: url(/pic/BG/Conclude.png) no-repeat center center;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+.sub-container {
+    position: absolute;
+    top: 5%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.flashcard-show-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+    .flashcard-show-container img {
+        width: 50%;
+        height: 60%;
+        margin-top: 100px;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+.answer-show-container {
+    margin-top: 50px;
+    transition: 0.3s ease;
+}
+
+.row {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.conclude-text {
+    margin-bottom: 50px;
+    text-align: center;
+    color: #FA9B95;
+    font-size: clamp(1rem, 5vw, 5rem) !important;
+}
+
+.conclude-btn {
+    position: fixed;
+    bottom: 2%;
+    text-align: center;
+    text-decoration: none;
+    background: #FA9B95;
+    width: 20% !important;
+    padding: 15px 0px 15px 0px;
+    border-radius: 100px;
+    border: none;
+    font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
+}
+
+.all-card-container {
+    margin-bottom: 120px !important;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    width: 80%;
+    margin-bottom: 50px;
+    border-radius: 15px;
+}
+
+.card-img-top {
+    border-radius: 10px;
+}
+
+/* =M3_Test= */
+.choices {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px 10px;
+    width: 65%;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+    .choices .choice-btn {
+        min-width: 240px;
+        height: 110px;
+        padding: 40px 30px;
+        border: none;
+        cursor: pointer;
+        text-align: center;
+        background-color: #f0f0f0;
+        border-radius: 15px;
+        font-size: clamp(1rem, 2.5vw, 2.2rem);
+        transition: 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        white-space: normal;
+    }
+
+        .choices .choice-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .choices .choice-btn.correct {
+            background-color: #B9E7A6;
+            color: black;
+        }
+
+        .choices .choice-btn.wrong {
+            background-color: #FA9B95;
+            color: black;
+        }
+
+/* Responsive รองรับขั้นต่ำที่ iPad Mini */
+@media screen and (max-width: 1024px) {
+    .choices {
+        width: 80%;
+        gap: 20px 20px;
+    }
+
+    .enhance-container img.flashcard {
+        width: 60%;
     }
 }

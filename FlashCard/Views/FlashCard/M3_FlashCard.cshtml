@@ -2,11 +2,11 @@
     ViewData["Title"] = "Flash Card";
     var translations = new Dictionary<string, string>
     {
-        { "Ask", "ขออนุญาตถาม" },
+        { "Ask", "ขออนุญาต" },
         { "Goodbye", "ลาก่อน" },
         { "Hello", "สวัสดี" },
         { "Sorry", "ขอโทษ" },
-        { "Thanks", "ขอบคุณ" },
+        { "Thanks", "ขอบคุณ"},
     };
 }
 
@@ -40,11 +40,11 @@
 </div>
 
 <!-- เพิ่ม Audio Elements สำหรับเสียง -->
-<audio id="askSound" src="/sounds/M1-Ask.mp3"></audio>
-<audio id="goodbyeSound" src="/sounds/M1-Goodbye.mp3"></audio>
-<audio id="helloSound" src="/sounds/M1-Hello.mp3"></audio>
-<audio id="sorrySound" src="/sounds/M1-Sorry.mp3"></audio>
-<audio id="thanksSound" src="/sounds/M1-Thanks.mp3"></audio>
+<audio id="askSound" src="/sounds/M3-2/Excuse-me-M3.mp3"></audio>
+<audio id="goodbyeSound" src="/sounds/M3-2/Bye-M3.mp3"></audio>
+<audio id="helloSound" src="/sounds/M3-2/Hello-M3.mp3"></audio>
+<audio id="sorrySound" src="/sounds/M3-2/Sorry-M3 .mp3"></audio>
+<audio id="thanksSound" src="/sounds/M3-2/Thank-you-M3 .mp3"></audio>
 
 <!-- JS SCRIPT -->
 <script>
@@ -55,11 +55,11 @@
 
         // สร้างอ็อบเจกต์แมพเสียงกับคำตอบ
         const soundMap = {
-            "ขออนุญาตถาม": document.getElementById("askSound"),
+            "ขออนุญาต": document.getElementById("askSound"),
             "ลาก่อน": document.getElementById("goodbyeSound"),
             "สวัสดี": document.getElementById("helloSound"),
             "ขอโทษ": document.getElementById("sorrySound"),
-            "ขอบคุณ": document.getElementById("scaredSound")
+            "ขอบคุณ": document.getElementById("thanksSound")
         };
 
         if (flashcard && nextBtn) {
@@ -88,8 +88,16 @@
             });
 
             nextBtn.addEventListener("click", function () {
-                if (hasShown) fetchNextFlashCard();
-                soundMap[answerText].stop(); 
+                if (hasShown) {
+                    // หยุดเสียงทั้งหมดก่อนโหลดแฟลชการ์ดใหม่
+                    for (const sound of Object.values(soundMap)) {
+                        sound.pause();
+                        sound.currentTime = 0;
+                    }
+
+                    fetchNextFlashCard();
+                }
+                // soundMap[answerText].stop();
             });
         }
 
@@ -108,7 +116,7 @@
                     // อัปเดตรูปภาพและคำตอบใหม่
                     document.querySelector(".flashcard-container img").src = "data:image/png;base64," + data.imgBytes;
                     document.querySelector(".answer-text").textContent =
-                        { "Ask": "ขออนุญาตถาม", "Goodbye": "ลาก่อน", "Hello": "สวัสดี", "Sorry": "ขอโทษ", "Thanks": "ขอบคุณ" }[data.correctAnswer] || data.correctAnswer;
+                        { "Ask": "ขออนุญาต", "Goodbye": "ลาก่อน", "Hello": "สวัสดี", "Sorry": "ขอโทษ", "Thanks": "ขอบคุณ" }[data.correctAnswer] || data.correctAnswer;
 
                     hasShown = false;
                     nextBtn.style.opacity = "0";

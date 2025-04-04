@@ -521,7 +521,7 @@ namespace FlashCard.Controllers
             return View();
         }
 
-        // Module 1 Test // // ศำหรับต้นไผ่ก็อปวางตั้งแค่ M1_Test เลย แล้วก็เปลี่ยนเลยเป็น 3 ทั้งชื่อมันและเลข Module ข้างใน //
+        // Module 1 Test // // สำหรับต้นไผ่ก็อปวางตั้งแค่ M1_Test เลย แล้วก็เปลี่ยนเลยเป็น 3 ทั้งชื่อมันและเลข Module ข้างใน //
         public async Task<IActionResult> M1_Test()
         {
             // ดึง User ID จาก session หรือ claims
@@ -1075,7 +1075,7 @@ namespace FlashCard.Controllers
             {
                 // Reset HasShown if User seen it all
                 await _db.UserCardDB
-                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "1" && i.SubModule == "1"))
+                    .Where(uf => uf.UserId == userId && _db.ImagesDB.Any(i => i.Id == uf.ImageId && i.Module == "3" && i.SubModule == "1"))
                     .ExecuteDeleteAsync();
 
                 await _db.SaveChangesAsync();
@@ -1098,6 +1098,157 @@ namespace FlashCard.Controllers
 
             return View(selectedImage);
         }
+
+        // Module 3 Enhance //
+        public IActionResult M3_Enhance()
+        {
+            return View();
+        }
+        public async Task<IActionResult> M3_Enhance_Test()
+        {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            var images = await _db.ImagesDB
+                .Where(i => i.Module == "3" && i.SubModule == "1" && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "3" && i.SubModule == "1")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+            }
+
+            var random = new Random();
+            var selectedImage = images[random.Next(images.Count)];
+
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.Entry(selectedImage).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);  // ส่งภาพที่เลือกไปยัง View
+        }
+
+        // Module 3 Test // // ขอบคุณจ้าอะตู่ //
+        public IActionResult M3_Test_Start()
+        {
+            return View();
+        }
+        public async Task<IActionResult> M3_Test()
+        {
+            // ดึง User ID จาก session หรือ claims
+            int userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "0");
+
+            var images = await _db.ImagesDB
+                .Where(i => (i.Module == "3") && (i.HasShown == false || i.HasShown == null))
+                .ToListAsync();
+
+            if (!images.Any())
+            {
+                await _db.ImagesDB
+                    .Where(i => i.Module == "3")
+                    .ExecuteUpdateAsync(setters => setters.SetProperty(i => i.HasShown, false));
+
+                await _db.SaveChangesAsync();
+            }
+
+            var random = new Random();
+            var selectedImage = images[random.Next(images.Count)];
+
+            if (selectedImage != null)
+            {
+                selectedImage.HasShown = true;
+                _db.Entry(selectedImage).State = EntityState.Modified;
+                await _db.SaveChangesAsync();
+
+                // บันทึกการแสดงภาพใน UserCardDB
+                _db.UserCardDB.Add(new UserFlashCard
+                {
+                    UserId = userId,
+                    ImageId = selectedImage.Id,
+                    HasShown = true
+                });
+
+                await _db.SaveChangesAsync();
+            }
+
+            return View(selectedImage);
+        }
+
+        // Module 3 Test done //
+        public async Task<IActionResult> M3_Test_Done(string score, string module)
+        {
+            ViewData["Score"] = score;
+            ViewData["Module"] = module;
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            int userId = 0;
+            if (!string.IsNullOrEmpty(userIdClaim) && int.TryParse(userIdClaim, out userId))
+            {
+                // ลบข้อมูล UserCardDB ที่เกี่ยวข้องกับผู้ใช้
+                var userCards = _db.UserCardDB.Where(uf => uf.UserId == userId && uf.Image.Module == module);
+                _db.UserCardDB.RemoveRange(userCards);
+                await _db.SaveChangesAsync();
+
+                // เช็คว่าโมดูลคืออะไรและบันทึกคะแนนไปยังคอลัมน์ที่เหมาะสม
+                var user = await _db.UsersDB.FirstOrDefaultAsync(u => u.UserID == userId);
+                if (user != null)
+                {
+                    switch (module)
+                    {
+                        case "M1":
+                            user.M1Score = int.TryParse(score, out int m1Score) ? m1Score : 0;
+                            break;
+                        case "M2":
+                            user.M2Score = int.TryParse(score, out int m2Score) ? m2Score : 0;
+                            break;
+                        case "M3":
+                            user.M3Score = int.TryParse(score, out int m3Score) ? m3Score : 0;
+                            break;
+                        default:
+                            // ถ้าโมดูลไม่ตรงกับที่กำหนด
+                            break;
+                    }
+
+                    await _db.SaveChangesAsync();
+                }
+            }
+            else
+            {
+                return BadRequest("Invalid user or module.");
+            }
+
+            return View();
+        }
+
+        // Module 3 Conclude //
+        public IActionResult M3_Conclude()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> M3_Conclude_All()
+        {
+            var conclude_img = await _db.ImagesDB.Where(i => i.Module == "3").ToListAsync();
+            return View(conclude_img);
+        }
+
 
     }
 
