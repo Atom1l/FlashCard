@@ -24,7 +24,7 @@
                 <div class="question-text noto-bold">คำพูดใดเหมาะสมกับภาพนี้?</div>
             }
             <img src="data:image/png;base64,@Convert.ToBase64String(Model.Imgbytes)" alt="Flashcard" class="flashcard" />
-            <div class="choices">
+            <div class="m3-choices">
                 @foreach (var choice in translations.Values)
                 {
                     <button class="choice-btn noto-bold" data-answer="@choice">@choice</button>
@@ -71,7 +71,7 @@
                 let key = Object.keys(translations)[index];
                 button.textContent = translations[key];
                 button.setAttribute("data-answer", translations[key]);
-                button.classList.remove("blue-bg");
+                button.classList.remove("red-bg");
                 button.disabled = false;
             });
         }
@@ -80,7 +80,7 @@
             button.addEventListener("click", function () {
                 let userAnswer = this.getAttribute("data-answer");
 
-                this.classList.add("blue-bg");
+                this.classList.add("red-bg");
                 if (userAnswer === correctAnswer) {
                     score++;
                 }

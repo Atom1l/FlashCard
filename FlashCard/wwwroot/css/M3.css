@@ -99,22 +99,22 @@
     height: 100%;
 }
 
-    .flashcard-container img {
-        width: 50%;
-        height: auto;
-        margin-top: 150px;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: 0.3s ease;
-    }
+.flashcard-container img {
+    width: 50%;
+    height: auto;
+    margin-top: 150px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
 
-        .flashcard-container img:focus {
-            margin-top: 45px;
-        }
+.flashcard-container img:focus {
+    margin-top: 45px;
+}
 
-            .flashcard-container img:focus + .answer-container {
-                opacity: 1;
-            }
+.flashcard-container img:focus + .answer-container {
+    opacity: 1;
+}
 
 .next-btn {
     position: absolute;
@@ -180,41 +180,48 @@
 .m3-choices {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* จัดปุ่มให้แถวไหนก็ตามอยู่กลางแนวนอน */
-    gap: 10px 10px; /* ระยะห่างระหว่างปุ่ม */
+    justify-content: center;
+    gap: 10px 10px;
     width: 65%;
     margin-top: 20px;
     margin-bottom: 10px;
 }
 
-    .m3-choices .choice-btn {
-        min-width: 240px; /* กำหนดความกว้างขั้นต่ำให้พอทำให้ปุ่มที่ 4 ล้น */
-        height: 110px; /* ขยายความสูงนิดหน่อย */
-        padding: 40px 30px; /* ขยาย padding */
-        border: none;
-        cursor: pointer;
-        text-align: center;
-        background-color: #f0f0f0;
-        border-radius: 15px;
-        font-size: clamp(1rem, 2.5vw, 2.2rem);
-        transition: 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        height: 100px; /* เพิ่มความสูงคงที่ให้ทุกปุ่มเท่ากัน */
-        white-space: normal; /* เปลี่ยนจาก nowrap เป็น normal เพื่อให้ขึ้นบรรทัดใหม่ได้ */
-    }
+.m3-choices .choice-btn {
+    flex: 0 0 calc(33.33% - 10px); /* ปุ่มที่ 1-3 บน */
+    min-width: 240px;
+    height: 100px;
+    padding: 40px 30px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    background-color: #f0f0f0;
+    border-radius: 15px;
+    font-size: clamp(1rem, 2.5vw, 2.2rem);
+    transition: 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: normal;
+}
 
+/* ปุ่มที่ 4 และ 5 ให้กินพื้นที่ครึ่งนึงของแถว */
+.m3-choices .choice-btn:nth-child(4),
+.m3-choices .choice-btn:nth-child(5) {
+    flex: 0 0 calc(35% - 10px);
+}
 
-        .m3-choices .choice-btn.correct {
-            background-color: #B9E7A6;
-            color: black;
-        }
+/* ปุ่มตอบถูก */
+.m3-choices .choice-btn.correct {
+    background-color: #B9E7A6;
+    color: black;
+}
 
-        .m3-choices .choice-btn.wrong {
-            background-color: #FA9B95;
-            color: black;
-        }
+/* ปุ่มตอบผิด */
+.m3-choices .choice-btn.wrong {
+    background-color: #FA9B95;
+    color: black;
+}
 
 .enhance-container {
     margin-top: 40px;
@@ -224,13 +231,13 @@
     width: 100%;
 }
 
-    .enhance-container img.flashcard {
-        width: 42%;
-        height: auto;
-        border-radius: 50px;
-        margin-bottom: 30px;
-        transition: 0.3s ease;
-    }
+.enhance-container img.flashcard {
+    width: 42%;
+    height: auto;
+    border-radius: 50px;
+    margin-bottom: 30px;
+    transition: 0.3s ease;
+}
 
 .question-text {
     margin-bottom: 25px;
@@ -239,18 +246,23 @@
     font-weight: bold;
 }
 
-/* Responsive (ขั้นต่ำคือ iPad Mini 1024x768) */
+/* Responsive สำหรับจอเล็กกว่า 1024px เช่น iPad */
 @media screen and (max-width: 1024px) {
     .m3-choices {
-        width: 80%;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px 20px;
+        width: 90%;
+        gap: 15px 10px;
     }
 
+        .m3-choices .choice-btn {
+            flex: 0 0 100%; /* ทุกปุ่มเต็มแถว */
+            min-width: unset;
+        }
+
     .enhance-container img.flashcard {
-        width: 60%;
+        width: 70%;
     }
 }
+
 
 /* =M3_Conclude= */
 .container-scroll {

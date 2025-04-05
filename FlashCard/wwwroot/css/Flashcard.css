@@ -26,6 +26,10 @@ html, body {
     color: white;
     background: #a1a4ff !important;
 }
+.red-bg {
+    color: white;
+    background: #FA9B95 !important;
+}
 
 /*= Universal class =*/
 .streak{
