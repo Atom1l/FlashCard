@@ -32,6 +32,7 @@
             </div>
             <a class="next-btn" style="opacity: 0; pointer-events: none;">
                 <i class="fa-solid fa-chevron-right"></i>
+                <div class="next-btn-text">ถัดไป</div>
             </a>
         </div>
     }
@@ -111,7 +112,7 @@
                     nextBtn.style.pointerEvents = "none";
                 } else {
                     const module = encodeURIComponent("M3");
-                    window.location.href = `@Url.Action("M3_Test_Done", "Flashcard")?score=${score}&module=${module}`;
+                    window.location.href = `@Url.Action("M1_Test_Done", "Flashcard")?score=${score}&module=${module}`;
                 }
             })
             .catch(error => console.error('Error:', error));

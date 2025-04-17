@@ -17,21 +17,19 @@
         maxScore = "12";
         topass = 8;
         colorClass = score >= topass ? "text-success" : "text-danger";
-        bgClass = score >= topass ? "done-bg-color" : "exit-bg-color";
+        // bgClass = score >= topass ? "done-bg-color" : "exit-bg-color";
     }
     else if (Module == "M2")
     {
         maxScore = "8";
         topass = 5;
         colorClass = score >= topass ? "text-success" : "text-danger";
-        bgClass = score >= topass ? "done-bg-color" : "exit-bg-color";
     }
     else if (Module == "M3")
     {
         maxScore = "7";
         topass = 4;
         colorClass = score >= topass ? "text-success" : "text-danger";
-        bgClass = score >= topass ? "done-bg-color" : "exit-bg-color";
     }
 }
 
@@ -42,7 +40,9 @@
         <div class="score-headtext noto-bold text-center">
             คะแนน <span class="score-text noto-bold"><span class="@colorClass">@score</span> / @maxScore</span>
         </div>
-        <div class="test-result test-result-box noto-medium text-white @bgClass">@(score >= topass ? "ผ่าน" : "ไม่ผ่าน")</div>
+
+        <div class="test-result noto-bold @colorClass">@(score >= topass ? "-ผ่าน-" : "-ไม่ผ่าน-")</div>
+
         <div class="d-flex flex-row justify-content-center align-items-center">
             <a asp-action="Mainmenu" class="module-go done-bg-color noto-regular text-white me-5">เสร็จสิ้น</a>
             @if (Module == "M1")
@@ -52,6 +52,10 @@
             @if (Module == "M2")
             {
                 <a asp-action="M2_Test_Start" class="module-go exit-bg-color noto-regular text-white">ทดสอบใหม่</a>
+            }
+            @if (Module == "M3")
+            {
+                <a asp-action="M3_Test_Start" class="module-go exit-bg-color noto-regular text-white">ทดสอบใหม่</a>
             }
             
         </div>

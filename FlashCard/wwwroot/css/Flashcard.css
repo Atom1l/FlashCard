@@ -17,6 +17,8 @@ html, body {
 }
 .blue-bg {
     color: white;
+    border: solid 4px #6DC6FF !important;
+    box-shadow: 0px 2px 10px 5px #8dd4ff !important;
     background: #8dd4ff !important;
 }
 .purple{
@@ -24,26 +26,53 @@ html, body {
 }
 .purple-bg {
     color: white;
+    border: solid 4px #8e91f5 !important;
+    box-shadow: 0px 2px 10px 5px #a1a4ff !important;
     background: #a1a4ff !important;
 }
 .red-bg {
     color: white;
+    border: solid 4px #E87F79 !important;
+    box-shadow: 0px 2px 10px 5px #FA9B95 !important;
     background: #FA9B95 !important;
 }
 
 /*= Universal class =*/
-.streak{
-    position:absolute;
-    top:2%;
-    right:2%;
+.streak {
+    position: absolute;
+    top: 4%;
+    right: 2%;
     font-size: 3.5rem;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: orange;
+    padding: 5px 50px 5px 50px;
+    border-radius: 30px;
+    border: solid 3px #D9D9D9;
+    box-shadow: 0px 2px 10px 5px #d9d9d9;
+    gap: 20px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s ease;
 }
 .streak i{
-    margin-right:10px;
-    color: orange;
+    margin-top: 3px;
+    color: white;
+}
+
+.back-btn {
+    position: absolute;
+    top: 2.5%;
+    left: 1.5%;
+    text-decoration: none;
+    font-size: 3rem;
+    color: white;
+    background: #a1a4ff;
+    border: solid 2px #a1a4ff;
+    box-shadow: 0px 2px 10px 5px #d9d9d9; 
+    border-radius: 50%;
+    padding: 5px 20px 5px 20px;
 }
 .container {
     margin: 0;
@@ -79,10 +108,27 @@ html, body {
 
 .menu{
     position:absolute;
-    bottom:5%;
-    left:3%;
+    bottom:2%;
+    left:2%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
     color: black;
-    transform:scale(4)
+    font-weight:bold;
+    text-decoration:none;
+}
+.menu i{
+    background: white;
+    border: solid 2px #9F9F9F;
+    box-shadow: 0px 3px 5px #9f9f9f;
+    border-radius: 20px;
+    padding: 10px 20px 10px 15px;
+    font-size: 4rem;
+}
+.menu-text{
+    margin-top: 2px;
+    font-size: 1.5rem;
 }
 .text-success {
     color: #B9E7A6 !important;
@@ -98,6 +144,7 @@ html, body {
 .game-text {
     text-align: center;
     font-size: clamp(2rem, 10vw, 10rem) !important;
+    z-index: 99;
 }
 .start-btn {
     margin-top: 10px;
@@ -106,9 +153,11 @@ html, body {
     padding: 30px 0px 30px 0px;
     border-radius: 100px;
     border: none;
-    text-align:center;
-    text-decoration:none;
+    text-align: center;
+    text-decoration: none;
     font-size: clamp(1rem, 5vw, 3rem) !important;
+    border: solid 3px #D9D9D9;
+    box-shadow: 0px 2px 10px 5px #d9d9d9;
 }
 .authen-text {
     width: 35% !important;
@@ -503,7 +552,6 @@ html, body {
         text-decoration: none;
         margin-top: 20px;
         margin-bottom: 40px;
-        background: #8dd4ff;
         width: 30% !important;
         padding: 10px 0px 10px 0px;
         border-radius: 100px;
@@ -511,19 +559,20 @@ html, body {
         font-size: clamp(1rem, 3vw, 2.5rem) !important;
     }
 
-    .main-module-go {
-        text-align: center;
-        text-decoration: none;
-        margin-top: 20px;
-        margin-bottom: 20px;
-        background: #8dd4ff;
-        width: 70% !important;
-        padding: 30px 0px 30px 0px;
-        border-radius: 100px;
-        border: none;
-        font-size: clamp(1rem, 3vw, 3rem) !important;
-        z-index: 99;
-    }
+.main-module-go {
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #8dd4ff;
+    width: 50% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: none;
+    box-shadow: 0px 2px 10px 5px #d9d9d9;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+    z-index: 99;
+}
 
     .module-go {
         text-align: center;
@@ -569,9 +618,20 @@ html, body {
     }
 
     .video-preview {
-        width: 855px;
-        height: 500px;
-        background-color: grey;
+        width: 100%;
+        max-height: 500px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        box-sizing: border-box;
+    }
+
+    .video-preview video {
+        width: 100%;
+        height: auto;
+        max-width: 700px;
+        max-height: 100%;
     }
 
     /* = FlashCard =*/
@@ -626,12 +686,22 @@ html, body {
         position: absolute;
         top: 45%;
         right: 2.25%;
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        align-items:center;
         color: black;
         text-decoration: none;
-        font-size: 4rem;
         opacity: 0;
         transition: 0.3s ease;
         pointer-events: none;
+    }
+    .next-btn i {
+        font-size: 4rem;
+    }
+    .next-btn-text{
+        margin-top: 3px;
+        font-size: 2rem;
     }
 
     .answer-container {
@@ -682,34 +752,41 @@ html, body {
         }
     }
 
-    /* =M1_Enhance1= */
-    .choices {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(100px, 1fr));
-        gap: 20px;
-        justify-content: center;
-        width: 60%;
-        margin: 30px auto;
-    }
+/* =M1_Enhance1= */
+.choices {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    width: 60%;
+    margin: 30px auto;
+}
 
-    .choice-btn {
-        padding: 35px 25px 35px 25px;
-        border: none;
-        cursor: pointer;
-        text-align: center;
-        background-color: #f0f0f0;
-        border-radius: 15px;
-        white-space: nowrap;
-        font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
-    }
+.choice-btn {
+    padding: 35px 25px 35px 25px;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    background-color: #f0f0f0;
+    border: solid 4px #9f9f9f;
+    border-radius: 15px;
+    box-shadow: 0px 2px 10px 5px #9f9f9f;
+    white-space: nowrap;
+    font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
+    transition: 0.2s ease;
+}
 
     .correct {
         background-color: #B9E7A6;
+        border: solid 4px #94CA7E;
+        box-shadow: 0px 2px 10px 5px #b9e7a6;
         color: black;
     }
 
     .wrong {
         background-color: #FA9B95;
+        border: solid 4px #E46961;
+        box-shadow: 0px 2px 10px 5px #FA9B95;
         color: black;
     }
 
@@ -724,7 +801,8 @@ html, body {
     }
 
     .question-text {
-        margin-bottom: 20px;
+        margin-top: -15px;
+        margin-bottom: 15px;
         text-align: center;
         font-size: clamp(1rem, 4vw, 8rem) !important;
     }
