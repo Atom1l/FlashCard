@@ -222,6 +222,13 @@ namespace FlashCard.Controllers
             return View();
         }
 
+        // Before-Play Instruction //
+        public IActionResult Beforeplay(string next)
+        {
+            ViewData["Next"] = next;
+            return View();
+        }
+
         // === MODULE 1 === //
         // Module 1 Main Page //
         public IActionResult M1_Main()

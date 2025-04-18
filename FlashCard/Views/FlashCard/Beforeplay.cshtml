@@ -1,0 +1,80 @@
+﻿@{
+    ViewData["Title"] = "Flash Card";
+    string? next = ViewData["Next"]?.ToString();
+}
+
+<div class="container home-bg">
+    <img src="/pic/BG/Blank.png" class="background" />
+    <div class="row d-flex flex-column justify-content-center align-items-center">
+        <div class="tutorial-headtext blue-darken noto-bold">แนะนำก่อนเล่น</div>
+        <!-- Module1 -->
+        @if(next == "M1_FlashCard"){
+            <div class="video-preview">
+                <video src="/pic/Tutorial.mp4" controls></video>
+            </div>
+            <a asp-action="M1_FlashCard" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if(next == "M1_Enhance1_Test"){
+            <a asp-action="M1_Enhance1_Test" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M1_FlashCard2")
+        {
+            <a asp-action="M1_FlashCard2" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M1_Enhance2_Test")
+        {
+            <a asp-action="M1_Enhance2_Test" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M1_Conclude_All")
+        {
+            <a asp-action="M1_Conclude_All" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M1_Test")
+        {
+            <a asp-action="M1_Test" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        <!-- Module2 -->
+        @if (next == "M2_FlashCard")
+        {
+            <a asp-action="M2_FlashCard" class="module2-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M2_Enhance1_Test")
+        {
+            <a asp-action="M2_Enhance1_Test" class="module2-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M2_FlashCard2")
+        {
+            <a asp-action="M2_FlashCard2" class="module2-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M2_Enhance2_Test")
+        {
+            <a asp-action="M2_Enhance2_Test" class="module2-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M2_Conclude_All")
+        {
+            <a asp-action="M2_Conclude_All" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M2_Test")
+        {
+            <a asp-action="M2_Test" class="module-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        <!-- Module3 -->
+        @if (next == "M3_FlashCard")
+        {
+            <a asp-action="M3_FlashCard" class="module3-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M3_Enhance_Test")
+        {
+            <a asp-action="M3_Enhance_Test" class="module3-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M3_Conclude_All")
+        {
+            <a asp-action="M3_Conclude_All" class="module3-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+        @if (next == "M3_Test")
+        {
+            <a asp-action="M3_Test" class="module3-go noto-bold text-white">เสร็จสิ้น</a>
+        }
+    </div>
+    <a class="menu" asp-action="Menu" asp-route-source="M1_Tutorial"><i class="fa-solid fa-list"></i></a>
+</div>
