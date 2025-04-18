@@ -4,10 +4,11 @@
     margin-top: 20px;
     margin-bottom: 20px;
     background: #a1a4ff;
+    border: solid 5px #6A6DC6;
+    box-shadow: 0px 2px 5px 2px #6A6DC6;
     width: 30% !important;
     padding: 30px 0px 30px 0px;
     border-radius: 100px;
-    border: none;
     font-size: clamp(1rem, 3vw, 3rem) !important;
 }
 
@@ -17,11 +18,42 @@
     margin-top: 20px;
     margin-bottom: 20px;
     background: #a1a4ff;
+    border: solid 5px #6A6DC6;
+    box-shadow: 0px 2px 5px 2px #6A6DC6;
     width: 37.5% !important;
     padding: 30px 0px 30px 0px;
     border-radius: 100px;
-    border: none;
     font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+
+.module2-golong-glow { 
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #4B0082 !important; 
+    background: #E0D7FF; 
+    width: 37.5% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: solid 5px #B89CFF; 
+    box-shadow: 0px 2px 5px 5px #B89CFF; 
+    font-size: clamp(1rem, 4vw, 4rem) !important;
+}
+
+.module2-golong-glow-exit {
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #4B0082 !important;
+    background: #A89CFF;
+    width: 37.5% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    border: solid 5px #7A64FF;
+    box-shadow: 0px 2px 5px 5px #7A64FF;
+    font-size: clamp(1rem, 4vw, 4rem) !important;
 }
 
 .module2-goshort { /* For short text */
@@ -50,18 +82,19 @@
 .m2-conclude-text {
     margin-bottom: 50px;
     text-align: center;
-    color: #a1a4ff;
+    color: #6A6DC6;
     font-size: clamp(1rem, 5vw, 5rem) !important;
 }
 .m2-conclude-btn {
     position: fixed;
-    bottom: 2%;
+    bottom: 3%;
     text-align: center;
     text-decoration: none;
     background: #a1a4ff;
     width: 20% !important;
     padding: 15px 0px 15px 0px;
     border-radius: 100px;
-    border: none;
+    border: solid 5px #6A6DC6;
+    box-shadow: 0px 4px 7px 2px #6A6DC6;
     font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
 }

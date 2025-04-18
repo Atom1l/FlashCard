@@ -12,17 +12,17 @@
         <!-- Again -->
         @if (!string.IsNullOrEmpty(source))
         {
-            <a asp-action="@source" class="module2-golong noto-regular text-white">เริ่มใหม่</a>
+            <a asp-action="@source" class="module2-golong-glow noto-bold">เริ่มใหม่</a>
         }
 
         <!-- Next -->
         @if (!string.IsNullOrEmpty(next))
         {
-            <a asp-action="@next" class="module2-golong noto-regular text-white">ถัดไป</a>
+            <a asp-action="@next" class="module2-golong-glow noto-bold">ถัดไป</a>
         }
 
         <!-- Exit -->
-        <a asp-action="Mainmenu" class="module2-golong noto-regular text-white">ออก</a>
+        <a asp-action="Mainmenu" class="module2-golong-glow-exit noto-bold">ออก</a>
     </div>
 
 </div>

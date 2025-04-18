@@ -59,6 +59,45 @@ namespace FlashCard.Controllers
             return View();
         }
 
+        // Edit Pic
+        public async Task<IActionResult> EditImg(int id)
+        {
+            var image = await _db.ImagesDB.FindAsync(id);
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            return View(image);
+        }
+
+        // Edit Post
+        [HttpPost]
+        public async Task<IActionResult> EditImg(int id, IFormFile newFile, string answer, string module, string subModule)
+        {
+            var image = await _db.ImagesDB.FindAsync(id);
+            if (image == null)
+            {
+                return NotFound();
+            }
+
+            image.Answer = answer;
+            image.Module = module;
+            image.SubModule = subModule;
+
+            if (newFile != null && newFile.Length > 0)
+            {
+                using var memoryStream = new MemoryStream();
+                await newFile.CopyToAsync(memoryStream);
+                image.Name = newFile.FileName;
+                image.Imgbytes = memoryStream.ToArray();
+            }
+
+            await _db.SaveChangesAsync();
+            ViewBag.Message = "Edit Successful!";
+            return View(image);
+        }
+
         // Show Pic //
         public async Task<IActionResult> ShowAllImages()
         {

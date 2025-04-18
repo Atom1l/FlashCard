@@ -1,0 +1,31 @@
+﻿@model Images
+<form asp-action="EditImg" asp-controller="FlashCard" enctype="multipart/form-data" method="post">
+    <input type="hidden" name="id" value="@Model.Id" />
+
+    <div>
+        <label>Answer:</label>
+        <input type="text" name="answer" value="@Model.Answer" />
+    </div>
+
+    <div>
+        <label>Module:</label>
+        <input type="text" name="module" value="@Model.Module" />
+    </div>
+
+    <div>
+        <label>SubModule:</label>
+        <input type="text" name="subModule" value="@Model.SubModule" />
+    </div>
+
+    <div>
+        <label>Replace Image (optional):</label>
+        <input type="file" name="newFile" />
+    </div>
+
+    <button type="submit">Save Changes</button>
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p>@ViewBag.Message</p>
+}

@@ -13,27 +13,30 @@ html, body {
     color: black !important;
 }
 .blue {
-    color: #8dd4ff !important;
+    color: #004877 !important;
+}
+.blue-darken {
+    color: #004877 !important;
 }
 .blue-bg {
     color: white;
-    border: solid 4px #6DC6FF !important;
-    box-shadow: 0px 2px 10px 5px #8dd4ff !important;
+    border: solid 5px #6DC6FF !important;
+    box-shadow: 0px 2px 10px 5px #6DC6FF !important;
     background: #8dd4ff !important;
 }
-.purple{
-    color: #a1a4ff !important;
+.purple {
+    color: #6A6DC6 !important;
 }
 .purple-bg {
     color: white;
-    border: solid 4px #8e91f5 !important;
-    box-shadow: 0px 2px 10px 5px #a1a4ff !important;
+    border: solid 5px #8e91f5 !important;
+    box-shadow: 0px 2px 10px 5px #8e91f5 !important;
     background: #a1a4ff !important;
 }
 .red-bg {
     color: white;
-    border: solid 4px #E87F79 !important;
-    box-shadow: 0px 2px 10px 5px #FA9B95 !important;
+    border: solid 5px #E87F79 !important;
+    box-shadow: 0px 2px 10px 5px #E87F79 !important;
     background: #FA9B95 !important;
 }
 
@@ -134,10 +137,18 @@ html, body {
     color: #B9E7A6 !important;
 }
 .done-bg-color {
+    color: black !important;
+    font-weight: bold;
     background-color: #B9E7A6 !important;
+    border: solid 5px #94CA7E !important;
+    box-shadow: 0px 3px 5px 2px #b9e7a6 !important;
 }
-.exit-bg-color{
+.exit-bg-color {
+    color: black !important;
+    font-weight: bold;
     background-color: #fb9b95 !important;
+    border: solid 5px #E46961 !important;
+    box-shadow: 0px 3px 5px 2px #fb9b95 !important;
 }
 
 /*= Home Page =*/
@@ -477,6 +488,8 @@ html, body {
         border: none;
         outline: none;
         border-radius: 50px;
+        border: solid 5px #a1a4ff;
+        box-shadow: 0px 2px 5px 0px #a1a4ff;
         font-size: clamp(1rem, 2vw, 2rem) !important;
     }
 
@@ -525,7 +538,7 @@ html, body {
     .module-headtext {
         margin-bottom: 20px;
         text-align: center;
-        font-size: clamp(2rem, 10vw, 10rem) !important;
+        font-size: clamp(2rem, 8vw, 10rem) !important;
     }
 
     .tutorial-headtext {
@@ -559,31 +572,61 @@ html, body {
         font-size: clamp(1rem, 3vw, 2.5rem) !important;
     }
 
-.main-module-go {
-    text-align: center;
-    text-decoration: none;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    background: #8dd4ff;
-    width: 50% !important;
-    padding: 30px 0px 30px 0px;
-    border-radius: 100px;
-    border: none;
-    box-shadow: 0px 2px 10px 5px #d9d9d9;
-    font-size: clamp(1rem, 3vw, 3rem) !important;
-    z-index: 99;
-}
+    .main-module-go {
+        text-align: center;
+        text-decoration: none;
+        margin-top: 15px;
+        margin-bottom: 20px;
+        background: #8dd4ff;
+        width: 50% !important;
+        padding: 30px 0px 30px 0px;
+        border-radius: 100px;
+        border: none;
+        box-shadow: 0px 2px 10px 5px #d9d9d9;
+        font-size: clamp(1rem, 3vw, 3rem) !important;
+        z-index: 99;
+    }
+
+    .main-1{
+        font-weight: bold !important;
+        background: #8FD3FF !important;
+        border: solid 5px #6DC6FF;
+        box-shadow: 0px 2px 5px 2px #6DC6FF !important;
+    }
+
+    .main-2{
+        background: #A89CFF !important;
+        border: solid 5px #6A6DC6 !important;
+        box-shadow: 0px 2px 5px 2px #6A6DC6 !important;
+    }
+
+    .main-3 {
+        background: #F6CD6D !important;
+        border: solid 5px #e8b847 !important;
+        box-shadow: 0px 2px 5px 2px #e8b847 !important;
+    }
+
+    .instruction-text{
+        width: 40%;
+        padding:5px;
+        margin-top: 20px;
+        text-align:center;
+        background: #FA9B95;
+        box-shadow: 0px 3px 5px #d9d9d9;
+        font-size: clamp(1rem, 2vw, 1.5rem) !important;
+    }
 
     .module-go {
         text-align: center;
         text-decoration: none;
         margin-top: 20px;
         margin-bottom: 20px;
-        background: #8dd4ff;
+        background: #6DC6FF;
         width: 30% !important;
         padding: 30px 0px 30px 0px;
         border-radius: 100px;
-        border: none;
+        border: solid 5px #51AFED;
+        box-shadow: 0px 4px 7px 2px #51afed;
         font-size: clamp(1rem, 3vw, 3rem) !important;
     }
 
@@ -598,6 +641,36 @@ html, body {
         border-radius: 100px;
         border: none;
         font-size: clamp(1rem, 3vw, 3rem) !important;
+    }
+
+    .module-golong-glow { /* For long text */
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: #004877 !important;
+        background: #CCEBFF;
+        width: 37.5% !important;
+        padding: 30px 0px 30px 0px;
+        border-radius: 100px;
+        border: solid 5px #6DC6FF;
+        box-shadow: 0px 2px 5px 5px #6dc6ff;
+        font-size: clamp(1rem, 4vw, 4rem) !important;
+    }
+
+    .module-golong-glow-exit { /* For long text */
+        text-align: center;
+        text-decoration: none;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        color: #004877 !important;
+        background: #8FD3FF;
+        width: 37.5% !important;
+        padding: 30px 0px 30px 0px;
+        border-radius: 100px;
+        border: solid 5px #41B0F8;
+        box-shadow: 0px 2px 5px 5px #41B0F8;
+        font-size: clamp(1rem, 4vw, 4rem) !important;
     }
 
     .module-goshort { /* For short text */
@@ -615,6 +688,8 @@ html, body {
 
     .no-play {
         background: #fb9b95 !important;
+        border: solid 5px #E46961 !important;
+        box-shadow: 0px 4px 7px 2px #E46961 !important;
     }
 
     .video-preview {
@@ -776,19 +851,19 @@ html, body {
     transition: 0.2s ease;
 }
 
-    .correct {
-        background-color: #B9E7A6;
-        border: solid 4px #94CA7E;
-        box-shadow: 0px 2px 10px 5px #b9e7a6;
-        color: black;
-    }
+.correct {
+    background-color: #B9E7A6;
+    border: solid 5px #94CA7E;
+    box-shadow: 0px 4px 7px 2px #94CA7E;
+    color: black;
+}
 
-    .wrong {
-        background-color: #FA9B95;
-        border: solid 4px #E46961;
-        box-shadow: 0px 2px 10px 5px #FA9B95;
-        color: black;
-    }
+.wrong {
+    background-color: #FA9B95;
+    border: solid 5px #E46961;
+    box-shadow: 0px 4px 7px 2px #E46961;
+    color: black;
+}
 
     .flashcard-overall-container {
         border: solid 5px red;
@@ -874,24 +949,25 @@ html, body {
     padding: 0!important;
 }
 .conclude-text {
-    margin-bottom:50px;
+    margin-bottom: 50px;
     text-align: center;
-    color: #8dd4ff;
+    color: #004877;
     font-size: clamp(1rem, 5vw, 5rem) !important;
 }
 .conclude-btn {
     position: fixed;
-    bottom: 2%;
+    bottom: 3%;
     text-align: center;
     text-decoration: none;
-    background: #8dd4ff;
+    background: #6DC6FF;
     width: 20% !important;
     padding: 15px 0px 15px 0px;
     border-radius: 100px;
-    border: none;
+    border: solid 5px #51AFED;
+    box-shadow: 0px 4px 7px 2px #51afed;
     font-size: clamp(0.8rem, 3vw, 2.5rem) !important;
 }
-.all-card-container{
+.all-card-container {
     margin-bottom: 120px !important;
 }
 .card-container {

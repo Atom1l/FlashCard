@@ -1,13 +1,15 @@
 ﻿.module3-go {
+    font-weight:bold;
     text-align: center;
     text-decoration: none;
     margin-top: 20px;
     margin-bottom: 20px;
-    background: #FA9B95;
+    background: #F6CD6D;
+    border: solid 5px #E8B847;
+    box-shadow: 0px 2px 5px 2px #E8B847;
     width: 30% !important;
     padding: 30px 0px 30px 0px;
     border-radius: 100px;
-    border: none;
     font-size: clamp(1rem, 3vw, 3rem) !important;
 }
 
@@ -16,16 +18,44 @@
     text-decoration: none;
     margin-top: 20px;
     margin-bottom: 20px;
-    background: #FA9B95;
+    background: #F6CD6D;
     width: 37.5% !important;
     padding: 30px 0px 30px 0px;
     border-radius: 100px;
-    border: none;
     font-size: clamp(1rem, 3vw, 3rem) !important;
 }
-
+.module3-go-glow {
+    font-weight: bold;
+    color: #E8B847 !important;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #FDE6B0;
+    border: solid 5px #F6CD6D;
+    box-shadow: 0px 2px 5px 2px #F6CD6D;
+    width: 37.5% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
+.module3-go-glow-exit {
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    background: #F6CD6D;
+    border: solid 5px #E8B847;
+    box-shadow: 0px 2px 5px 2px #E8B847;
+    width: 37.5% !important;
+    padding: 30px 0px 30px 0px;
+    border-radius: 100px;
+    font-size: clamp(1rem, 3vw, 3rem) !important;
+}
 .module3-headtext {
     margin-bottom: 20px;
+    color: #E8B847 !important;
     text-align: center;
     font-size: clamp(2rem, 7vw, 10rem) !important;
 }

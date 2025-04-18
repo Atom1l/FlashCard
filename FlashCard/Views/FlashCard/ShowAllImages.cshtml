@@ -11,16 +11,18 @@
     {
         <div class="col-md-4 mb-4">
             <div class="card">
-                <!-- Display the image from Imgbytes -->
-                <img src="data:image/png;base64,@Convert.ToBase64String(image.Imgbytes)" class="card-img-top" alt="@image.Name" />
+                <a asp-action="EditImg" asp-route-id="@image.Id" style="text-decoration: none; color: inherit;">
+                    <!-- Display the image from Imgbytes -->
+                    <img src="data:image/png;base64,@Convert.ToBase64String(image.Imgbytes)" class="card-img-top" alt="@image.Name" />
 
-                <div class="card-body text-center">
-                    <h5 class="card-title noto-bold">@image.Name</h5>
-                    <p class="card-text noto-regular">ID: @image.Id</p>
-                    <p class="card-text noto-regular">Module: @image.Module</p>
-                    <p class="card-text noto-regular">SubModule: @image.SubModule</p>
-                    <p class="card-text noto-bold">Answer: @image.Answer</p>
-                </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title noto-bold">@image.Name</h5>
+                        <p class="card-text noto-regular">ID: @image.Id</p>
+                        <p class="card-text noto-regular">Module: @image.Module</p>
+                        <p class="card-text noto-regular">SubModule: @image.SubModule</p>
+                        <p class="card-text noto-bold">Answer: @image.Answer</p>
+                    </div>
+                </a>
             </div>
         </div>
     }
