@@ -1,6 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Flash Card";
     string? source = TempData["Source"]?.ToString();
+    string? data = ViewData["Data"]?.ToString();
 }
 
 <div class="container home-bg d-flex flex-column justify-content-center align-items-center">
@@ -26,7 +27,7 @@
             <!-- === Resume === -->
             @if (!string.IsNullOrEmpty(source))
             {
-                <a asp-action="@source" class="continue-btn me-5">
+                <a asp-action="@source" asp-route-next="@data" class="continue-btn me-5">
                     <i class="fa-solid fa-play"></i>
                     <div class="noto-bold">เล่นต่อ</div>
                 </a>

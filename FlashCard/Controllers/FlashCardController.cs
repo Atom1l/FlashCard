@@ -210,9 +210,10 @@ namespace FlashCard.Controllers
         }
 
         // Menu Page //
-        public IActionResult Menu(string source)
+        public IActionResult Menu(string source, string data)
         {
             TempData["Source"] = source;
+            ViewData["Data"] = data;
             return View();
         }
 
